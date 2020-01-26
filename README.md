@@ -20,8 +20,18 @@ https://drive.google.com/open?id=1NOSihXdLQdE7UW4YGySvFcAMfIGLLAZq
 ### Software 
 
 Frontend: React Native App 
+
 Backend: 
+
 Database: 
+
+Simulating/Testing:
+
+IDE: Visual Code Studio
+
+TO DO/SCRUM board: Trello 
+
+Communication: Discord 
 
 ### Terms
 
