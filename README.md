@@ -21,13 +21,13 @@ https://drive.google.com/open?id=1NOSihXdLQdE7UW4YGySvFcAMfIGLLAZq
 
 Frontend: React Native App 
 
-Backend: 
+Backend: SQL
 
-Database: 
+Database: AWS / Sqlite
 
 Simulating/Testing:
 
-IDE: Visual Code Studio
+IDE: Visual Code Studio / Expo CLI ecosystem
 
 TO DO/SCRUM board: Trello 
 
