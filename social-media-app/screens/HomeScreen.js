@@ -1,5 +1,9 @@
+// HomeScreen
+// Should appear after Login page
+// currently displays green screen with Sign Out button 
+
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Image,
   Platform,
@@ -8,70 +12,46 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
+  AsyncStorage, 
 } from 'react-native';
+
+import Login from './Login/Login'; 
 
 import { MonoText } from '../components/StyledText';
 
-export default function HomeScreen() {
-  return (
-    <View style={styles.container}><ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
+export default class HomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+    this._signOutAsync();
+  }
+  render(){
+    return (
+      <View style={styles.container}>
 
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
-
-            If we add the following example:
-
-            Hello world.  
-
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
+  
+      <TouchableOpacity>
+        <Text style={styles.signOutButton} onPress={this._signOutAsync}>Sign out!</Text>
+      </TouchableOpacity> 
+  
       </View>
-    </View>
-  );
-}
+    );
+  
+    }
+ 
+    _signOutAsync = async () => {
+      await AsyncStorage.clear();
+     this.props.navigation.navigate('Auth');
+    };
+  }
+
+
+
+
+  // Other HomeScreen Functions from Initial Project Set Up
+
 
 HomeScreen.navigationOptions = {
   header: null,
@@ -115,7 +95,10 @@ function handleHelpPress() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#add836',
+    alignContent:'center',
+    paddingTop: 50, 
+    paddingHorizontal: 50
   },
   developmentModeText: {
     marginBottom: 20,
@@ -195,3 +178,16 @@ const styles = StyleSheet.create({
   helpLink: {
     paddingVertical: 15,
   },
+  helpLinkText: {
+    fontSize: 14,
+    color: '#2e78b7',
+  },
+
+  signOutButton:{
+    backgroundColor:'#FFF', 
+    padding:10,
+    textAlign:'center', 
+    fontWeight:"500", 
+    
+  }
+});
