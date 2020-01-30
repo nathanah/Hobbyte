@@ -14,8 +14,7 @@ import { MonoText } from '../components/StyledText';
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <ScrollView
+    <View style={styles.container}><ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
@@ -41,6 +40,11 @@ export default function HomeScreen() {
 
           <Text style={styles.getStartedText}>
             Change this text and your app will automatically reload.
+
+            If we add the following example:
+
+            Hello world.  
+
           </Text>
         </View>
 
@@ -191,8 +195,3 @@ const styles = StyleSheet.create({
   helpLink: {
     paddingVertical: 15,
   },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-});
