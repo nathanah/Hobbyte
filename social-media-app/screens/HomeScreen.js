@@ -1,8 +1,13 @@
+// NO longer being called - need to delete 1/31/2020 Abby
+
+
 // HomeScreen
 // Should appear after Login page
 // currently displays green screen with Sign Out button 
 
 import * as WebBrowser from 'expo-web-browser';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import React, { Component } from 'react';
 import {
   Image,
@@ -20,6 +25,8 @@ import Login from './Login/Login';
 
 import { MonoText } from '../components/StyledText';
 
+
+
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -28,21 +35,25 @@ export default class HomeScreen extends Component {
     this._signOutAsync();
   }
   render(){
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
 
   
       <TouchableOpacity>
-        <Text style={styles.signOutButton} onPress={this._signOutAsync}>Sign out!</Text>
+        <Text style={styles.signOutButton} onPress={() => navigate('Login')} >Sign out!</Text>
       </TouchableOpacity> 
   
       </View>
     );
   
     }
+
+    //onPress={this._signOutAsync}
  
+    // clears user data from global storage on local
     _signOutAsync = async () => {
-      await AsyncStorage.clear();
+      // await AsyncStorage.clear();
      this.props.navigation.navigate('Auth');
     };
   }

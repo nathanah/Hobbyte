@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, AsyncStorage} from 'react-native';
+
+// import HomeScreen from "../../screens/HomeScreen";
 export default class LoginForm extends Component {
   constructor(props) {
     super(props);
@@ -8,6 +10,7 @@ export default class LoginForm extends Component {
   }
 
   render() {
+    // const {navigate} = this.props.navigation;
     return (
         <View style={styles.container}>
             <StatusBar
@@ -36,22 +39,24 @@ export default class LoginForm extends Component {
                 val = {(input) => this.passwordInput = input}
             />
 
-            <TouchableOpacity style={styles.loginContainer}>
-                <Text style={styles.buttonText} onPress={this._loginAsync}>LOGIN</Text>
-            </TouchableOpacity>
+            {/* <TouchableOpacity style={styles.loginContainer}>
+                <Text style={styles.buttonText}>LOGIN</Text>
+            </TouchableOpacity> */}
 
 
         </View>
     </View>
     );
   }
-
-  
-_loginAsync = async () => {
-    // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-    this.props.navigation.navigate('App');
-  };
 }
+
+// Navigate doesn't work here for some reason so it is all in AppNavigator.js
+//   onPress={this._loginAsync}
+// _loginAsync = async () => {
+//     // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
+//     this.props.navigation.navigate('App');
+//   };
+// }
 
 
 const styles = StyleSheet.create({
@@ -83,4 +88,3 @@ const styles = StyleSheet.create({
     }
 
 });
-

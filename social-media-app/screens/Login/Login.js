@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, Image, } from 'react-native';
 import LoginForm from './LoginForm';
 
 export default class Login extends Component {
@@ -11,8 +11,8 @@ export default class Login extends Component {
 
   render() {
     return (
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
-    
+       
+    <View>
           <View style = {styles.appLogo}>
             
             <Image 
@@ -26,8 +26,8 @@ export default class Login extends Component {
           <View style={styles.loginContainer}>
             < LoginForm />
           </View>
-    
-      </KeyboardAvoidingView>
+          </View>
+
     );
   }
 
