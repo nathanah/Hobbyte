@@ -1,61 +1,101 @@
-import React, { Component } from 'react';
+// AppNavigator
+// Sets up route from auth page to login to home screen
+// Called by App.js
 
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image } from 'react-native';
-import LoginForm from './LoginForm';
-
-export default /*=====================================================*/
-/*            Login Screen                              */
 /*=====================================================*/
-class Login extends React.Component {
+// TO DO
+// - Add async functions for obtaining user input and verifying identity
+// - remove back button in default header
+// - fix spinning/slow auth page
+// -
+/*=====================================================*/
+import * as React from 'react';
+import { Button, View, Text, TouchableOpacity, StyleSheet,  TextInput } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
+import AuthLoadingScreen from "../screens/AuthLoadingScreen";
+import Login from "../screens/Login/Login";
+
+
+
+
+/*=====================================================*/
+/*            Home Screen                              */
+/*=====================================================*/
+class HomeScreen extends React.Component {
   render() {
     return (
-      <View style={{backgroundColor: "#d0e0f1", flex: 1}}>
-         <KeyboardAvoidingView behavior="padding" style={styles.container}>
-          <Login/>
-
-        <TextInput
-                placeholder="Username"
-                style={styles.formBox}
-                placeholderTextColor = "#2e4257"
-                returnKeyType = "next"
-                onSubmitEditing = {() => {this.passwordInput.focus();}}
-                keyboardType="email-address"
-                autoCapitalize='none'
-                autoCorrect={false}
-            />
-
-            <TextInput
-                placeholder = "Password"
-                style={styles.formBox}
-                placeholderTextColor = "#2e4257"
-                secureTextEntry
-                returnKeyType="go"
-                ref = {(input) => {this.passwordInput = input;}}
-            />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Details Screen</Text>
+        <Button
+          title="Go to Details... again"
+          onPress={() => this.props.navigation.navigate('Home')}
+        />
+        <Button
+          title="Sign out"
+          onPress={this._signOutAsync}
+        />
+        <Button
+          title="Go back"
+          onPress={() => this.props.navigation.goBack()}
+        />
 
 
-        <TouchableOpacity style={styles.loginContainer}>
-                <Text style={styles.buttonText}
-                  onPress={this._loginAsync}>LOGIN</Text>
-        </TouchableOpacity>
-        </KeyboardAvoidingView>
-
+          {/* TODO - note Not sure why going back to auth page leads to spinning loading button */}
+        <Button
+          title="Go back to auth page"
+          onPress={() => this.props.navigation.navigate('AuthLoading')}
+        />
       </View>
     );
   }
 
   /*--------------------Async------------------------*/
-    _loginAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      this.props.navigation.navigate('Home');
-    };
+  _signOutAsync = async () => {
+    // TODO - clear Async storage
+    // await AsyncStorage.clear();
+    this.props.navigation.navigate('SignIn');
+  };
+
 }
 
-const styles = StyleSheet.create({
-   container:{
-       flex:1,
-       backgroundColor:'#FFDFD3'
-   },
+/*---------------------Navigation Stack -----------------------------*/
 
-});
+const RootStack = createStackNavigator({
+  AuthLoading: AuthLoadingScreen,
+  SignIn: {screens: Login},
+  Home: HomeScreen,
+},
+{
+  initialRouteName: 'AuthLoading',
+}
+);
+
+/*----------------------Styles    ----------------------------*/
+const styles = StyleSheet.create ({
+  container:{
+    flex:1,
+    backgroundColor:'#FFDFD3'
+  },
+
+  buttonText:{
+    textAlign:'center',
+    color:'#FFF',
+    fontWeight: "600",
+    backgroundColor:'#db8a75',
+    padding:20,
+    paddingBottom: 30,
+
+},
+  formBox:{
+    height: 45,
+    backgroundColor: '#FFF',
+    marginBottom: 20,
+    paddingHorizontal: 20,
+
+  },
+  })
+
+  /*-----------------------Export default ---------------------------*/
+  export default createAppContainer(RootStack);
