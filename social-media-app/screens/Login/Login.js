@@ -11,8 +11,7 @@ export default class Login extends Component {
 
   render() {
     return (
-       
-    <View>
+     
           <View style = {styles.appLogo}>
             
             <Image 
@@ -21,11 +20,6 @@ export default class Login extends Component {
             />
 
             <Text style={styles.title}>Welcome to The Shire</Text>
-          </View>
-
-          <View style={styles.loginContainer}>
-            < LoginForm />
-          </View>
           </View>
 
     );

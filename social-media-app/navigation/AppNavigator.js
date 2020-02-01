@@ -10,7 +10,7 @@
 // - 
 /*=====================================================*/
 import * as React from 'react';
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -26,7 +26,29 @@ class LoginScreen extends React.Component {
     return (
       <View style={{backgroundColor: "#d0e0f1", flex: 1}}>
          <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Login/>
+          <Login/>
+
+        <TextInput 
+                placeholder="Username"
+                style={styles.formBox}
+                placeholderTextColor = "#2e4257"
+                returnKeyType = "next"
+                // onSubmitEditing = {() =>this.passwordInput.focus()} // need to fix
+                keyboardType="email-address"
+                autoCapitalize='none'
+                autoCorrect={false}
+            />
+
+            <TextInput 
+                placeholder = "Password"
+                style={styles.formBox}
+                placeholderTextColor = "#2e4257"
+                secureTextEntry
+                returnKeyType="go"
+                // val = {(input) => this.passwordInput = input} // need to fix 
+            />
+
+
         <TouchableOpacity style={styles.loginContainer}>
                 <Text style={styles.buttonText} 
                   onPress={this._loginAsync}>LOGIN</Text>
@@ -112,9 +134,16 @@ const styles = StyleSheet.create ({
     padding:20,
     paddingBottom: 30,
 
-}
-})
+},
+  formBox:{
+    height: 45, 
+    backgroundColor: '#FFF',
+    marginBottom: 20, 
+    paddingHorizontal: 20,
 
-/*-----------------------Export default ---------------------------*/
-export default createAppContainer(RootStack);
+  },
+  })
+
+  /*-----------------------Export default ---------------------------*/
+  export default createAppContainer(RootStack);
 
