@@ -33,7 +33,7 @@ class LoginScreen extends React.Component {
                 style={styles.formBox}
                 placeholderTextColor = "#2e4257"
                 returnKeyType = "next"
-                // onSubmitEditing = {() =>this.passwordInput.focus()} // need to fix
+                onSubmitEditing = {() => {this.passwordInput.focus();}} 
                 keyboardType="email-address"
                 autoCapitalize='none'
                 autoCorrect={false}
@@ -45,7 +45,7 @@ class LoginScreen extends React.Component {
                 placeholderTextColor = "#2e4257"
                 secureTextEntry
                 returnKeyType="go"
-                // val = {(input) => this.passwordInput = input} // need to fix 
+                ref = {(input) => {this.passwordInput = input;}}
             />
 
 
