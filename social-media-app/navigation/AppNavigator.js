@@ -15,7 +15,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import AuthLoadingScreen from "../screens/AuthLoadingScreen";
-import Login from "../screens/Login/Login";
+import LoginScreen from "../screens/Login/LoginScreen";
 
 
 
@@ -62,9 +62,8 @@ class HomeScreen extends React.Component {
 
 /*---------------------Navigation Stack -----------------------------*/
 
-//Defince diferent pages
+//Define different pages
 const RootStack = createStackNavigator({
-  //Initial roght
   AuthLoading: AuthLoadingScreen,
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to ho
   SignIn: LoginScreen,

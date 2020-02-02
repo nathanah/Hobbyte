@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image } from 'react-native';
-import LoginForm from './LoginForm';
 
-export default /*=====================================================*/
+/*=====================================================*/
 /*            Login Screen                              */
 /*=====================================================*/
-class Login extends React.Component {
+export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={{backgroundColor: "#d0e0f1", flex: 1}}>
          <KeyboardAvoidingView behavior="padding" style={styles.container}>
-          <Login/>
+          {/* <LoginForm/> */}
+          <Image 
+            style={styles.logo}	            style={styles.logo}
+            source={require('../../assets/images/bilbo.png')}	 
+            /> 
 
         <TextInput
                 placeholder="Username"
@@ -22,8 +25,9 @@ class Login extends React.Component {
                 keyboardType="email-address"
                 autoCapitalize='none'
                 autoCorrect={false}
+                // value 
             />
-
+  
             <TextInput
                 placeholder = "Password"
                 style={styles.formBox}
@@ -31,6 +35,7 @@ class Login extends React.Component {
                 secureTextEntry
                 returnKeyType="go"
                 ref = {(input) => {this.passwordInput = input;}}
+                // value = ...
             />
 
 
@@ -52,10 +57,38 @@ class Login extends React.Component {
     };
 }
 
+
 const styles = StyleSheet.create({
-   container:{
-       flex:1,
-       backgroundColor:'#FFDFD3'
-   },
+  container:{
+      padding:20, 
+  }, 
+
+  formBox:{
+      height: 45, 
+      backgroundColor: '#FFF',
+      marginBottom: 20, 
+      paddingHorizontal: 20,
+
+  },
+
+  loginContainer:{
+      
+      paddingVertical: 10,
+
+  },
+
+  buttonText:{
+      textAlign:'center', 
+      color:'#FFF',
+      fontWeight: "600",
+      backgroundColor:'#db8a75',
+      padding:10
+
+  }, 
+
+  logo: {
+    width: 100, 
+    height:200
+  }
 
 });
