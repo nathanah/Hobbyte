@@ -16,6 +16,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
+import ResetScreen from '../screens/Login/ResetScreen';
 
 
 
@@ -68,6 +69,7 @@ const RootStack = createStackNavigator({
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to ho
   SignIn: LoginScreen,
   Home: HomeScreen,
+  Reset: ResetScreen,
 },
 {
   initialRouteName: 'AuthLoading',
