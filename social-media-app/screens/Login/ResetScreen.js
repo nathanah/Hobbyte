@@ -43,7 +43,6 @@ export default class ResetScreen extends React.Component {
                 placeholder = "Phone Number"
                 style={styles.formBox}
                 placeholderTextColor = "#2e4257"
-                secureTextEntry
                 keyboardType="phone-pad"
                 returnKeyType="send"
                 ref = {(input) => {this.phoneInput = input;}}
