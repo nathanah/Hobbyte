@@ -1,5 +1,8 @@
+// No longer being used -- was not 
+
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, AsyncStorage} from 'react-native';
+
 
 // import HomeScreen from "../../screens/HomeScreen";
 export default class LoginForm extends Component {
@@ -7,7 +10,18 @@ export default class LoginForm extends Component {
     super(props);
     this.state = {
     };
+
+    
   }
+
+_loginAsync = async () => {
+    // TODO - fetch user token and verify user identity 
+    // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
+    this.props.navigation.navigate('Home');
+  }
+
+
+
 
   render() {
     // const {navigate} = this.props.navigation;
@@ -19,12 +33,13 @@ export default class LoginForm extends Component {
         
    
         <View style={styles.container}>
+        
             <TextInput 
                 placeholder="Username"
                 style={styles.formBox}
                 placeholderTextColor = "#2e4257"
                 returnKeyType = "next"
-                onSubmitEditing = {() =>this.passwordInput.focus()}
+                // onSubmitEditing = {() =>this.passwordInput.focus()} // need to fix
                 keyboardType="email-address"
                 autoCapitalize='none'
                 autoCorrect={false}
@@ -36,12 +51,12 @@ export default class LoginForm extends Component {
                 placeholderTextColor = "#2e4257"
                 secureTextEntry
                 returnKeyType="go"
-                val = {(input) => this.passwordInput = input}
+                // val = {(input) => this.passwordInput = input} // need to fix 
             />
 
-            {/* <TouchableOpacity style={styles.loginContainer}>
-                <Text style={styles.buttonText}>LOGIN</Text>
-            </TouchableOpacity> */}
+            <TouchableOpacity style={styles.loginContainer}>
+                <Text style={styles.buttonText}>LOGIN from LoginForm</Text>
+            </TouchableOpacity>
 
 
         </View>
@@ -52,11 +67,6 @@ export default class LoginForm extends Component {
 
 // Navigate doesn't work here for some reason so it is all in AppNavigator.js
 //   onPress={this._loginAsync}
-// _loginAsync = async () => {
-//     // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-//     this.props.navigation.navigate('App');
-//   };
-// }
 
 
 const styles = StyleSheet.create({

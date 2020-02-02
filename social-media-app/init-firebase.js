@@ -1,5 +1,4 @@
 import * as firebase from 'firebase';
-import '@firebase/firestore/dist/index.cjs.min';
 
   // Your web app's Firebase configuration
   var firebaseConfig = {
