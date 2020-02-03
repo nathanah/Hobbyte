@@ -4,7 +4,6 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
 import AppNavigator from './navigation/AppNavigator';
 
 /*=====================================================*/
@@ -25,7 +24,11 @@ import * as firebase from 'firebase';
   };
 
   // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
  // let db = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
  function storeHighScore(userId, score) {
     firebase.database().ref('users/' + userId).set({
