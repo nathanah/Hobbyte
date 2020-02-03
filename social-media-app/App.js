@@ -6,6 +6,13 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 
+/*John - This is setup for Amplify*/
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
+Amplify.configure(awsconfig);
+/*</John>*/
+
+
 /*=====================================================*/
 /*                      MAIN                           */
 /*=====================================================*/
@@ -23,12 +30,7 @@ import * as firebase from 'firebase';
     appId: "1:361566556420:web:cdeedf44697ec542ac0051"
   };
 
-  // Initialize Firebase
-
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
+  
  // let db = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
  function storeHighScore(userId, score) {
     firebase.database().ref('users/' + userId).set({
