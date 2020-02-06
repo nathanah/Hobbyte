@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 // import {Auth} from '../../App';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
-/*John - This is setup for Amplify*/
-import Amplify, { Auth } from 'aws-amplify';
-import awsconfig from './aws-exports';
-Amplify.configure(awsconfig);
-/*</John>*/
+import {Auth} from "../../App"
 
 /*=====================================================*/
 /*            Login Screen                              */
