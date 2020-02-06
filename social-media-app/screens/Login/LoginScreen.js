@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-// import {Auth} from '../../App';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
-import {Auth} from "../../App"
+import {Auth} from 'aws-amplify';
 
 /*=====================================================*/
 /*            Login Screen                              */
