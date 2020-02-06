@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+// import {Auth} from '../../App';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
+/*John - This is setup for Amplify*/
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
+Amplify.configure(awsconfig);
+/*</John>*/
 
 /*=====================================================*/
 /*            Login Screen                              */
@@ -84,8 +90,29 @@ export default class LoginScreen extends React.Component {
       console.log("Login information input from user: ");
       console.log("username:" + this.state.username);
       console.log("password:" + this.state.password);
-      this.props.navigation.navigate('Home');
-    };
+      
+      try {
+        const user = await Auth.signIn(this.state.username, this.state.password);
+        console.log(user);
+        this.props.navigation.navigate('Home');
+
+      } catch (err) {
+        if (err.code === 'NotAuthorizedException') {
+          console.log("bad password");
+          console.log(err);
+        // The error happens when the incorrect password is provided
+        } else if (err.code === 'UserNotFoundException') {
+          console.log("bad username");
+          console.log(err);
+        // The error happens when the supplied username/email does not exist in the Cognito user pool
+        } else {
+          console.log("Other error");
+
+          console.log(err);
+        }
+        this.props.navigation.navigate('SignIn');
+      }
+    }
 
     _resetAsync = async () => {
       // TODO - fetch user token and verify user identity
