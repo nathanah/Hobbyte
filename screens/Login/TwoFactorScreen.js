@@ -10,9 +10,7 @@ export default class TwoFactorScreen extends React.Component {
 
   state = {
 
-    username: '',
-    password: '',
-    status: '',
+    verificationCode: '',
 
   };
 
@@ -34,10 +32,9 @@ export default class TwoFactorScreen extends React.Component {
             returnKeyType = "go"
             autoFocus={true}
             onSubmitEditing = {this._loginAsync}
-            keyboardType="email-address"
             autoCapitalize='none'
             autoCorrect={false}
-            value={this.state.username}
+            value={this.state.verificationCode}
             onChange ={event => this.setState({verificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
@@ -57,8 +54,6 @@ export default class TwoFactorScreen extends React.Component {
           </ScrollView>
 
 
-
-
       </KeyboardAvoidingView>
       </View>
 
@@ -71,7 +66,6 @@ export default class TwoFactorScreen extends React.Component {
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
       console.log("Login information input from user: ");
       console.log("code:" + this.state.verificationCode);
-      console.log("password:" + this.state.password);
       this.props.navigation.navigate('Home');
     };
 

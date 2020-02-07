@@ -5,14 +5,16 @@ import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView,
 /*=====================================================*/
 /*            Login Screen                              */
 /*=====================================================*/
-export default class LoginScreen extends React.Component {
+export default class SignUpScreen extends React.Component {
 
 
   state = {
 
     username: '',
     password: '',
-    status: '',
+    passwordConfirm: '',
+    email: '',
+    phoneNumber: '',
 
   };
 
@@ -22,19 +24,13 @@ export default class LoginScreen extends React.Component {
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
-          <Image
-            style={styles.logo}
-            source={require('../../assets/images/logo.png')}
-            />
-
           <TextInput
             placeholder="Username"
             style={styles.formBox}
             placeholderTextColor = "#2e4257"
             returnKeyType = "next"
             autoFocus={true}
-            onSubmitEditing = {() => {this.passwordInput.focus();}}
-            keyboardType="email-address"
+            onSubmitEditing = {() => {this.emailInput.focus();}}
             autoCapitalize='none'
             autoCorrect={false}
             value={this.state.username}
@@ -43,33 +39,65 @@ export default class LoginScreen extends React.Component {
           />
 
           <TextInput
+            placeholder="Email"
+            style={styles.formBox}
+            placeholderTextColor = "#2e4257"
+            returnKeyType = "next"
+            onSubmitEditing = {() => {this.phoneInput.focus();}}
+            keyboardType="email-address"
+            autoCapitalize='none'
+            autoCorrect={false}
+            ref = {(input) => {this.emailInput = input;}}
+            value={this.state.email}
+            onChange ={event => this.setState({email:event.nativeEvent.text})}
+            underlineColorAndroid = "transparent"
+          />
+
+          <TextInput
+            placeholder="Phone Number"
+            style={styles.formBox}
+            placeholderTextColor = "#2e4257"
+            returnKeyType = "next"
+            onSubmitEditing = {() => {this.passwordInput.focus();}}
+            keyboardType="phone-pad"
+            autoCapitalize='none'
+            autoCorrect={false}
+            ref = {(input) => {this.phoneInput = input;}}
+            value={this.state.phoneNumber}
+            onChange ={event => this.setState({phoneNumber:event.nativeEvent.text})}
+            underlineColorAndroid = "transparent"
+          />
+
+          <TextInput
             placeholder = "Password"
             style={styles.formBox}
             placeholderTextColor = "#2e4257"
             secureTextEntry
-            returnKeyType="go"
+            returnKeyType="next"
             ref = {(input) => {this.passwordInput = input;}}
             value={this.state.password}
             onChange={event => this.setState({password: event.nativeEvent.text })}
-            onSubmitEditing = {this._loginAsync}
+            onSubmitEditing = {() => {this.passwordConfirmInput.focus();}}
+            underlineColorAndroid = "transparent"
+          />
+
+          <TextInput
+            placeholder = "Password Confirmation"
+            style={styles.formBox}
+            placeholderTextColor = "#2e4257"
+            secureTextEntry
+            returnKeyType="go"
+            ref = {(input) => {this.passwordConfirmInput = input;}}
+            value={this.state.passwordConfirm}
+            onChange={event => this.setState({passwordConfirm: event.nativeEvent.text })}
+            onSubmitEditing = {this._submitAsync}
             underlineColorAndroid = "transparent"
           />
 
 
         <TouchableOpacity style={styles.loginContainer}>
                 <Text style={styles.buttonText}
-                  onPress={this._loginAsync}>LOGIN</Text>
-        </TouchableOpacity>
-
-
-        <TouchableOpacity style={styles.resetContainer}>
-                <Text
-                  onPress={this._resetAsync}>Forgot password or username?</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.resetContainer}>
-                <Text
-                  onPress={this._signUpAsync}>New User? Sign Up Here!</Text>
+                  onPress={this._submitAsync}>Sumbit</Text>
         </TouchableOpacity>
 
           </ScrollView>
@@ -84,27 +112,16 @@ export default class LoginScreen extends React.Component {
   }
 
   /*--------------------Async------------------------*/
-    _loginAsync = async () => {
+    _submitAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Login information input from user: ");
+      console.log("Sign Up information input from user: ");
       console.log("username:" + this.state.username);
+      console.log("email   :" + this.state.email);
+      console.log("phone # :" + this.state.phoneNumber);
       console.log("password:" + this.state.password);
-      this.props.navigation.navigate('TFS');
-    };
-
-    _resetAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Redirecting to reset page");
-      this.props.navigation.navigate('Reset');
-    };
-
-    _signUpAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Redirecting to Sign Up page");
-      this.props.navigation.navigate('SignUp');
+      console.log("password:" + this.state.passwordConfirm);
+      this.props.navigation.navigate('SignIn');
     };
 }
 

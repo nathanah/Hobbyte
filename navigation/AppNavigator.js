@@ -20,6 +20,7 @@ import ResetScreen from '../screens/Login/ResetScreen';
 import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
 import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
 import HomeScreen from "../screens/HomeScreen"
+import SignUpScreen from "../screens/Login/SignUpScreen"
 
 
 
@@ -32,6 +33,7 @@ const RootStack = createStackNavigator({
   AuthLoading: AuthLoadingScreen,
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
   SignIn: LoginScreen,
+  SignUp: SignUpScreen,
   Home: HomeScreen,
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
