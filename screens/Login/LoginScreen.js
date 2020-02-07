@@ -85,7 +85,6 @@ export default class LoginScreen extends React.Component {
       console.log("Login information input from user: ");
       console.log("username:" + this.state.username);
       console.log("password:" + this.state.password);
-      console.log("new");
       this.props.navigation.navigate('TFS');
     };
 

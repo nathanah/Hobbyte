@@ -18,8 +18,8 @@ import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
 import ResetScreen from '../screens/Login/ResetScreen';
 import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
+import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
 import HomeScreen from "../screens/HomeScreen"
-
 
 
 
@@ -30,11 +30,12 @@ import HomeScreen from "../screens/HomeScreen"
 //Define different pages
 const RootStack = createStackNavigator({
   AuthLoading: AuthLoadingScreen,
-  //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to ho
+  //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
   SignIn: LoginScreen,
   Home: HomeScreen,
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
+  PhoneReset: PhoneResetScreen,
 },
 {
   initialRouteName: 'AuthLoading',

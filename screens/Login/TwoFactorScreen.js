@@ -33,7 +33,7 @@ export default class TwoFactorScreen extends React.Component {
             placeholderTextColor = "#2e4257"
             returnKeyType = "go"
             autoFocus={true}
-            onSubmitEditing = {() => {this.passwordInput.focus();}}
+            onSubmitEditing = {this._loginAsync}
             keyboardType="email-address"
             autoCapitalize='none'
             autoCorrect={false}
@@ -51,7 +51,7 @@ export default class TwoFactorScreen extends React.Component {
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text
-                  onPress={this._resetAsync}>Forgot password or username?</Text>
+                  onPress={this._resetAsync}>Changed phone number?</Text>
         </TouchableOpacity>
 
           </ScrollView>
@@ -78,8 +78,8 @@ export default class TwoFactorScreen extends React.Component {
     _resetAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Redirecting to reset page");
-      this.props.navigation.navigate('Reset');
+      console.log("Redirecting to phone reset page");
+      this.props.navigation.navigate('PhoneReset');
     };
 }
 
