@@ -1,0 +1,8 @@
+{
+    "CreateAPIKey": 1,
+    "AppSyncApiName": "hobyte",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "S3DeploymentBucket": "amplify-social-media-app-hobyte-224702-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/3b7c616573d4a10d77f69194d5018a36a33e6adc"
+}

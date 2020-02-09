@@ -64,7 +64,8 @@ class HomeScreen extends React.Component {
 /*---------------------Navigation Stack -----------------------------*/
 
 //Define different pages
-const RootStack = createStackNavigator({
+const RootStack = createStackNavigator(
+{
   AuthLoading: AuthLoadingScreen,
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to ho
   SignIn: LoginScreen,
