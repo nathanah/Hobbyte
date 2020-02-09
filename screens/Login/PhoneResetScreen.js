@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, ScrollView,Keyboard } from 'react-native';
 
 /*=====================================================*/
-/*            Reset Screen                              */
+/*            Phone Reset Screen                       */
 /*=====================================================*/
-export default class ResetScreen extends React.Component {
+export default class PhoneResetScreen extends React.Component {
 
 
   state = {
@@ -21,9 +21,9 @@ export default class ResetScreen extends React.Component {
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
-            source={require('../../assets/images/logo.png')}	 
+            source={require('../../assets/images/logo.png')}
             />
-        <Text style={styles.header}>Reset Password</Text>
+        <Text style={styles.header}>Reset Phone Number</Text>
         <TextInput
                 placeholder="Email"
                 style={styles.formBox}
@@ -36,18 +36,6 @@ export default class ResetScreen extends React.Component {
                 autoCorrect={false}
                 value={this.state.email}
                 onChange ={event => this.setState({email:event.nativeEvent.text})}
-                underlineColorAndroid = "transparent"
-            />
-
-            <TextInput
-                placeholder = "Phone Number"
-                style={styles.formBox}
-                placeholderTextColor = "#2e4257"
-                keyboardType="phone-pad"
-                returnKeyType="send"
-                ref = {(input) => {this.phoneInput = input;}}
-                value={this.state.phone}
-                onChange={event => this.setState({phone: event.nativeEvent.text })}
                 underlineColorAndroid = "transparent"
             />
 

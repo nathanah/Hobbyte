@@ -3,16 +3,14 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
 
 /*=====================================================*/
-/*            Login Screen                              */
+/*            Phone Verification Screen                */
 /*=====================================================*/
-export default class LoginScreen extends React.Component {
+export default class TwoFactorScreen extends React.Component {
 
 
   state = {
 
-    username: '',
-    password: '',
-    status: '',
+    verificationCode: '',
 
   };
 
@@ -26,32 +24,18 @@ export default class LoginScreen extends React.Component {
             style={styles.logo}
             source={require('../../assets/images/logo.png')}
             />
-
+          <Text style={styles.header}>Two Factor Verification Code</Text>
           <TextInput
-            placeholder="Username"
+            placeholder="Code"
             style={styles.formBox}
             placeholderTextColor = "#2e4257"
-            returnKeyType = "next"
+            returnKeyType = "go"
             autoFocus={true}
-            onSubmitEditing = {() => {this.passwordInput.focus();}}
-            keyboardType="email-address"
+            onSubmitEditing = {this._loginAsync}
             autoCapitalize='none'
             autoCorrect={false}
-            value={this.state.username}
-            onChange ={event => this.setState({username:event.nativeEvent.text})}
-            underlineColorAndroid = "transparent"
-          />
-
-          <TextInput
-            placeholder = "Password"
-            style={styles.formBox}
-            placeholderTextColor = "#2e4257"
-            secureTextEntry
-            returnKeyType="go"
-            ref = {(input) => {this.passwordInput = input;}}
-            value={this.state.password}
-            onChange={event => this.setState({password: event.nativeEvent.text })}
-            onSubmitEditing = {this._loginAsync}
+            value={this.state.verificationCode}
+            onChange ={event => this.setState({verificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
 
@@ -64,17 +48,10 @@ export default class LoginScreen extends React.Component {
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text
-                  onPress={this._resetAsync}>Forgot password or username?</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.resetContainer}>
-                <Text
-                  onPress={this._signUpAsync}>New User? Sign Up Here!</Text>
+                  onPress={this._resetAsync}>Changed phone number?</Text>
         </TouchableOpacity>
 
           </ScrollView>
-
-
 
 
       </KeyboardAvoidingView>
@@ -88,23 +65,15 @@ export default class LoginScreen extends React.Component {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
       console.log("Login information input from user: ");
-      console.log("username:" + this.state.username);
-      console.log("password:" + this.state.password);
-      this.props.navigation.navigate('TFS');
+      console.log("code:" + this.state.verificationCode);
+      this.props.navigation.navigate('Home');
     };
 
     _resetAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Redirecting to reset page");
-      this.props.navigation.navigate('Reset');
-    };
-
-    _signUpAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Redirecting to Sign Up page");
-      this.props.navigation.navigate('SignUp');
+      console.log("Redirecting to phone reset page");
+      this.props.navigation.navigate('PhoneReset');
     };
 }
 
@@ -113,7 +82,10 @@ const styles = StyleSheet.create({
   container:{
       padding:20,
   },
-
+  header:{
+    paddingBottom: 25,
+    fontSize: 18,
+  },
   formBox:{
       height: 45,
       backgroundColor: '#FFF',

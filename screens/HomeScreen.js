@@ -3,7 +3,7 @@
 
 // HomeScreen
 // Should appear after Login page
-// currently displays green screen with Sign Out button 
+// currently displays green screen with Sign Out button
 
 import * as WebBrowser from 'expo-web-browser';
 import { createAppContainer } from 'react-navigation';
@@ -18,45 +18,54 @@ import {
   TouchableOpacity,
   View,
   Button,
-  AsyncStorage, 
+  AsyncStorage,
 } from 'react-native';
 
-import Login from './Login/Login'; 
+// import Login from './Login/';
 
 import { MonoText } from '../components/StyledText';
 
 
 
-export default class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-    this._signOutAsync();
-  }
-  render(){
-    const {navigate} = this.props.navigation;
+/*=====================================================*/
+/*            Home Screen                              */
+/*=====================================================*/
+export default class HomeScreen extends React.Component {
+  render() {
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Details Screen</Text>
+        <Button
+          title="Go to Details... again"
+          onPress={() => this.props.navigation.navigate('Home')}
+        />
+        <Button
+          title="Sign out"
+          onPress={this._signOutAsync}
+        />
+        <Button
+          title="Go back"
+          onPress={() => this.props.navigation.goBack()}
+        />
 
-  
-      <TouchableOpacity>
-        <Text style={styles.signOutButton} onPress={() => navigate('Login')} >Sign out!</Text>
-      </TouchableOpacity> 
-  
+
+          {/* TODO - note Not sure why going back to auth page leads to spinning loading button */}
+        <Button
+          title="Go back to auth page"
+          onPress={() => this.props.navigation.navigate('AuthLoading')}
+        />
       </View>
     );
-  
-    }
-
-    //onPress={this._signOutAsync}
- 
-    // clears user data from global storage on local
-    _signOutAsync = async () => {
-      // await AsyncStorage.clear();
-     this.props.navigation.navigate('Auth');
-    };
   }
+
+  /*--------------------Async------------------------*/
+  _signOutAsync = async () => {
+    // TODO - clear Async storage
+    // await AsyncStorage.clear();
+    this.props.navigation.navigate('SignIn');
+  };
+
+}
 
 
 
@@ -108,7 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#add836',
     alignContent:'center',
-    paddingTop: 50, 
+    paddingTop: 50,
     paddingHorizontal: 50
   },
   developmentModeText: {
@@ -195,10 +204,10 @@ const styles = StyleSheet.create({
   },
 
   signOutButton:{
-    backgroundColor:'#FFF', 
+    backgroundColor:'#FFF',
     padding:10,
-    textAlign:'center', 
-    fontWeight:"500", 
-    
+    textAlign:'center',
+    fontWeight:"500",
+
   }
 });

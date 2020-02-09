@@ -6,21 +6,44 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 
-/*John - This is setup for Amplify*/
-import Amplify, { Auth } from 'aws-amplify';
-import awsconfig from './aws-exports';
-Amplify.configure(awsconfig);
-/*</John>*/
-
-
 /*=====================================================*/
 /*                      MAIN                           */
 /*=====================================================*/
 
+import * as firebase from 'firebase';
+
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDbor4DxPmmOfsBNvd1CoRLUXgCiLaUk_8",
+    authDomain: "hobyte-4e08c.firebaseapp.com",
+    databaseURL: "https://hobyte-4e08c.firebaseio.com",
+    projectId: "hobyte-4e08c",
+    storageBucket: "hobyte-4e08c.appspot.com",
+    messagingSenderId: "361566556420",
+    appId: "1:361566556420:web:cdeedf44697ec542ac0051"
+  };
+
+  // Initialize Firebase
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+ // let db = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
+ function storeHighScore(userId, score) {
+    firebase.database().ref('users/' + userId).set({
+      highscore: score
+    });
+  }
+
+
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {    
+  if (!isLoadingComplete && !props.skipLoadingScreen) {
+    storeHighScore(123,12321);
+
     return (
       <AppLoading
         startAsync={loadResourcesAsync}
@@ -41,8 +64,8 @@ export default function App(props) {
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      require('./assets/images/bilbo.png'),
-      require('./assets/images/bilbo-small.png'),
+      require('./assets/images/logo.png'),
+      require('./assets/images/logo-small.png'),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar

@@ -11,12 +11,8 @@ import * as firebase from 'firebase';
     appId: "1:361566556420:web:cdeedf44697ec542ac0051"
   };
 
- // Initialize Firebase
-//Checks length of list of connected apps, if it is non zero, then it does not re initialize.
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
+  // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
  // let db = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
  function storeHighScore(userId, score) {
     firebase.database().ref('users/' + userId).set({

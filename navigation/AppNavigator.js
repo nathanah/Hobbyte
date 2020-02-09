@@ -17,60 +17,27 @@ import { createStackNavigator } from 'react-navigation-stack';
 import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
 import ResetScreen from '../screens/Login/ResetScreen';
+import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
+import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
+import HomeScreen from "../screens/HomeScreen"
+import SignUpScreen from "../screens/Login/SignUpScreen"
 
 
 
 
-/*=====================================================*/
-/*            Home Screen                              */
-/*=====================================================*/
-class HomeScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-        <Button
-          title="Go to Details... again"
-          onPress={() => this.props.navigation.navigate('Home')}
-        />
-        <Button
-          title="Sign out"
-          onPress={this._signOutAsync}
-        />
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
-
-
-          {/* TODO - note Not sure why going back to auth page leads to spinning loading button */}
-        <Button
-          title="Go back to auth page"
-          onPress={() => this.props.navigation.navigate('AuthLoading')}
-        />
-      </View>
-    );
-  }
-
-  /*--------------------Async------------------------*/
-  _signOutAsync = async () => {
-    // TODO - clear Async storage
-    // await AsyncStorage.clear();
-    this.props.navigation.navigate('SignIn');
-  };
-
-}
 
 /*---------------------Navigation Stack -----------------------------*/
 
 //Define different pages
-const RootStack = createStackNavigator(
-{
+const RootStack = createStackNavigator({
   AuthLoading: AuthLoadingScreen,
-  //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to ho
+  //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
   SignIn: LoginScreen,
+  SignUp: SignUpScreen,
   Home: HomeScreen,
   Reset: ResetScreen,
+  TFS: TwoFactorScreen,
+  PhoneReset: PhoneResetScreen,
 },
 {
   initialRouteName: 'AuthLoading',
