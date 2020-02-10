@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
-
+import {Auth} from 'aws-amplify';
 /*=====================================================*/
 /*            Login Screen                              */
 /*=====================================================*/
@@ -15,7 +15,7 @@ export default class SignUpScreen extends React.Component {
     passwordConfirm: '',
     email: '',
     phoneNumber: '',
-
+    confirmationCode: '',
   };
 
   render() {
@@ -111,6 +111,8 @@ export default class SignUpScreen extends React.Component {
     );
   }
 
+
+
   /*--------------------Async------------------------*/
     _submitAsync = async () => {
       // TODO - fetch user token and verify user identity
@@ -121,7 +123,19 @@ export default class SignUpScreen extends React.Component {
       console.log("phone # :" + this.state.phoneNumber);
       console.log("password:" + this.state.password);
       console.log("password:" + this.state.passwordConfirm);
-      this.props.navigation.navigate('SignIn');
+
+      Auth.signUp({
+        username: this.state.username,
+        password: this.state.password,
+        attributes: {
+          email: this.state.email,
+          phone_number: this.state.phone_number,
+        },
+      })
+        .then(() => console.log('successful sign up!'))
+        .catch(err => console.log('error signing up!: ', err));
+      
+      //this.props.navigation.navigate('SignIn');
     };
 }
 
