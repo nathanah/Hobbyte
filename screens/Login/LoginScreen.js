@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
+import {Auth} from 'aws-amplify';
 
 /*=====================================================*/
 /*            Login Screen                              */
 /*=====================================================*/
 export default class LoginScreen extends React.Component {
-
-
   state = {
-
     username: '',
     password: '',
-    status: '',
-
+    confirmationCode: '',
+    user: {},
   };
 
   render() {
@@ -61,6 +59,25 @@ export default class LoginScreen extends React.Component {
                   onPress={this._loginAsync}>LOGIN</Text>
         </TouchableOpacity>
 
+        <TextInput
+            placeholder = "Code"
+            style={styles.formBox}
+            placeholderTextColor = "#2e4257"
+            returnKeyType="go"
+            ref = {(input) => {this.confirmationCode = input;}}
+            value={this.state.confirmationCode}
+            onChange={event => this.setState({confirmationCode: event.nativeEvent.text })}
+            onSubmitEditing = {this._confermAsync}
+            underlineColorAndroid = "transparent"
+          />
+
+
+        <TouchableOpacity style={styles.loginContainer}>
+                <Text style={styles.buttonText}
+                  onPress={this._confermAsync}>Sumbit</Text>
+        </TouchableOpacity>
+
+
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text
@@ -71,7 +88,10 @@ export default class LoginScreen extends React.Component {
                 <Text
                   onPress={this._signUpAsync}>New User? Sign Up Here!</Text>
         </TouchableOpacity>
-
+        <TouchableOpacity style={styles.resetContainer}>
+                <Text
+                  onPress={this._goToHome}>Home Screen</Text>
+        </TouchableOpacity>
           </ScrollView>
 
 
@@ -83,6 +103,8 @@ export default class LoginScreen extends React.Component {
     );
   }
 
+
+    
   /*--------------------Async------------------------*/
     _loginAsync = async () => {
       // TODO - fetch user token and verify user identity
@@ -90,8 +112,30 @@ export default class LoginScreen extends React.Component {
       console.log("Login information input from user: ");
       console.log("username:" + this.state.username);
       console.log("password:" + this.state.password);
-      this.props.navigation.navigate('TFS');
+      const { username, password } = this.state;
+      Auth.signIn(username, password)
+        .then(user => {
+          this.setState({ user });
+          console.log('successful sign in!');
+          console.log(this.state.user);
+        })
+        .catch(err => console.log('error signing in!: ', err));
     };
+
+    _confermAsync = async () => {
+      // TODO - fetch user token and verify user identity
+      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
+      console.log("Conferming user: ");
+      console.log("code:" + this.state.confirmationCode);
+
+      Auth.confirmSignIn(this.state.user, this.state.confirmationCode)
+      .then(() => {
+        console.log('successful confirm sign in!');
+      })
+      .catch(err => console.log('error confirming signing in!: ', err));
+      //this.props.navigation.navigate('SignIn');
+    };
+
 
     _resetAsync = async () => {
       // TODO - fetch user token and verify user identity
@@ -106,7 +150,16 @@ export default class LoginScreen extends React.Component {
       console.log("Redirecting to Sign Up page");
       this.props.navigation.navigate('SignUp');
     };
+    _goToHome = async () => {
+      if(Auth.user !== null) {
+        this.props.navigation.navigate('Home');
+      } else {
+        console.log("User is ", Auth.user)
+        console.log("Must login before going to home screen")
+      }
+    };
 }
+
 
 
 const styles = StyleSheet.create({

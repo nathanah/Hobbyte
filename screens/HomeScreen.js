@@ -24,6 +24,7 @@ import {
 // import Login from './Login/';
 
 import { MonoText } from '../components/StyledText';
+import {Auth} from 'aws-amplify';
 
 
 
@@ -34,7 +35,7 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
+        <Text>Wellcome To This Super Sweet App {Auth.user.username}</Text>
         <Button
           title="Go to Details... again"
           onPress={() => this.props.navigation.navigate('Home')}
@@ -62,7 +63,12 @@ export default class HomeScreen extends React.Component {
   _signOutAsync = async () => {
     // TODO - clear Async storage
     // await AsyncStorage.clear();
-    this.props.navigation.navigate('SignIn');
+    Auth.signOut()
+    .then(() => {
+      console.log("Signed Out")
+      this.props.navigation.navigate('SignIn')
+    })
+    .catch(err => console.log('error confirming signing in!: ', err));
   };
 
 }

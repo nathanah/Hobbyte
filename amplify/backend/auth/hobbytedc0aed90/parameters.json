@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "socialmediaapp237c2083_identitypool_237c2083",
+    "identityPoolName": "hobbytedc0aed90_identitypool_dc0aed90",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "social237c2083",
-    "userPoolName": "socialmediaapp237c2083_userpool_237c2083",
+    "resourceNameTruncated": "hobbytdc0aed90",
+    "userPoolName": "hobbytedc0aed90_userpool_dc0aed90",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -17,7 +17,10 @@
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
-    "requiredAttributes": [],
+    "requiredAttributes": [
+        "email",
+        "phone_number"
+    ],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
@@ -26,9 +29,9 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "social237c2083_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "hobbytdc0aed90_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "resourceName": "socialmediaapp237c2083",
+    "resourceName": "hobbytedc0aed90",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [

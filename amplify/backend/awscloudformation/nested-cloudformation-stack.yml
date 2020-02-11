@@ -68,30 +68,15 @@
 				}
 			}
 		},
-		"apihobyte": {
+		"authhobbytedc0aed90": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/amplify-social-media-app-hobyte-224702-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-133609-deployment/amplify-cfn-templates/auth/hobbytedc0aed90-cloudformation-template.yml",
 				"Parameters": {
-					"CreateAPIKey": 1,
-					"AppSyncApiName": "hobyte",
-					"DynamoDBBillingMode": "PAY_PER_REQUEST",
-					"DynamoDBEnableServerSideEncryption": "false",
-					"S3DeploymentBucket": "amplify-social-media-app-hobyte-224702-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/3b7c616573d4a10d77f69194d5018a36a33e6adc",
-					"env": "hobyte"
-				}
-			}
-		},
-		"authsocialmediaapp237c2083": {
-			"Type": "AWS::CloudFormation::Stack",
-			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/amplify-social-media-app-hobyte-224702-deployment/amplify-cfn-templates/auth/socialmediaapp237c2083-cloudformation-template.yml",
-				"Parameters": {
-					"identityPoolName": "socialmediaapp237c2083_identitypool_237c2083",
+					"identityPoolName": "hobbytedc0aed90_identitypool_dc0aed90",
 					"allowUnauthenticatedIdentities": false,
-					"resourceNameTruncated": "social237c2083",
-					"userPoolName": "socialmediaapp237c2083_userpool_237c2083",
+					"resourceNameTruncated": "hobbytdc0aed90",
+					"userPoolName": "hobbytedc0aed90_userpool_dc0aed90",
 					"autoVerifiedAttributes": "email",
 					"mfaConfiguration": "OFF",
 					"mfaTypes": "SMS Text Message",
@@ -102,14 +87,14 @@
 					"defaultPasswordPolicy": false,
 					"passwordPolicyMinLength": 8,
 					"passwordPolicyCharacters": "",
-					"requiredAttributes": "",
+					"requiredAttributes": "email,phone_number",
 					"userpoolClientGenerateSecret": true,
 					"userpoolClientRefreshTokenValidity": 30,
 					"userpoolClientWriteAttributes": "email",
 					"userpoolClientReadAttributes": "email",
-					"userpoolClientLambdaRole": "social237c2083_userpoolclient_lambda_role",
+					"userpoolClientLambdaRole": "hobbytdc0aed90_userpoolclient_lambda_role",
 					"userpoolClientSetAttributes": false,
-					"resourceName": "socialmediaapp237c2083",
+					"resourceName": "hobbytedc0aed90",
 					"authSelections": "identityPoolAndUserPool",
 					"authRoleArn": {
 						"Fn::GetAtt": [
@@ -131,7 +116,7 @@
 					},
 					"permissions": "",
 					"dependsOn": "",
-					"env": "hobyte"
+					"env": "hobbyte"
 				}
 			}
 		},
@@ -139,7 +124,7 @@
 			"DependsOn": [
 				"AuthRole",
 				"UnauthRole",
-				"authsocialmediaapp237c2083"
+				"authhobbytedc0aed90"
 			],
 			"Type": "AWS::Lambda::Function",
 			"Properties": {
@@ -222,7 +207,7 @@
 				},
 				"idpId": {
 					"Fn::GetAtt": [
-						"authsocialmediaapp237c2083",
+						"authhobbytedc0aed90",
 						"Outputs.IdentityPoolId"
 					]
 				},

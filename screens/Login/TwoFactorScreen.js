@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
+import Amplify, { Auth } from 'aws-amplify';
 
 /*=====================================================*/
 /*            Phone Verification Screen                */
@@ -66,6 +67,10 @@ export default class TwoFactorScreen extends React.Component {
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
       console.log("Login information input from user: ");
       console.log("code:" + this.state.verificationCode);
+
+      Auth.confirmSignUp(this.state.username, this.state.verificationCode)
+      .then(() => console.log('successful confirm sign up!'))
+      .catch(err => console.log('error confirming signing up!: ', err));
       this.props.navigation.navigate('Home');
     };
 

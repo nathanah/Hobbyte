@@ -1,0 +1,449 @@
+<pre><font color="#4E9A06">Packager stopped.</font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ ^C
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ git add .
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ git commit -m &quot;Going to try to reset up userpool.&quot;
+[login-merging-step b33b8d46] Going to try to reset up userpool.
+ 2 files changed, 23 insertions(+), 31 deletions(-)
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify status
+Scanning for plugins...
+Plugin scan successful
+
+<font color="#4E9A06">Current Environment</font>: hobyte
+
+<font color="#555753">|</font><font color="#CC0000"> Category </font><font color="#555753">|</font><font color="#CC0000"> Resource name          </font><font color="#555753">|</font><font color="#CC0000"> Operation </font><font color="#555753">|</font><font color="#CC0000"> Provider plugin   </font><font color="#555753">|</font>
+<font color="#555753">|</font> -------- <font color="#555753">|</font> ---------------------- <font color="#555753">|</font> --------- <font color="#555753">|</font> ----------------- <font color="#555753">|</font>
+<font color="#555753">|</font> Api      <font color="#555753">|</font> hobyte                 <font color="#555753">|</font> No Change <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+<font color="#555753">|</font> Auth     <font color="#555753">|</font> socialmediaapp237c2083 <font color="#555753">|</font> No Change <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+
+GraphQL endpoint: <font color="#3465A4"><u style="text-decoration-style:single">https://o2qjnuukqjgknfbnqvjanlgpbu.appsync-api.us-west-2.amazonaws.com/graphql</u></font>
+GraphQL API KEY: <font color="#3465A4"><u style="text-decoration-style:single">da2-f6if4cr5vjbezm4cri6mtnbyhm</u></font>
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify add auth
+<font color="#C4A000">Auth has already been added to this project. To update run amplify update auth.</font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify update auth
+Please note that certain attributes may not be overwritten if you choose to use defaults settings.
+
+You have configured resources that might depend on this Cognito resource.  Updating this Cognito resource could have unintended side effects.
+
+Using service: Cognito, provided by: awscloudformation
+ 
+<font color="#4E9A06"> The current configured provider is Amazon Cognito. </font>
+ 
+ <b>Do you want to use the default authentication and security configuration?</b> <font color="#06989A">Defau</font>
+<font color="#06989A">lt configuration</font>
+ <b>What do you want to do?</b> <font color="#06989A">Apply default configuration without Social Provider (Fe</font>
+<font color="#06989A">deration)</font>
+TypeError: Cannot read property &apos;substring&apos; of undefined
+    at userPoolDefaults (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/assets/cognito-defaults.js:23:47)
+    at Object.identityAndUserPoolDefaults [as identityPoolAndUserPool] (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/assets/cognito-defaults.js:65:6)
+    at /home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/index.js:255:58
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at Object.executeAmplifyCommand (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/index.js:284:3)
+<font color="#CC0000">There was an error adding the auth resource</font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify remove Auth
+<font color="#C4A000">The Amplify CLI can NOT find command:  remove Auth</font>
+Scanning for plugins...
+Plugin scan successful
+
+
+<font color="#555753">|</font><font color="#CC0000"> Category      </font><font color="#555753">|</font>
+<font color="#555753">|</font> ------------- <font color="#555753">|</font>
+<font color="#555753">|</font> analytics     <font color="#555753">|</font>
+<font color="#555753">|</font> api           <font color="#555753">|</font>
+<font color="#555753">|</font> auth          <font color="#555753">|</font>
+<font color="#555753">|</font> function      <font color="#555753">|</font>
+<font color="#555753">|</font> hosting       <font color="#555753">|</font>
+<font color="#555753">|</font> interactions  <font color="#555753">|</font>
+<font color="#555753">|</font> notifications <font color="#555753">|</font>
+<font color="#555753">|</font> predictions   <font color="#555753">|</font>
+<font color="#555753">|</font> storage       <font color="#555753">|</font>
+<font color="#555753">|</font> xr            <font color="#555753">|</font>
+
+ █████╗ ███╗   ███╗██████╗ ██╗     ██╗███████╗██╗   ██╗    ███████╗██████╗  █████╗ ███╗   ███╗███████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
+██╔══██╗████╗ ████║██╔══██╗██║     ██║██╔════╝╚██╗ ██╔╝    ██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔════╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝
+███████║██╔████╔██║██████╔╝██║     ██║█████╗   ╚████╔╝     █████╗  ██████╔╝███████║██╔████╔██║█████╗  ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ 
+██╔══██║██║╚██╔╝██║██╔═══╝ ██║     ██║██╔══╝    ╚██╔╝      ██╔══╝  ██╔══██╗██╔══██║██║╚██╔╝██║██╔══╝  ██║███╗██║██║   ██║██╔══██╗██╔═██╗ 
+██║  ██║██║ ╚═╝ ██║██║     ███████╗██║██║        ██║       ██║     ██║  ██║██║  ██║██║ ╚═╝ ██║███████╗╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗
+╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝╚═╝        ╚═╝       ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝ ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+                                                                                                                                         
+amplify &lt;command&gt; &lt;subcommand&gt;
+
+<font color="#555753"> </font> init              <font color="#555753"> </font> Initializes a new project, sets up deployment resources in the cloud, and makes your project ready for Amplify.                              
+<font color="#555753"> </font> configure         <font color="#555753"> </font> Configures the attributes of your project for amplify-cli, such as switching front-end framework and adding/removing cloud-provider plugins. 
+<font color="#555753"> </font> push              <font color="#555753"> </font> Provisions cloud resources with the latest local developments.                                                                               
+<font color="#555753"> </font> pull              <font color="#555753"> </font> Fetch upstream backend environment definition changes from the cloud and updates the local environment to match that definition.             
+<font color="#555753"> </font> publish           <font color="#555753"> </font> Executes amplify push, and then builds and publishes client-side application for hosting.                                                    
+<font color="#555753"> </font> serve             <font color="#555753"> </font> Executes amplify push, and then executes the project&apos;s start command to test run the client-side application locally.                        
+<font color="#555753"> </font> status            <font color="#555753"> </font> Shows the state of local resources not yet pushed to the cloud (Create/Update/Delete).                                                       
+<font color="#555753"> </font> delete            <font color="#555753"> </font> Deletes all of the resources tied to the project from the cloud.                                                                             
+<font color="#555753"> </font> &lt;category&gt; add    <font color="#555753"> </font> Adds a resource for an Amplify category in your local backend                                                                                
+<font color="#555753"> </font> &lt;category&gt; update <font color="#555753"> </font> Update resource for an Amplify category in your local backend.                                                                               
+<font color="#555753"> </font> &lt;category&gt; push   <font color="#555753"> </font> Provisions all cloud resources in a category with the latest local developments.                                                             
+<font color="#555753"> </font> &lt;category&gt; remove <font color="#555753"> </font> Removes a resource for an Amplify category in your local backend.                                                                            
+<font color="#555753"> </font> &lt;category&gt;        <font color="#555753"> </font> Displays subcommands of the specified Amplify category.                                                                                      
+<font color="#555753"> </font> mock              <font color="#555753"> </font> Run mock server for testing categories locally.                                                                                              
+<font color="#555753"> </font> codegen           <font color="#555753"> </font> Generates GraphQL statements(queries, mutations and eventHandlers) and type annotations.                                                     
+<font color="#555753"> </font> env               <font color="#555753"> </font> Displays and manages environment related information for your Amplify project.                                                               
+<font color="#555753"> </font> console           <font color="#555753"> </font> Opens the web console for the selected cloud resource.                                                                                       
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify remove auth
+
+You have configured resources that might depend on this Cognito resource.  Updating this Cognito resource could have unintended side effects.
+
+<font color="#4E9A06">?</font> <b>Choose the resource you would want to remove</b> <font color="#06989A">socialmediaapp237c2083</font>
+<font color="#4E9A06">?</font> <b>Are you sure you want to delete the resource? This action deletes all files re</b>
+<b>lated to this resource from the backend directory.</b> <font color="#06989A">Yes</font>
+<font color="#4E9A06">Successfully removed resource</font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify status
+
+<font color="#4E9A06">Current Environment</font>: hobyte
+
+<font color="#555753">|</font><font color="#CC0000"> Category </font><font color="#555753">|</font><font color="#CC0000"> Resource name          </font><font color="#555753">|</font><font color="#CC0000"> Operation </font><font color="#555753">|</font><font color="#CC0000"> Provider plugin   </font><font color="#555753">|</font>
+<font color="#555753">|</font> -------- <font color="#555753">|</font> ---------------------- <font color="#555753">|</font> --------- <font color="#555753">|</font> ----------------- <font color="#555753">|</font>
+<font color="#555753">|</font> Auth     <font color="#555753">|</font> socialmediaapp237c2083 <font color="#555753">|</font> Delete    <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+<font color="#555753">|</font> Api      <font color="#555753">|</font> hobyte                 <font color="#555753">|</font> No Change <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+
+GraphQL endpoint: <font color="#3465A4"><u style="text-decoration-style:single">https://o2qjnuukqjgknfbnqvjanlgpbu.appsync-api.us-west-2.amazonaws.com/graphql</u></font>
+GraphQL API KEY: <font color="#3465A4"><u style="text-decoration-style:single">da2-f6if4cr5vjbezm4cri6mtnbyhm</u></font>
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ lsls
+ls
+
+Command &apos;lsls&apos; not found, did you mean:
+
+  command &apos;lsns&apos; from deb util-linux
+  command &apos;fsls&apos; from deb python-fs
+
+Try: sudo apt install &lt;deb name&gt;
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ ls
+<font color="#729FCF"><b>amplify</b></font>          babel.config.js     <font color="#729FCF"><b>node_modules</b></font>       <font color="#729FCF"><b>src</b></font>
+AmplifySetup2-2  <font color="#729FCF"><b>components</b></font>          package.json       <font color="#729FCF"><b>__tests__</b></font>
+App.js           <font color="#729FCF"><b>constants</b></font>           package-lock.json  text.txt
+app.json         firebase_config.js  README.md
+<font color="#729FCF"><b>assets</b></font>           init-firebase.js    <font color="#729FCF"><b>screens</b></font>
+aws-exports.js   <font color="#729FCF"><b>navigation</b></font>          <font color="#729FCF"><b>social-media-app</b></font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ firefox AmplifySetup2-2 &amp;
+[1] 27847
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify add auth
+Using service: Cognito, provided by: awscloudformation
+ 
+<font color="#4E9A06"> The current configured provider is Amazon Cognito. </font>
+ 
+ <b>Do you want to use the default authentication and security configuration?</b> <font color="#06989A">Defau</font>
+<font color="#06989A">lt configuration</font>
+ <font color="#CC0000">Warning: you will not be able to edit these selections.</font> 
+ <b>How do you want users to be able to sign in?</b> <font color="#06989A">Username</font>
+ <b>Do you want to configure advanced settings?</b> <font color="#06989A">Yes, I want to make some additional</font>
+<font color="#06989A"> changes.</font>
+ <font color="#CC0000">Warning: you will not be able to edit these selections.</font> 
+ <b>What attributes are required for signing up?</b> <font color="#06989A">Email, Phone Number (This attribute is not supported by Facebook, Login With Amazon.)</font>
+ <b>Do you want to enable any of the following capabilities?</b> 
+Error: ENOENT: no such file or directory, open &apos;/home/john/Desktop/Hobyte/Hobbyte/social-media-app/amplify/backend/auth/socialmediaappd386d251/parameters.json&apos;
+    at Object.openSync (fs.js:457:3)
+    at Proxy.writeFileSync (fs.js:1298:35)
+    at Object.saveResourceParameters (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-provider-awscloudformation/src/resourceParams.js:25:6)
+    at saveResourceParameters (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/index.js:110:12)
+    at /home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/index.js:146:7
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at Object.executeAmplifyCommand (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/index.js:284:3)
+<font color="#CC0000">There was an error adding the auth resource</font>
+[1]+  Done                    firefox AmplifySetup2-2
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify status
+
+<font color="#4E9A06">Current Environment</font>: hobyte
+
+<font color="#555753">|</font><font color="#CC0000"> Category </font><font color="#555753">|</font><font color="#CC0000"> Resource name          </font><font color="#555753">|</font><font color="#CC0000"> Operation </font><font color="#555753">|</font><font color="#CC0000"> Provider plugin   </font><font color="#555753">|</font>
+<font color="#555753">|</font> -------- <font color="#555753">|</font> ---------------------- <font color="#555753">|</font> --------- <font color="#555753">|</font> ----------------- <font color="#555753">|</font>
+<font color="#555753">|</font> Auth     <font color="#555753">|</font> socialmediaapp237c2083 <font color="#555753">|</font> Delete    <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+<font color="#555753">|</font> Api      <font color="#555753">|</font> hobyte                 <font color="#555753">|</font> No Change <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+
+GraphQL endpoint: <font color="#3465A4"><u style="text-decoration-style:single">https://o2qjnuukqjgknfbnqvjanlgpbu.appsync-api.us-west-2.amazonaws.com/graphql</u></font>
+GraphQL API KEY: <font color="#3465A4"><u style="text-decoration-style:single">da2-f6if4cr5vjbezm4cri6mtnbyhm</u></font>
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify add auth
+Using service: Cognito, provided by: awscloudformation
+ 
+<font color="#4E9A06"> The current configured provider is Amazon Cognito. </font>
+ 
+ <b>Do you want to use the default authentication and security configuration?</b> <font color="#06989A">Default configuration</font>
+ <font color="#CC0000">Warning: you will not be able to edit these selections.</font> 
+ <b>How do you want users to be able to sign in?</b> <font color="#06989A">Username</font>
+ <b>Do you want to configure advanced settings?</b> <font color="#06989A">Yes, I want to make some additional changes.</font>
+ <font color="#CC0000">Warning: you will not be able to edit these selections.</font> 
+ <b>What attributes are required for signing up?</b> <font color="#06989A">Email, Phone Number (This attribute is not supported by Facebook, Login With Amazon.)</font>
+ <b>Do you want to enable any of the following capabilities?</b> 
+Error: ENOENT: no such file or directory, open &apos;/home/john/Desktop/Hobyte/Hobbyte/social-media-app/amplify/backend/auth/socialmediaappa3625941/parameters.json&apos;
+    at Object.openSync (fs.js:457:3)
+    at Proxy.writeFileSync (fs.js:1298:35)
+    at Object.saveResourceParameters (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-provider-awscloudformation/src/resourceParams.js:25:6)
+    at saveResourceParameters (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/index.js:110:12)
+    at /home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/index.js:146:7
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at Object.executeAmplifyCommand (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/index.js:284:3)
+<font color="#CC0000">There was an error adding the auth resource</font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ ls
+<font color="#729FCF"><b>amplify</b></font>          app.json        babel.config.js  firebase_config.js  <font color="#729FCF"><b>node_modules</b></font>       README.md         <font color="#729FCF"><b>src</b></font>
+AmplifySetup2-2  <font color="#729FCF"><b>assets</b></font>          <font color="#729FCF"><b>components</b></font>       init-firebase.js    package.json       <font color="#729FCF"><b>screens</b></font>           <font color="#729FCF"><b>__tests__</b></font>
+App.js           aws-exports.js  <font color="#729FCF"><b>constants</b></font>        <font color="#729FCF"><b>navigation</b></font>          package-lock.json  <font color="#729FCF"><b>social-media-app</b></font>  text.txt
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ cd amplify/
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify</b></font>$ cd backend/auth/
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth</b></font>$ ls
+<font color="#729FCF"><b>socialmediaappa3625941</b></font>  <font color="#729FCF"><b>socialmediaappd386d251</b></font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth</b></font>$ cd socialmediaappa3625941
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth/socialmediaappa3625941</b></font>$ ls
+socialmediaappa3625941-cloudformation-template.yml
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth/socialmediaappa3625941</b></font>$ cd ..
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth</b></font>$ ls
+<font color="#729FCF"><b>socialmediaappa3625941</b></font>  <font color="#729FCF"><b>socialmediaappd386d251</b></font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth</b></font>$ cd socialmediaappd386d251
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth/socialmediaappd386d251</b></font>$ ls
+socialmediaappd386d251-cloudformation-template.yml
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth/socialmediaappd386d251</b></font>$ cd ..
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend/auth</b></font>$ cd ..
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte/amplify/backend</b></font>$ cd ../..
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify add auth
+Using service: Cognito, provided by: awscloudformation
+ 
+<font color="#4E9A06"> The current configured provider is Amazon Cognito. </font>
+ 
+ <b>Do you want to use the default authentication and security configuration?</b> <font color="#06989A">Default configuration</font>
+ <font color="#CC0000">Warning: you will not be able to edit these selections.</font> 
+ <b>How do you want users to be able to sign in?</b> <font color="#06989A">Username</font>
+ <b>Do you want to configure advanced settings?</b> <font color="#06989A">No, I am done.</font>
+Error: ENOENT: no such file or directory, open &apos;/home/john/Desktop/Hobyte/Hobbyte/social-media-app/amplify/backend/auth/socialmediaapp5fed2725/parameters.json&apos;
+    at Object.openSync (fs.js:457:3)
+    at Proxy.writeFileSync (fs.js:1298:35)
+    at Object.saveResourceParameters (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-provider-awscloudformation/src/resourceParams.js:25:6)
+    at saveResourceParameters (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/index.js:110:12)
+    at /home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/index.js:146:7
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at Object.executeAmplifyCommand (/home/john/.npm-global/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/index.js:284:3)
+<font color="#CC0000">There was an error adding the auth resource</font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ ^C
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify delete
+<font color="#4E9A06">?</font> <b>Are you sure you want to continue? (This would delete all the environments of the project from the cloud and wipe out all the local amplify resource</b>
+<b> files)</b> <font color="#06989A">Yes</font>
+<font color="#06989A">⠋</font> Deleting resources from the cloud. This may take a few minutes...
+Deleting env:hobyte
+<font color="#4E9A06">✔</font> Project deleted in the cloud
+<font color="#4E9A06">Project deleted locally.</font>
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ rm -rf aws-exports.js
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify init
+<font color="#C4A000">Note: It is recommended to run this command from the root of your app directory</font>
+<font color="#4E9A06">?</font> <b>Enter a name for the project</b> <font color="#06989A">Hobbyte</font>
+<font color="#4E9A06">?</font> <b>Enter a name for the environment</b> <font color="#06989A">hobbyte</font>
+<font color="#4E9A06">?</font> <b>Choose your default editor:</b> <font color="#06989A">Visual Studio Code</font>
+<font color="#4E9A06">?</font> <b>Choose the type of app that you&apos;re building</b> <font color="#06989A">javascript</font>
+Please tell us about your project
+<font color="#4E9A06">?</font> <b>What javascript framework are you using</b> <font color="#06989A">react-native</font>
+<font color="#4E9A06">?</font> <b>Source Directory Path: </b> <font color="#06989A">/</font>
+<font color="#4E9A06">?</font> <b>Distribution Directory Path:</b> <font color="#06989A">/</font>
+<font color="#4E9A06">?</font> <b>Build Command: </b> <font color="#06989A">npm run-script build</font>
+<font color="#4E9A06">?</font> <b>Start Command:</b> <font color="#06989A">npm run-script start</font>
+Using default provider  awscloudformation
+
+For more information on AWS Profiles, see:
+<font color="#4E9A06">https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html</font>
+
+<font color="#4E9A06">?</font> <b>Do you want to use an AWS profile?</b> <font color="#06989A">Yes</font>
+<font color="#4E9A06">?</font> <b>Please choose the profile you want to use</b> <font color="#06989A">hobyte</font>
+Adding backend environment hobbyte to AWS Amplify Console app: d18c2vq74e0rzg
+<font color="#06989A">⠸</font> Initializing project in the cloud...
+
+CREATE_IN_PROGRESS DeploymentBucket               AWS::S3::Bucket            Mon Feb 10 2020 13:36:15 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UnauthRole                     AWS::IAM::Role             Mon Feb 10 2020 13:36:15 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS AuthRole                       AWS::IAM::Role             Mon Feb 10 2020 13:36:14 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UnauthRole                     AWS::IAM::Role             Mon Feb 10 2020 13:36:14 GMT-0800 (Pacific Standard Time)                            
+CREATE_IN_PROGRESS DeploymentBucket               AWS::S3::Bucket            Mon Feb 10 2020 13:36:14 GMT-0800 (Pacific Standard Time)                            
+CREATE_IN_PROGRESS AuthRole                       AWS::IAM::Role             Mon Feb 10 2020 13:36:14 GMT-0800 (Pacific Standard Time)                            
+CREATE_IN_PROGRESS amplify-hobbyte-hobbyte-133609 AWS::CloudFormation::Stack Mon Feb 10 2020 13:36:11 GMT-0800 (Pacific Standard Time) User Initiated             
+<font color="#06989A">⠏</font> Initializing project in the cloud...
+
+<font color="#4E9A06">CREATE_COMPLETE</font> <font color="#4E9A06">UnauthRole</font> <font color="#4E9A06">AWS::IAM::Role</font> <font color="#4E9A06">Mon Feb 10 2020 13:36:30 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#4E9A06">CREATE_COMPLETE</font> <font color="#4E9A06">AuthRole</font>   <font color="#4E9A06">AWS::IAM::Role</font> <font color="#4E9A06">Mon Feb 10 2020 13:36:29 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠙</font> Initializing project in the cloud...
+
+<font color="#4E9A06">CREATE_COMPLETE</font> <font color="#4E9A06">DeploymentBucket</font> <font color="#4E9A06">AWS::S3::Bucket</font> <font color="#4E9A06">Mon Feb 10 2020 13:36:36 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠸</font> Initializing project in the cloud...
+
+<font color="#4E9A06">CREATE_COMPLETE</font> <font color="#4E9A06">amplify-hobbyte-hobbyte-133609</font> <font color="#4E9A06">AWS::CloudFormation::Stack</font> <font color="#4E9A06">Mon Feb 10 2020 13:36:38 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#4E9A06">✔</font> Successfully created initial AWS cloud resources for deployments.
+<font color="#4E9A06">✔</font> Initialized provider successfully.
+<font color="#4E9A06">Initialized your environment successfully.</font>
+
+<font color="#4E9A06">Your project has been successfully initialized and connected to the cloud!</font>
+
+<font color="#4E9A06">Some next steps:</font>
+&quot;amplify status&quot; will show you what you&apos;ve added already and if it&apos;s locally configured or deployed
+&quot;amplify add &lt;category&gt;&quot; will allow you to add features like user login or a backend API
+&quot;amplify push&quot; will build all your local backend resources and provision it in the cloud
+“amplify console” to open the Amplify Console and view your project status
+&quot;amplify publish&quot; will build all your local backend and frontend resources (if you have hosting category added) and provision it in the cloud
+
+<font color="#4E9A06">Pro tip:</font>
+Try &quot;amplify add api&quot; to create a backend API and then &quot;amplify publish&quot; to deploy everything
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify status
+
+<font color="#4E9A06">Current Environment</font>: hobbyte
+
+<font color="#555753">|</font><font color="#CC0000"> Category </font><font color="#555753">|</font><font color="#CC0000"> Resource name </font><font color="#555753">|</font><font color="#CC0000"> Operation </font><font color="#555753">|</font><font color="#CC0000"> Provider plugin </font><font color="#555753">|</font>
+<font color="#555753">|</font> -------- <font color="#555753">|</font> ------------- <font color="#555753">|</font> --------- <font color="#555753">|</font> --------------- <font color="#555753">|</font>
+
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify add auth
+Using service: Cognito, provided by: awscloudformation
+ 
+<font color="#4E9A06"> The current configured provider is Amazon Cognito. </font>
+ 
+ <b>Do you want to use the default authentication and security configuration?</b> <font color="#06989A">Default configuration</font>
+ <font color="#CC0000">Warning: you will not be able to edit these selections.</font> 
+ <b>How do you want users to be able to sign in?</b> <font color="#06989A">Username</font>
+ <b>Do you want to configure advanced settings?</b> <font color="#06989A">Yes, I want to make some additional changes.</font>
+ <font color="#CC0000">Warning: you will not be able to edit these selections.</font> 
+ <b>What attributes are required for signing up?</b> <font color="#06989A">Email, Phone Number (This attribute is not supported by Facebook, Login With Amazon.)</font>
+ <b>Do you want to enable any of the following capabilities?</b> 
+<font color="#4E9A06">Successfully added resource hobbytedc0aed90 locally</font>
+
+<font color="#4E9A06">Some next steps:</font>
+&quot;amplify push&quot; will build all your local backend resources and provision it in the cloud
+&quot;amplify publish&quot; will build all your local backend and frontend resources (if you have hosting category added) and provision it in the cloud
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify push
+<font color="#4E9A06">✔</font> Successfully pulled backend environment hobbyte from the cloud.
+
+<font color="#4E9A06">Current Environment</font>: hobbyte
+
+<font color="#555753">|</font><font color="#CC0000"> Category </font><font color="#555753">|</font><font color="#CC0000"> Resource name   </font><font color="#555753">|</font><font color="#CC0000"> Operation </font><font color="#555753">|</font><font color="#CC0000"> Provider plugin   </font><font color="#555753">|</font>
+<font color="#555753">|</font> -------- <font color="#555753">|</font> --------------- <font color="#555753">|</font> --------- <font color="#555753">|</font> ----------------- <font color="#555753">|</font>
+<font color="#555753">|</font> Auth     <font color="#555753">|</font> hobbytedc0aed90 <font color="#555753">|</font> Create    <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+<font color="#4E9A06">?</font> <b>Are you sure you want to continue?</b> <font color="#06989A">Yes</font>
+<font color="#06989A">⠸</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS authhobbytedc0aed90            AWS::CloudFormation::Stack Mon Feb 10 2020 13:38:37 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UpdateRolesWithIDPFunctionRole AWS::IAM::Role             Mon Feb 10 2020 13:38:36 GMT-0800 (Pacific Standard Time)                            
+CREATE_IN_PROGRESS authhobbytedc0aed90            AWS::CloudFormation::Stack Mon Feb 10 2020 13:38:36 GMT-0800 (Pacific Standard Time)                            
+UPDATE_IN_PROGRESS amplify-hobbyte-hobbyte-133609 AWS::CloudFormation::Stack Mon Feb 10 2020 13:38:32 GMT-0800 (Pacific Standard Time) User Initiated             
+<font color="#06989A">⠦</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS amplify-hobbyte-hobbyte-133609-authhobbytedc0aed90-1E4FLY59FIBLK AWS::CloudFormation::Stack Mon Feb 10 2020 13:38:37 GMT-0800 (Pacific Standard Time) User Initiated
+<font color="#06989A">⠇</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UpdateRolesWithIDPFunctionRole AWS::IAM::Role Mon Feb 10 2020 13:38:37 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠇</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS SNSRole AWS::IAM::Role Mon Feb 10 2020 13:38:42 GMT-0800 (Pacific Standard Time) 
+<font color="#06989A">⠹</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS SNSRole AWS::IAM::Role Mon Feb 10 2020 13:38:43 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠋</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">CREATE_COMPLETE</font> <font color="#4E9A06">UpdateRolesWithIDPFunctionRole</font> <font color="#4E9A06">AWS::IAM::Role</font> <font color="#4E9A06">Mon Feb 10 2020 13:38:53 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠦</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UserPool AWS::Cognito::UserPool Mon Feb 10 2020 13:39:02 GMT-0800 (Pacific Standard Time) 
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">SNSRole</font>  <font color="#4E9A06">AWS::IAM::Role</font>         <font color="#4E9A06">Mon Feb 10 2020 13:38:58 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠧</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UserPoolClient AWS::Cognito::UserPoolClient Mon Feb 10 2020 13:39:07 GMT-0800 (Pacific Standard Time)                            
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UserPool</font>       <font color="#4E9A06">AWS::Cognito::UserPool</font>       <font color="#4E9A06">Mon Feb 10 2020 13:39:04 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS UserPool       AWS::Cognito::UserPool       Mon Feb 10 2020 13:39:04 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠏</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UserPoolClientRole AWS::IAM::Role               Mon Feb 10 2020 13:39:12 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UserPoolClientRole AWS::IAM::Role               Mon Feb 10 2020 13:39:11 GMT-0800 (Pacific Standard Time)                            
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UserPoolClientWeb</font>  <font color="#4E9A06">AWS::Cognito::UserPoolClient</font> <font color="#4E9A06">Mon Feb 10 2020 13:39:10 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS UserPoolClientWeb  AWS::Cognito::UserPoolClient Mon Feb 10 2020 13:39:10 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UserPoolClientWeb  AWS::Cognito::UserPoolClient Mon Feb 10 2020 13:39:09 GMT-0800 (Pacific Standard Time)                            
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UserPoolClient</font>     <font color="#4E9A06">AWS::Cognito::UserPoolClient</font> <font color="#4E9A06">Mon Feb 10 2020 13:39:08 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS UserPoolClient     AWS::Cognito::UserPoolClient Mon Feb 10 2020 13:39:08 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠧</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">CREATE_COMPLETE</font> <font color="#4E9A06">UserPoolClientRole</font> <font color="#4E9A06">AWS::IAM::Role</font> <font color="#4E9A06">Mon Feb 10 2020 13:39:27 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠇</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UserPoolClientLambda</font> <font color="#4E9A06">AWS::Lambda::Function</font> <font color="#4E9A06">Mon Feb 10 2020 13:39:31 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS UserPoolClientLambda AWS::Lambda::Function Mon Feb 10 2020 13:39:30 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UserPoolClientLambda AWS::Lambda::Function Mon Feb 10 2020 13:39:30 GMT-0800 (Pacific Standard Time)                            
+<font color="#06989A">⠋</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UserPoolClientLambdaPolicy AWS::IAM::Policy Mon Feb 10 2020 13:39:35 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UserPoolClientLambdaPolicy AWS::IAM::Policy Mon Feb 10 2020 13:39:34 GMT-0800 (Pacific Standard Time)                            
+<font color="#06989A">⠧</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UserPoolClientLogPolicy    AWS::IAM::Policy Mon Feb 10 2020 13:39:52 GMT-0800 (Pacific Standard Time) 
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UserPoolClientLambdaPolicy</font> <font color="#4E9A06">AWS::IAM::Policy</font> <font color="#4E9A06">Mon Feb 10 2020 13:39:49 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠹</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UserPoolClientLogPolicy AWS::IAM::Policy Mon Feb 10 2020 13:39:53 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠦</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UserPoolClientInputs    Custom::LambdaCallout Mon Feb 10 2020 13:40:11 GMT-0800 (Pacific Standard Time) 
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UserPoolClientLogPolicy</font> <font color="#4E9A06">AWS::IAM::Policy</font>      <font color="#4E9A06">Mon Feb 10 2020 13:40:08 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠇</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UserPoolClientInputs</font> <font color="#4E9A06">Custom::LambdaCallout</font> <font color="#4E9A06">Mon Feb 10 2020 13:40:15 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS UserPoolClientInputs Custom::LambdaCallout Mon Feb 10 2020 13:40:14 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠹</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS IdentityPool AWS::Cognito::IdentityPool Mon Feb 10 2020 13:40:18 GMT-0800 (Pacific Standard Time) 
+<font color="#06989A">⠋</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">IdentityPool</font> <font color="#4E9A06">AWS::Cognito::IdentityPool</font> <font color="#4E9A06">Mon Feb 10 2020 13:40:20 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS IdentityPool AWS::Cognito::IdentityPool Mon Feb 10 2020 13:40:19 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠴</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">amplify-hobbyte-hobbyte-133609-authhobbytedc0aed90-1E4FLY59FIBLK</font> <font color="#4E9A06">AWS::CloudFormation::Stack</font>               <font color="#4E9A06">Mon Feb 10 2020 13:40:27 GMT-0800 (Pacific Standard Time)</font>                            
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">IdentityPoolRoleMap</font>                                              <font color="#4E9A06">AWS::Cognito::IdentityPoolRoleAttachment</font> <font color="#4E9A06">Mon Feb 10 2020 13:40:25 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS IdentityPoolRoleMap                                              AWS::Cognito::IdentityPoolRoleAttachment Mon Feb 10 2020 13:40:25 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS IdentityPoolRoleMap                                              AWS::Cognito::IdentityPoolRoleAttachment Mon Feb 10 2020 13:40:23 GMT-0800 (Pacific Standard Time)                            
+<font color="#06989A">⠋</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">CREATE_COMPLETE</font> <font color="#4E9A06">authhobbytedc0aed90</font> <font color="#4E9A06">AWS::CloudFormation::Stack</font> <font color="#4E9A06">Mon Feb 10 2020 13:40:31 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#06989A">⠸</font> Updating resources in the cloud. This may take a few minutes...
+
+CREATE_IN_PROGRESS UpdateRolesWithIDPFunctionOutputs Custom::LambdaCallout Mon Feb 10 2020 13:40:36 GMT-0800 (Pacific Standard Time)                            
+<font color="#4E9A06">CREATE_COMPLETE</font>    <font color="#4E9A06">UpdateRolesWithIDPFunction</font>        <font color="#4E9A06">AWS::Lambda::Function</font> <font color="#4E9A06">Mon Feb 10 2020 13:40:34 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS UpdateRolesWithIDPFunction        AWS::Lambda::Function Mon Feb 10 2020 13:40:33 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+CREATE_IN_PROGRESS UpdateRolesWithIDPFunction        AWS::Lambda::Function Mon Feb 10 2020 13:40:33 GMT-0800 (Pacific Standard Time)                            
+<font color="#06989A">⠴</font> Updating resources in the cloud. This may take a few minutes...
+
+UPDATE_COMPLETE_CLEANUP_IN_PROGRESS amplify-hobbyte-hobbyte-133609    AWS::CloudFormation::Stack Mon Feb 10 2020 13:40:42 GMT-0800 (Pacific Standard Time)                            
+<font color="#4E9A06">CREATE_COMPLETE</font>                     <font color="#4E9A06">UpdateRolesWithIDPFunctionOutputs</font> <font color="#4E9A06">Custom::LambdaCallout</font>      <font color="#4E9A06">Mon Feb 10 2020 13:40:40 GMT-0800 (Pacific Standard Time)</font>                            
+CREATE_IN_PROGRESS                  UpdateRolesWithIDPFunctionOutputs Custom::LambdaCallout      Mon Feb 10 2020 13:40:39 GMT-0800 (Pacific Standard Time) Resource creation Initiated
+<font color="#06989A">⠧</font> Updating resources in the cloud. This may take a few minutes...
+
+<font color="#4E9A06">UPDATE_COMPLETE</font> <font color="#4E9A06">amplify-hobbyte-hobbyte-133609</font> <font color="#4E9A06">AWS::CloudFormation::Stack</font> <font color="#4E9A06">Mon Feb 10 2020 13:40:43 GMT-0800 (Pacific Standard Time)</font> 
+<font color="#4E9A06">✔</font> All resources are updated in the cloud
+
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ amplify status
+
+<font color="#4E9A06">Current Environment</font>: hobbyte
+
+<font color="#555753">|</font><font color="#CC0000"> Category </font><font color="#555753">|</font><font color="#CC0000"> Resource name   </font><font color="#555753">|</font><font color="#CC0000"> Operation </font><font color="#555753">|</font><font color="#CC0000"> Provider plugin   </font><font color="#555753">|</font>
+<font color="#555753">|</font> -------- <font color="#555753">|</font> --------------- <font color="#555753">|</font> --------- <font color="#555753">|</font> ----------------- <font color="#555753">|</font>
+<font color="#555753">|</font> Auth     <font color="#555753">|</font> hobbytedc0aed90 <font color="#555753">|</font> No Change <font color="#555753">|</font> awscloudformation <font color="#555753">|</font>
+
+
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ npm add aws-amplify
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> @aws-amplify/api@2.1.5 requires a peer of @aws-amplify/pubsub@^1.2.4 but none is installed. You must install peer dependencies yourself.
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> aws-amplify-react-native@3.2.2 requires a peer of react-native-fs@^2.12.1 but none is installed. You must install peer dependencies yourself.
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> aws-amplify-react-native@3.2.2 requires a peer of react-native-sound@^0.10.9 but none is installed. You must install peer dependencies yourself.
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> aws-amplify-react-native@3.2.2 requires a peer of react-native-voice@^0.2.6 but none is installed. You must install peer dependencies yourself.
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> react-native-elements@0.19.1 requires a peer of react-native-vector-icons@^4.2.0 but none is installed. You must install peer dependencies yourself.
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> react-navigation-stack@1.10.3 requires a peer of react-native-screens@^1.0.0 || ^1.0.0-alpha but none is installed. You must install peer dependencies yourself.
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> react-navigation-tabs@2.6.2 requires a peer of react-native-screens@^1.0.0 || ^1.0.0-alpha but none is installed. You must install peer dependencies yourself.
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> <font color="#75507B">optional</font> SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.11 (node_modules/fsevents):
+<span style="background-color:#2E3436"><font color="#D3D7CF">npm</font></span> <span style="background-color:#C4A000"><font color="#2E3436">WARN</font></span> <font color="#75507B">notsup</font> SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.11: wanted {&quot;os&quot;:&quot;darwin&quot;,&quot;arch&quot;:&quot;any&quot;} (current: {&quot;os&quot;:&quot;linux&quot;,&quot;arch&quot;:&quot;x64&quot;})
+
++ aws-amplify@2.2.4
+updated 1 package and audited 964596 packages in 20.522s
+
+21 packages are looking for funding
+  run `npm fund` for details
+
+found 6 <b>low</b> severity vulnerabilities
+  run `npm audit fix` to fix them, or `npm audit` for details
+(base) <font color="#8AE234"><b>john@john-HP-Pavilion-Laptop-15-cs1xxx</b></font>:<font color="#729FCF"><b>~/Desktop/Hobyte/Hobbyte</b></font>$ 
+</pre>

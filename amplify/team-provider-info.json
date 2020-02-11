@@ -1,19 +1,19 @@
 {
-    "hobyte": {
+    "hobbyte": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-social-media-app-hobyte-224702-authRole",
-            "UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-social-media-app-hobyte-224702-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-social-media-app-hobyte-224702-authRole",
+            "AuthRoleName": "amplify-hobbyte-hobbyte-133609-authRole",
+            "UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-133609-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-133609-authRole",
             "Region": "us-west-2",
-            "DeploymentBucketName": "amplify-social-media-app-hobyte-224702-deployment",
-            "UnauthRoleName": "amplify-social-media-app-hobyte-224702-unauthRole",
-            "StackName": "amplify-social-media-app-hobyte-224702",
-            "StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-social-media-app-hobyte-224702/fd8ff720-4650-11ea-a3c1-0696e27486d4",
-            "AmplifyAppId": "dnhhfdbob7b3w"
+            "DeploymentBucketName": "amplify-hobbyte-hobbyte-133609-deployment",
+            "UnauthRoleName": "amplify-hobbyte-hobbyte-133609-unauthRole",
+            "StackName": "amplify-hobbyte-hobbyte-133609",
+            "StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-133609/5afe7600-4c4d-11ea-a80b-06e35a67ba22",
+            "AmplifyAppId": "d18c2vq74e0rzg"
         },
         "categories": {
             "auth": {
-                "socialmediaapp237c2083": {}
+                "hobbytedc0aed90": {}
             }
         }
     }
