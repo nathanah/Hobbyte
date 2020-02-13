@@ -1,12 +1,12 @@
 {
-    "identityPoolName": "hobbytedc0aed90_identitypool_dc0aed90",
+    "identityPoolName": "hobbytee966d8ec_identitypool_e966d8ec",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "hobbytdc0aed90",
-    "userPoolName": "hobbytedc0aed90_userpool_dc0aed90",
+    "resourceNameTruncated": "hobbyte966d8ec",
+    "userPoolName": "hobbytee966d8ec_userpool_e966d8ec",
     "autoVerifiedAttributes": [
         "email"
     ],
-    "mfaConfiguration": "OFF",
+    "mfaConfiguration": "ON",
     "mfaTypes": [
         "SMS Text Message"
     ],
@@ -29,10 +29,17 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "hobbytdc0aed90_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "hobbyte966d8ec_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "resourceName": "hobbytedc0aed90",
+    "useDefault": "manual",
     "authSelections": "identityPoolAndUserPool",
+    "resourceName": "hobbytee966d8ece966d8ec",
+    "thirdPartyAuth": false,
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": "{}",
+    "hostedUI": false,
+    "userPoolGroupList": [],
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -45,9 +52,6 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
-    "triggers": "{}",
-    "userPoolGroupList": [],
     "parentStack": {
         "Ref": "AWS::StackId"
     },

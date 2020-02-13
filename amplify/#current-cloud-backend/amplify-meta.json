@@ -1,37 +1,38 @@
 {
 	"providers": {
 		"awscloudformation": {
-			"AuthRoleName": "amplify-hobbyte-hobbyte-133609-authRole",
-			"UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-133609-unauthRole",
-			"AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-133609-authRole",
+			"AuthRoleName": "amplify-hobbyte-hobbyte-123439-authRole",
+			"UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-authRole",
 			"Region": "us-west-2",
-			"DeploymentBucketName": "amplify-hobbyte-hobbyte-133609-deployment",
-			"UnauthRoleName": "amplify-hobbyte-hobbyte-133609-unauthRole",
-			"StackName": "amplify-hobbyte-hobbyte-133609",
-			"StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-133609/5afe7600-4c4d-11ea-a80b-06e35a67ba22",
-			"AmplifyAppId": "d18c2vq74e0rzg"
+			"DeploymentBucketName": "amplify-hobbyte-hobbyte-123439-deployment",
+			"UnauthRoleName": "amplify-hobbyte-hobbyte-123439-unauthRole",
+			"StackName": "amplify-hobbyte-hobbyte-123439",
+			"StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-123439/43b76dd0-4ea0-11ea-83d1-067657bdc03a",
+			"AmplifyAppId": "d3enphqz5721xj"
 		}
 	},
 	"auth": {
-		"hobbytedc0aed90": {
+		"hobbytee966d8ece966d8ec": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": [],
 			"providerMetadata": {
-				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-133609-deployment/amplify-cfn-templates/auth/hobbytedc0aed90-cloudformation-template.yml",
-				"logicalId": "authhobbytedc0aed90"
+				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/auth/hobbytee966d8ece966d8ec-cloudformation-template.yml",
+				"logicalId": "authhobbytee966d8ece966d8ec"
 			},
-			"lastPushTimeStamp": "2020-02-10T21:41:04.411Z",
+			"lastPushTimeStamp": "2020-02-13T20:43:43.666Z",
 			"output": {
-				"AppClientSecret": "dlflljhsarjc9jodhbm4rucbao33er8dghd6e20ktf54o88re9n",
-				"UserPoolId": "us-west-2_HsQWZOMLo",
-				"AppClientIDWeb": "2hnqj27hc3fdn6741i2851vib5",
-				"AppClientID": "59qmvn74ier4u07djhkif8ti9p",
-				"IdentityPoolId": "us-west-2:003e3b79-c4ec-41b1-bc15-79833f5bae41",
-				"IdentityPoolName": "hobbytedc0aed90_identitypool_dc0aed90__hobbyte",
-				"UserPoolName": "hobbytedc0aed90_userpool_dc0aed90"
+				"CreatedSNSRole": "arn:aws:iam::230460721296:role/sns123439-hobbyte",
+				"AppClientSecret": "1ppd22o56qv9kg9s6nbit975v5cpcse6ehjdervkngl18vf8r4u0",
+				"UserPoolId": "us-west-2_5PkO8pXel",
+				"AppClientIDWeb": "3tvfa0m9kb6uqsokkigqhht7c5",
+				"AppClientID": "4dv39bb049gqiae71k4drporcg",
+				"IdentityPoolId": "us-west-2:5f151ee5-c159-4404-baf9-a07f615e5958",
+				"IdentityPoolName": "hobbytee966d8ec_identitypool_e966d8ec__hobbyte",
+				"UserPoolName": "hobbytee966d8ec_userpool_e966d8ec"
 			},
-			"lastPushDirHash": "jXiYcwx4Upo6Ud7huFmilD34Tms="
+			"lastPushDirHash": "k/9GKDh2AY2d8Qqh0PzJaGnfLCQ="
 		}
 	}
 }

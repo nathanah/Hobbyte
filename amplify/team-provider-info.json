@@ -1,19 +1,19 @@
 {
     "hobbyte": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-hobbyte-hobbyte-133609-authRole",
-            "UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-133609-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-133609-authRole",
+            "AuthRoleName": "amplify-hobbyte-hobbyte-123439-authRole",
+            "UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-authRole",
             "Region": "us-west-2",
-            "DeploymentBucketName": "amplify-hobbyte-hobbyte-133609-deployment",
-            "UnauthRoleName": "amplify-hobbyte-hobbyte-133609-unauthRole",
-            "StackName": "amplify-hobbyte-hobbyte-133609",
-            "StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-133609/5afe7600-4c4d-11ea-a80b-06e35a67ba22",
-            "AmplifyAppId": "d18c2vq74e0rzg"
+            "DeploymentBucketName": "amplify-hobbyte-hobbyte-123439-deployment",
+            "UnauthRoleName": "amplify-hobbyte-hobbyte-123439-unauthRole",
+            "StackName": "amplify-hobbyte-hobbyte-123439",
+            "StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-123439/43b76dd0-4ea0-11ea-83d1-067657bdc03a",
+            "AmplifyAppId": "d3enphqz5721xj"
         },
         "categories": {
             "auth": {
-                "hobbytedc0aed90": {}
+                "hobbytee966d8ece966d8ec": {}
             }
         }
     }

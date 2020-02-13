@@ -1,6 +1,6 @@
 {
 	"auth": {
-		"hobbytedc0aed90": {
+		"hobbytee966d8ece966d8ec": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": []
