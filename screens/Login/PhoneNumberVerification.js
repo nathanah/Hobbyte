@@ -6,13 +6,15 @@ import Amplify, { Auth } from 'aws-amplify';
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
-export default class TwoFactorScreen extends React.Component {
+export default class PhoneNumberVerification extends React.Component {
 
 
   state = {
 
     verificationCode: '',
-
+    username: this.props.navigation.getParam('username','none'),
+    authType: this.props.navigation.getParam('authType', 'none'),
+    user: this.props.navigation.getParam('user', 'none')
   };
 
   render() {
@@ -43,7 +45,7 @@ export default class TwoFactorScreen extends React.Component {
 
         <TouchableOpacity style={styles.loginContainer}>
                 <Text style={styles.buttonText}
-                  onPress={this._loginAsync}>LOGIN</Text>
+                  onPress={this._loginAsync}>Code</Text>
         </TouchableOpacity>
 
 
@@ -67,11 +69,23 @@ export default class TwoFactorScreen extends React.Component {
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
       console.log("Login information input from user: ");
       console.log("code:" + this.state.verificationCode);
+      console.log("Passed form login: ", this.state.username)
+      console.log("Varification type: ", this.state.authType)
 
-      Auth.confirmSignUp(this.state.username, this.state.verificationCode)
-      .then(() => console.log('successful confirm sign up!'))
-      .catch(err => console.log('error confirming signing up!: ', err));
-      this.props.navigation.navigate('Home');
+      if(this.state.authType == 'signup') { 
+        Auth.confirmSignUp(this.state.username, this.state.verificationCode)
+        .then(() => {
+            console.log('successful confirm sign up!')
+            this.props.navigation.navigate('Home');
+          })
+        .catch(err => console.log('error confirming signing up!: ', err));
+      } else if(this.state.authType == 'signin') {
+        Auth.confirmSignIn(this.state.user, this.state.verificationCode)
+        .then(() => {
+          console.log('successful confirm sign in!');
+        })
+        .catch(err => console.log('error confirming signing in!: ', err));
+      }
     };
 
     _resetAsync = async () => {

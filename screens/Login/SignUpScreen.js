@@ -99,31 +99,8 @@ export default class SignUpScreen extends React.Component {
                   onPress={this._submitAsync}>Sumbit</Text>
         </TouchableOpacity>
 
-
-
-        <TextInput
-            placeholder = "Code"
-            style={styles.formBox}
-            placeholderTextColor = "#2e4257"
-            returnKeyType="go"
-            ref = {(input) => {this.confirmationCode = input;}}
-            value={this.state.confirmationCode}
-            onChange={event => this.setState({confirmationCode: event.nativeEvent.text })}
-            onSubmitEditing = {this._confermAsync}
-            underlineColorAndroid = "transparent"
-          />
-
-
-        <TouchableOpacity style={styles.loginContainer}>
-                <Text style={styles.buttonText}
-                  onPress={this._confermAsync}>Sumbit</Text>
-        </TouchableOpacity>
-
           </ScrollView>
-
-
-
-
+          
       </KeyboardAvoidingView>
       </View>
 
@@ -151,27 +128,13 @@ export default class SignUpScreen extends React.Component {
           phone_number: this.state.phoneNumber,
         },
       })
-        .then(() => console.log('successful sign up!'))
+        .then(() => {
+          console.log('successful sign up!')
+          this.props.navigation.navigate('PNV',
+                {username: this.state.username, authType: 'signup'})
+        })
         .catch(err => console.log('error signing up!: ', err));
-        //this.props.navigation.navigate('TFS');
 
-      //this.props.navigation.navigate('SignIn');
-    };
-
-    _confermAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Conferming user: ");
-      console.log("code:" + this.state.verificationCode);
-
-      Auth.confirmSignUp(this.state.username, this.state.confirmationCode)
-      .then(() => {
-        console.log('successful confirm sign up!')
-        this.props.navigation.navigate('Home');
-      })
-      .catch(err => console.log('error confirming signing up!: ', err));
-
-      //this.props.navigation.navigate('SignIn');
     };
 }
 
