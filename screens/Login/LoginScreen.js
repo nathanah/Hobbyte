@@ -12,6 +12,7 @@ export default class LoginScreen extends React.Component {
     password: '',
     confirmationCode: '',
     user: {},
+    errorMessage: ''
   };
 
   render() {
@@ -52,8 +53,7 @@ export default class LoginScreen extends React.Component {
             onSubmitEditing = {this._loginAsync}
             underlineColorAndroid = "transparent"
           />
-
-
+            
         <TouchableOpacity style={styles.loginContainer}>
                 <Text style={styles.buttonText}
                   onPress={this._loginAsync}>LOGIN</Text>
