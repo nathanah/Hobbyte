@@ -27,7 +27,7 @@ export default class PhoneNumberVerification extends React.Component {
             style={styles.logo}
             source={require('../../assets/images/logo.png')}
             />
-          <Text style={styles.header}>Varify Phone Number</Text>
+          <Text style={styles.header}>Verify Phone Number</Text>
           <TextInput
             placeholder="Code"
             style={styles.formBox}
