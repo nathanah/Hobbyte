@@ -12,6 +12,7 @@ export default class LoginScreen extends React.Component {
     password: '',
     confirmationCode: '',
     user: {},
+    errorMessage: ''
   };
 
   render() {
@@ -52,32 +53,11 @@ export default class LoginScreen extends React.Component {
             onSubmitEditing = {this._loginAsync}
             underlineColorAndroid = "transparent"
           />
-
-
+            
         <TouchableOpacity style={styles.loginContainer}>
                 <Text style={styles.buttonText}
                   onPress={this._loginAsync}>LOGIN</Text>
         </TouchableOpacity>
-
-        <TextInput
-            placeholder = "Code"
-            style={styles.formBox}
-            placeholderTextColor = "#2e4257"
-            returnKeyType="go"
-            ref = {(input) => {this.confirmationCode = input;}}
-            value={this.state.confirmationCode}
-            onChange={event => this.setState({confirmationCode: event.nativeEvent.text })}
-            onSubmitEditing = {this._confermAsync}
-            underlineColorAndroid = "transparent"
-          />
-
-
-        <TouchableOpacity style={styles.loginContainer}>
-                <Text style={styles.buttonText}
-                  onPress={this._confermAsync}>Sumbit</Text>
-        </TouchableOpacity>
-
-
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text
@@ -103,8 +83,6 @@ export default class LoginScreen extends React.Component {
     );
   }
 
-
-    
   /*--------------------Async------------------------*/
     _loginAsync = async () => {
       // TODO - fetch user token and verify user identity
@@ -112,30 +90,17 @@ export default class LoginScreen extends React.Component {
       console.log("Login information input from user: ");
       console.log("username:" + this.state.username);
       console.log("password:" + this.state.password);
+      
       const { username, password } = this.state;
       Auth.signIn(username, password)
         .then(user => {
           this.setState({ user });
           console.log('successful sign in!');
-          console.log(this.state.user);
+          this.props.navigation.navigate('PNV',
+            {user: this.state.user, authType: 'signin'})
         })
         .catch(err => console.log('error signing in!: ', err));
     };
-
-    _confermAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Conferming user: ");
-      console.log("code:" + this.state.confirmationCode);
-
-      Auth.confirmSignIn(this.state.user, this.state.confirmationCode)
-      .then(() => {
-        console.log('successful confirm sign in!');
-      })
-      .catch(err => console.log('error confirming signing in!: ', err));
-      //this.props.navigation.navigate('SignIn');
-    };
-
 
     _resetAsync = async () => {
       // TODO - fetch user token and verify user identity

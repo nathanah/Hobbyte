@@ -18,6 +18,7 @@ import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
 import ResetScreen from '../screens/Login/ResetScreen';
 import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
+import PhoneNumberVerification from "../screens/Login/PhoneNumberVerification"
 import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
 import HomeScreen from "../screens/HomeScreen"
 import SignUpScreen from "../screens/Login/SignUpScreen";
@@ -37,6 +38,7 @@ const RootStack = createStackNavigator({
   Home: HomeScreen,
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
+  PNV: PhoneNumberVerification,
   PhoneReset: PhoneResetScreen,
   ChatPage: ChatScreen,
 },
