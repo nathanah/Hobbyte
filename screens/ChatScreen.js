@@ -1,13 +1,46 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
+
+
 class ChatScreen extends React.Component {
   state = {
     messages: [],
+    loadEarlier: true, 
+    isLoadingEarlier: false, 
+    typingText: null, 
+    isTyping: false, 
+    appIsReady: false,
+    title: 'Chat',
   }
 
+  // should display user name from other user - currently shows sign in username
+  static navigationOptions = ({navigation}) => ({
+      title: (navigation.state.params || {}).name || 'Chat!',
+  });
+
+  get user() {
+      return{
+          name: this.props.navigation.getParam('name'), 
+        //   _id: 
+      };
+  }
+
+
   // mounts test messages and sets it as a state
-  // This example has quick replies setting 
+  // This example has quick replies setting demonstrated with buttons in hardcoded section
   componentDidMount() {
+      this._isMounted = true,
+
+      // This is for retrieving messages from AWS 
+    //   this.setState ({
+    //       messages:messagesDataAWS, 
+    //       appIsReady: true, 
+    //       isTyping: false,
+    // 
+          
+    //   })
+
+    // Hardcoded message example ---- 
     this.setState({
       messages: [
         {
@@ -65,10 +98,17 @@ class ChatScreen extends React.Component {
           }
 
       ],
+
+      // end of hardcoded message example --- 
     })
   }
 
 
+  componentWillUnmount() {
+      this._isMounted = false
+  }
+
+  
   // User's send Async function
   onSend(messages = []) {
     this.setState(previousState => ({
@@ -76,10 +116,39 @@ class ChatScreen extends React.Component {
     }))
   }
 
+  // currently onReceive doesn't work:
+//   onReceive = (text: string) => {
+//     this.setState((previousState: any) => {
+//       return {
+//         messages: GiftedChat.append(
+//           previousState.messages as any,
+//           [
+//             {
+//               _id: Math.round(Math.random() * 1000000),
+//               text,
+//               createdAt: new Date(),
+//               user: otherUser,
+//             },
+//           ],
+//           Platform.OS !== 'web',
+//         ),
+//       }
+//     })
+//   }
+
+
   render() {
     return (
       <GiftedChat
+      title
         messages={this.state.messages}
+        scrollToBottom
+        loadEarlier = {this.state.loadEarlier}
+        isLoadingEarlier = {this.state.isLoadingEarlier}
+        onLongPressAvatar = {user => alert(JSON.stringify(user))}
+        onPressAvatar = {() => alert('short press')}
+        keyboardShouldPersistTaps = 'never'
+        isTyping={this.state.isTyping}
         onSend={messages => this.onSend(messages)}
         user={{
           _id: 1,
