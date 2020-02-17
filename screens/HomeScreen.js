@@ -55,6 +55,12 @@ export default class HomeScreen extends React.Component {
           title="Go back to auth page"
           onPress={() => this.props.navigation.navigate('AuthLoading')}
         />
+
+      <Button
+          title="Go to test message page"
+          onPress={() => this.props.navigation.navigate('ChatPage')}
+        />    
+
       </View>
     );
   }
