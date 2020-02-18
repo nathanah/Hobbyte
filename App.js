@@ -15,10 +15,10 @@ Amplify.configure(awsconfig);
 /*</John>*/
 
 // Abby - Setup for AWS AppSync and Apollo
-import AWSAppSyncClient from "aws-appsync";
-import {ApolloProvider} from "react-apollo";
-import {Rehydrated} from "aws-appsync-react";
-import AppSyncConfig from "./aws-exports"; 
+// import AWSAppSyncClient from "aws-appsync";
+// import {ApolloProvider} from "react-apollo";
+// import {Rehydrated} from "aws-appsync-react";
+// import AppSyncConfig from "./aws-exports"; 
 
 
 /*=====================================================*/
@@ -43,8 +43,8 @@ export default function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         {/* <AppNavigator />   */}
-        <ChatRoom /> 
-        {/* <ChatScreen /> */}
+        {/* <ChatRoom />  */}
+        <ChatScreen />
       </View>
     );
   }
