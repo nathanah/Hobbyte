@@ -18,11 +18,12 @@ import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
 import ResetScreen from '../screens/Login/ResetScreen';
 import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
-import PhoneNumberVerification from "../screens/Login/PhoneNumberVerification"
-import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
-import HomeScreen from "../screens/HomeScreen"
+import PhoneNumberVerification from "../screens/Login/PhoneNumberVerification";
+import PhoneResetScreen from "../screens/Login/PhoneResetScreen";
+import HomeScreen from "../screens/HomeScreen";
 import SignUpScreen from "../screens/Login/SignUpScreen";
-import ChatScreen from "../screens/ChatScreen";
+import ChatScreen from "../screens/Chat/ChatScreen";
+import ChatRoom from "../screens/Chat/ChatRoomScreen"; 
 
 
 
@@ -41,6 +42,7 @@ const RootStack = createStackNavigator({
   PNV: PhoneNumberVerification,
   PhoneReset: PhoneResetScreen,
   ChatPage: ChatScreen,
+  ChatRoom: ChatRoom, 
 },
 {
   initialRouteName: 'AuthLoading',

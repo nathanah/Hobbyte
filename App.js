@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
+import ChatRoom from './screens/Chat/ChatRoomScreen';
+import ChatScreen from './screens/Chat/ChatScreen'; 
 
 /*John - This is setup for Amplify*/
 import Amplify, { Auth } from 'aws-amplify';
@@ -40,7 +42,9 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
+        {/* <AppNavigator />   */}
+        <ChatRoom /> 
+        {/* <ChatScreen /> */}
       </View>
     );
   }
