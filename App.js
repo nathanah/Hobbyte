@@ -12,6 +12,13 @@ import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
 /*</John>*/
 
+// Abby - Setup for AWS AppSync and Apollo
+import AWSAppSyncClient from "aws-appsync";
+import {ApolloProvider} from "react-apollo";
+import {Rehydrated} from "aws-appsync-react";
+import AppSyncConfig from "./aws-exports"; 
+
+
 /*=====================================================*/
 /*                      MAIN                           */
 /*=====================================================*/
