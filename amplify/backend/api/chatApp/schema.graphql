@@ -1,0 +1,12 @@
+type Room @model @auth {
+  id: ID!
+  messages: [Message] @connection(name: "RoomMessages", keyField: "roomId", sortField: "when")
+}
+
+type Message @model @auth{
+  id: ID!
+  content: String!
+  when: String!
+  roomId: ID
+  room: Room @connection(name: "RoomMessages", keyField: "roomId")
+}
