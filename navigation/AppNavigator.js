@@ -16,6 +16,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
+import MainScreen from "../screens/MainScreen";
 import ResetScreen from '../screens/Login/ResetScreen';
 import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
 import PhoneNumberVerification from "../screens/Login/PhoneNumberVerification";
@@ -23,7 +24,7 @@ import PhoneResetScreen from "../screens/Login/PhoneResetScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SignUpScreen from "../screens/Login/SignUpScreen";
 import ChatScreen from "../screens/Chat/ChatScreen";
-import ChatRoom from "../screens/Chat/ChatRoomScreen"; 
+// import ChatRoom from "../screens/Chat/ChatRoomScreen"; 
 
 
 
@@ -37,12 +38,13 @@ const RootStack = createStackNavigator({
   SignIn: LoginScreen,
   SignUp: SignUpScreen,
   Home: HomeScreen,
+  Main: MainScreen,
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
   PNV: PhoneNumberVerification,
   PhoneReset: PhoneResetScreen,
   ChatPage: ChatScreen,
-  ChatRoom: ChatRoom, 
+  // ChatRoom: ChatRoom, // not working 
 },
 {
   initialRouteName: 'AuthLoading',

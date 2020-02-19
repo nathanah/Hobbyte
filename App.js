@@ -5,7 +5,8 @@ import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
-import ChatRoom from './screens/Chat/ChatRoomScreen';
+import MainScreen from './screens/MainScreen';
+// import ChatRoom from './screens/Chat/ChatRoomScreen';
 import ChatScreen from './screens/Chat/ChatScreen'; 
 
 /*John - This is setup for Amplify*/
@@ -19,6 +20,14 @@ Amplify.configure(awsconfig);
 // import {ApolloProvider} from "react-apollo";
 // import {Rehydrated} from "aws-appsync-react";
 // import AppSyncConfig from "./aws-exports"; 
+
+import { Component } from 'react';
+import { Switch, Route, BrowserRouter as Router, ServerRouter } from 'react-router-dom';
+import Rooms from './screens/Chat/Rooms';
+// import ChatScreen from './ChatScreen';
+import {createMemoryHistory} from 'history';
+const history = createMemoryHistory(); 
+
 
 
 /*=====================================================*/
@@ -42,9 +51,8 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        {/* <AppNavigator />   */}
-        {/* <ChatRoom />  */}
-        <ChatScreen />
+        <AppNavigator />  
+        {/* <MainScreen /> */}
       </View>
     );
   }
