@@ -36,12 +36,12 @@ export default class ChatRoom extends Component {
     return (
       <View style={styles.list_item}>
         <Text style={styles.list_item_text}>{item.name}</Text>
-        <Button title="Enter" color="#0064e1" onPress={() => {
-          this.enterChat(item);
-        }} />
+        <Button title="Enter" color="#0064e1" onPress={() => alert('need to redirect to chat once implemented')} />
       </View>
     );
   }
+
+  //add this back in when we can retrieve chat {this.enterChat(item);}
   render() {
     const {rooms} = this.state;
     return (

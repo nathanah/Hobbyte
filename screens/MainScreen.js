@@ -5,6 +5,7 @@ import { createBottomTabNavigator} from 'react-navigation-tabs';
 import {Icon} from 'react-native-elements';
 import {Auth} from 'aws-amplify';
 import ChatScreen from "../screens/Chat/ChatScreen";
+import ChatRoom from "../screens/Chat/ChatRoomScreen";
 import {
     Image,
     Platform,
@@ -68,7 +69,8 @@ class ListScreen extends React.Component {
     return(
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         {/* <ChatScreen/> */}
-        <Text> This is my chat rooms screen </Text>
+        {/* <Text> This is my chat rooms screen </Text> */}
+        <ChatRoom />
       </View>
     );
   }
