@@ -24,7 +24,7 @@ import PhoneResetScreen from "../screens/Login/PhoneResetScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SignUpScreen from "../screens/Login/SignUpScreen";
 import ChatScreen from "../screens/Chat/ChatScreen";
-// import ChatRoom from "../screens/Chat/ChatRoomScreen"; 
+import ChatRoom from "../screens/Chat/ChatRoomScreen";
 
 
 
@@ -44,7 +44,7 @@ const RootStack = createStackNavigator({
   PNV: PhoneNumberVerification,
   PhoneReset: PhoneResetScreen,
   ChatPage: ChatScreen,
-  // ChatRoom: ChatRoom, // not working 
+  ChatRoom: ChatRoom, // not working
 },
 {
   initialRouteName: 'AuthLoading',
