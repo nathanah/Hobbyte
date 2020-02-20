@@ -22,6 +22,7 @@ import PhoneNumberVerification from "../screens/Login/PhoneNumberVerification"
 import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
 import HomeScreen from "../screens/HomeScreen"
 import SignUpScreen from "../screens/Login/SignUpScreen"
+import PasswordResetScreen from "../screens/Login/PasswordResetScreen"
 
 
 
@@ -40,6 +41,7 @@ const RootStack = createStackNavigator({
   TFS: TwoFactorScreen,
   PNV: PhoneNumberVerification,
   PhoneReset: PhoneResetScreen,
+  PRS: PasswordResetScreen
 },
 {
   initialRouteName: 'AuthLoading',

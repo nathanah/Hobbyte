@@ -83,6 +83,7 @@ export default class PhoneNumberVerification extends React.Component {
         Auth.confirmSignIn(this.state.user, this.state.verificationCode)
         .then(() => {
           console.log('successful confirm sign in!');
+          this.props.navigation.navigate('Home');
         })
         .catch(err => console.log('error confirming signing in!: ', err));
       }

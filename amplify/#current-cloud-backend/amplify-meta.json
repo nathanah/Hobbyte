@@ -21,7 +21,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/auth/hobbytee966d8ece966d8ec-cloudformation-template.yml",
 				"logicalId": "authhobbytee966d8ece966d8ec"
 			},
-			"lastPushTimeStamp": "2020-02-13T20:43:43.666Z",
+			"lastPushTimeStamp": "2020-02-20T22:53:26.492Z",
 			"output": {
 				"CreatedSNSRole": "arn:aws:iam::230460721296:role/sns123439-hobbyte",
 				"AppClientSecret": "1ppd22o56qv9kg9s6nbit975v5cpcse6ehjdervkngl18vf8r4u0",
@@ -33,6 +33,31 @@
 				"UserPoolName": "hobbytee966d8ec_userpool_e966d8ec"
 			},
 			"lastPushDirHash": "k/9GKDh2AY2d8Qqh0PzJaGnfLCQ="
+		}
+	},
+	"api": {
+		"hobbyte": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"authConfig": {
+					"additionalAuthenticationProviders": [],
+					"defaultAuthentication": {
+						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
+						"userPoolConfig": {
+							"userPoolId": "authhobbytee966d8ece966d8ec"
+						}
+					}
+				},
+				"GraphQLAPIIdOutput": "bmhsowmdizbnvlpfafwtuqfceq",
+				"GraphQLAPIEndpointOutput": "https://vozsqv4mcreydpnzvhij4exkze.appsync-api.us-west-2.amazonaws.com/graphql"
+			},
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"logicalId": "apihobbyte"
+			},
+			"lastPushTimeStamp": "2020-02-20T22:53:26.498Z",
+			"lastPushDirHash": "gd7PI3RoZa+VSyGjhbiZI4Z3bec="
 		}
 	}
 }
