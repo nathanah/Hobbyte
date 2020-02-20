@@ -1,7 +1,8 @@
 // not working
 import React, { Component } from 'react';
 import { Switch, Route, BrowserRouter as Router, ServerRouter } from 'react-router-dom';
-import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert } from "react-native";
+import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage} from "react-native";
+
 import Rooms from './Rooms';
 import ChatScreen from './ChatScreen';
 import {createMemoryHistory} from 'history';
@@ -13,12 +14,24 @@ export default class ChatRoom extends Component {
     const {navigation} = this.props;
     this.maxid = 2;
     // this.username = navigation.getParam("username");
+    this.data = [
+      {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
+      {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()},
+    ];
+    this.data2 = JSON.stringify(this.data)
+    this.storeRooms("abc", this.data2);
+    AsyncStorage.setItem("abc", this.data2);
+    console.log("set");
+    // var parseAsync = Promise.method(JSON.parse)
+    this.data3 = this.loadRooms("abc");
+    console.log("got");
     this.state = {
-      rooms: [
-          {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
-          {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()},
-      ]
+      rooms: this.data2,
     };
+    // console.log(this.state.rooms);
+    // console.log(this.data);
+    // console.log(this.data2);
+    // console.log(this.data3);
   }
 
   async componentDidMount() {
@@ -36,7 +49,8 @@ export default class ChatRoom extends Component {
     return (
       <View style={styles.list_item}>
         <Text style={styles.list_item_text}>{item.name}</Text>
-        <Button title="Enter" color="#0064e1" onPress={() => alert('need to redirect to chat once implemented')} />
+        <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage'/*,{ name:Auth.user.username}, item.id.toString()*/)
+      /*alert('need to redirect to chat once implemented')*/} />
       </View>
     );
   }
@@ -72,6 +86,13 @@ export default class ChatRoom extends Component {
     newid = async () =>{
       this.maxid++;
       return this.maxid;
+    }
+
+    loadRooms = async (key) => {
+      AsyncStorage.getItem(key).then(successMessage =>{console.log("success")}).catch(fail => {console.log("fail")}) ;
+    }
+    storeRooms = async (key, stringified) => {
+      await AsyncStorage.setItem(key, stringified);
     }
 }
 
