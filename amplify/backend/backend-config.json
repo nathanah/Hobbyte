@@ -6,6 +6,7 @@
 			"dependsOn": []
 		}
 	},
+<<<<<<< HEAD
 	"api": {
 		"chatApp": {
 			"service": "AppSync",
@@ -23,4 +24,7 @@
 			}
 		}
 	}
+=======
+	"api": {}
+>>>>>>> 606a1b511cfcc196cd6aeac581d23b2c36ab0818
 }
