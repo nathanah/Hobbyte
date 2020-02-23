@@ -6,25 +6,5 @@
 			"dependsOn": []
 		}
 	},
-<<<<<<< HEAD
-	"api": {
-		"chatApp": {
-			"service": "AppSync",
-			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
-						"userPoolConfig": {
-							"userPoolId": "authhobbytee966d8ece966d8ec"
-						}
-					}
-				}
-			}
-		}
-	}
-=======
 	"api": {}
->>>>>>> 606a1b511cfcc196cd6aeac581d23b2c36ab0818
 }

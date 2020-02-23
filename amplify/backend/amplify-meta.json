@@ -1,48 +1,4 @@
 {
-<<<<<<< HEAD
-	"providers": {
-		"awscloudformation": {
-			"AuthRoleName": "amplify-hobbyte-hobbyte-123439-authRole",
-			"UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-unauthRole",
-			"AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-authRole",
-			"Region": "us-west-2",
-			"DeploymentBucketName": "amplify-hobbyte-hobbyte-123439-deployment",
-			"UnauthRoleName": "amplify-hobbyte-hobbyte-123439-unauthRole",
-			"StackName": "amplify-hobbyte-hobbyte-123439",
-			"StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-123439/43b76dd0-4ea0-11ea-83d1-067657bdc03a",
-			"AmplifyAppId": "d3enphqz5721xj"
-		},
-		"categories": {
-			"auth": {
-				"hobbytee966d8ece966d8ec": {}
-			}
-		}
-	},
-	"auth": {
-		"hobbytee966d8ece966d8ec": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": []
-		}
-	},
-	"api": {
-		"chatApp": {
-			"service": "AppSync",
-			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
-						"userPoolConfig": {
-							"userPoolId": "authhobbytee966d8ece966d8ec"
-						}
-					}
-				}
-			}
-		}
-	}
-=======
     "providers": {
         "awscloudformation": {
             "AuthRoleName": "amplify-hobbyte-hobbyte-123439-authRole",
@@ -103,5 +59,4 @@
             "lastPushTimeStamp": "2020-02-23T22:52:10.598Z"
         }
     }
->>>>>>> 606a1b511cfcc196cd6aeac581d23b2c36ab0818
 }
