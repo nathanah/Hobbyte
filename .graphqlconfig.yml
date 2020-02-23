@@ -1,5 +1,5 @@
 projects:
-  hobyte:
+  ChatApp API:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
@@ -10,6 +10,6 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
-extensions:
-  amplify:
-    version: 3
+        region: us-west-2
+        apiId: iprnqaepqfhnjdvht4nptwp36u
+        maxDepth: 2

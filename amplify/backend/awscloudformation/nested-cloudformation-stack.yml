@@ -124,27 +124,6 @@
 				}
 			}
 		},
-		"apihobbyte": {
-			"Type": "AWS::CloudFormation::Stack",
-			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/api/cloudformation-template.json",
-				"Parameters": {
-					"CreateAPIKey": 0,
-					"AppSyncApiName": "hobbyte",
-					"DynamoDBBillingMode": "PAY_PER_REQUEST",
-					"DynamoDBEnableServerSideEncryption": "false",
-					"AuthCognitoUserPoolId": {
-						"Fn::GetAtt": [
-							"authhobbytee966d8ece966d8ec",
-							"Outputs.UserPoolId"
-						]
-					},
-					"S3DeploymentBucket": "amplify-hobbyte-hobbyte-123439-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/e6a4e05bcf3db8db88ad5028fd2a62c6bd8ebed0",
-					"env": "hobbyte"
-				}
-			}
-		},
 		"UpdateRolesWithIDPFunction": {
 			"DependsOn": [
 				"AuthRole",

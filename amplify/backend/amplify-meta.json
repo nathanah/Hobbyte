@@ -1,63 +1,62 @@
 {
-	"providers": {
-		"awscloudformation": {
-			"AuthRoleName": "amplify-hobbyte-hobbyte-123439-authRole",
-			"UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-unauthRole",
-			"AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-authRole",
-			"Region": "us-west-2",
-			"DeploymentBucketName": "amplify-hobbyte-hobbyte-123439-deployment",
-			"UnauthRoleName": "amplify-hobbyte-hobbyte-123439-unauthRole",
-			"StackName": "amplify-hobbyte-hobbyte-123439",
-			"StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-123439/43b76dd0-4ea0-11ea-83d1-067657bdc03a",
-			"AmplifyAppId": "d3enphqz5721xj"
-		}
-	},
-	"auth": {
-		"hobbytee966d8ece966d8ec": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": [],
-			"providerMetadata": {
-				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/auth/hobbytee966d8ece966d8ec-cloudformation-template.yml",
-				"logicalId": "authhobbytee966d8ece966d8ec"
-			},
-			"lastPushTimeStamp": "2020-02-20T22:53:26.492Z",
-			"output": {
-				"CreatedSNSRole": "arn:aws:iam::230460721296:role/sns123439-hobbyte",
-				"AppClientSecret": "1ppd22o56qv9kg9s6nbit975v5cpcse6ehjdervkngl18vf8r4u0",
-				"UserPoolId": "us-west-2_5PkO8pXel",
-				"AppClientIDWeb": "3tvfa0m9kb6uqsokkigqhht7c5",
-				"AppClientID": "4dv39bb049gqiae71k4drporcg",
-				"IdentityPoolId": "us-west-2:5f151ee5-c159-4404-baf9-a07f615e5958",
-				"IdentityPoolName": "hobbytee966d8ec_identitypool_e966d8ec__hobbyte",
-				"UserPoolName": "hobbytee966d8ec_userpool_e966d8ec"
-			},
-			"lastPushDirHash": "k/9GKDh2AY2d8Qqh0PzJaGnfLCQ="
-		}
-	},
-	"api": {
-		"hobbyte": {
-			"service": "AppSync",
-			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
-						"userPoolConfig": {
-							"userPoolId": "authhobbytee966d8ece966d8ec"
-						}
-					}
-				},
-				"GraphQLAPIIdOutput": "bmhsowmdizbnvlpfafwtuqfceq",
-				"GraphQLAPIEndpointOutput": "https://vozsqv4mcreydpnzvhij4exkze.appsync-api.us-west-2.amazonaws.com/graphql"
-			},
-			"providerMetadata": {
-				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/api/cloudformation-template.json",
-				"logicalId": "apihobbyte"
-			},
-			"lastPushTimeStamp": "2020-02-20T22:53:26.498Z",
-			"lastPushDirHash": "gd7PI3RoZa+VSyGjhbiZI4Z3bec="
-		}
-	}
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-hobbyte-hobbyte-123439-authRole",
+            "UnauthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::230460721296:role/amplify-hobbyte-hobbyte-123439-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-hobbyte-hobbyte-123439-deployment",
+            "UnauthRoleName": "amplify-hobbyte-hobbyte-123439-unauthRole",
+            "StackName": "amplify-hobbyte-hobbyte-123439",
+            "StackId": "arn:aws:cloudformation:us-west-2:230460721296:stack/amplify-hobbyte-hobbyte-123439/43b76dd0-4ea0-11ea-83d1-067657bdc03a",
+            "AmplifyAppId": "d3enphqz5721xj"
+        }
+    },
+    "auth": {
+        "hobbytee966d8ece966d8ec": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [],
+            "providerMetadata": {
+                "s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/auth/hobbytee966d8ece966d8ec-cloudformation-template.yml",
+                "logicalId": "authhobbytee966d8ece966d8ec"
+            },
+            "lastPushTimeStamp": "2020-02-23T23:02:53.238Z",
+            "output": {
+                "CreatedSNSRole": "arn:aws:iam::230460721296:role/sns123439-hobbyte",
+                "AppClientSecret": "1ppd22o56qv9kg9s6nbit975v5cpcse6ehjdervkngl18vf8r4u0",
+                "UserPoolId": "us-west-2_5PkO8pXel",
+                "AppClientIDWeb": "3tvfa0m9kb6uqsokkigqhht7c5",
+                "AppClientID": "4dv39bb049gqiae71k4drporcg",
+                "IdentityPoolId": "us-west-2:5f151ee5-c159-4404-baf9-a07f615e5958",
+                "IdentityPoolName": "hobbytee966d8ec_identitypool_e966d8ec__hobbyte",
+                "UserPoolName": "hobbytee966d8ec_userpool_e966d8ec"
+            },
+            "lastPushDirHash": "k/9GKDh2AY2d8Qqh0PzJaGnfLCQ="
+        }
+    },
+    "api": {
+        "ChatApp API": {
+            "service": "AppSync",
+            "output": {
+                "authConfig": {
+                    "defaultAuthentication": {
+                        "authenticationType": "AMAZON_COGNITO_USER_POOLS"
+                    },
+                    "additionalAuthenticationProviders": null,
+                    "userPoolConfig": {
+                        "userPoolId": "us-west-2_5PkO8pXel",
+                        "awsRegion": "us-west-2",
+                        "defaultAction": "ALLOW",
+                        "appIdClientRegex": null
+                    }
+                },
+                "GraphQLAPIIdOutput": "iprnqaepqfhnjdvht4nptwp36u",
+                "GraphQLAPIEndpointOutput": "https://jekl72b6ffhjhmjmiet2rnveya.appsync-api.us-west-2.amazonaws.com/graphql",
+                "name": "ChatApp API",
+                "region": "us-west-2"
+            },
+            "lastPushTimeStamp": "2020-02-23T22:52:10.598Z"
+        }
+    }
 }
