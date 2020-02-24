@@ -21,7 +21,7 @@
                 "s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/auth/hobbytee966d8ece966d8ec-cloudformation-template.yml",
                 "logicalId": "authhobbytee966d8ece966d8ec"
             },
-            "lastPushTimeStamp": "2020-02-23T23:02:53.238Z",
+            "lastPushTimeStamp": "2020-02-24T00:00:57.396Z",
             "output": {
                 "CreatedSNSRole": "arn:aws:iam::230460721296:role/sns123439-hobbyte",
                 "AppClientSecret": "1ppd22o56qv9kg9s6nbit975v5cpcse6ehjdervkngl18vf8r4u0",
@@ -35,28 +35,5 @@
             "lastPushDirHash": "k/9GKDh2AY2d8Qqh0PzJaGnfLCQ="
         }
     },
-    "api": {
-        "ChatApp API": {
-            "service": "AppSync",
-            "output": {
-                "authConfig": {
-                    "defaultAuthentication": {
-                        "authenticationType": "AMAZON_COGNITO_USER_POOLS"
-                    },
-                    "additionalAuthenticationProviders": null,
-                    "userPoolConfig": {
-                        "userPoolId": "us-west-2_5PkO8pXel",
-                        "awsRegion": "us-west-2",
-                        "defaultAction": "ALLOW",
-                        "appIdClientRegex": null
-                    }
-                },
-                "GraphQLAPIIdOutput": "iprnqaepqfhnjdvht4nptwp36u",
-                "GraphQLAPIEndpointOutput": "https://jekl72b6ffhjhmjmiet2rnveya.appsync-api.us-west-2.amazonaws.com/graphql",
-                "name": "ChatApp API",
-                "region": "us-west-2"
-            },
-            "lastPushTimeStamp": "2020-02-23T22:52:10.598Z"
-        }
-    }
+    "api": {}
 }
