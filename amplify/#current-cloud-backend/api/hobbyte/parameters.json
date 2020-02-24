@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "hobbyte",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authhobbytee966d8ece966d8ec",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

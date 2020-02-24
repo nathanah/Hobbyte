@@ -1,116 +1,72 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const allMessage = /* GraphQL */ `
-  query AllMessage($after: String, $conversationId: ID!, $first: Int) {
-    allMessage(after: $after, conversationId: $conversationId, first: $first) {
-      author {
-        cognitoId
-        id
-        username
-        registered
-      }
-      content
-      conversationId
-      createdAt
+export const getRoom = /* GraphQL */ `
+  query GetRoom($id: ID!) {
+    getRoom(id: $id) {
       id
-      isSent
-      recipient {
-        cognitoId
-        id
-        username
-        registered
+      messages {
+        items {
+          id
+          content
+          when
+          roomId
+        }
+        nextToken
       }
-      sender
     }
   }
 `;
-export const allMessageConnection = /* GraphQL */ `
-  query AllMessageConnection(
-    $after: String
-    $conversationId: ID!
-    $first: Int
+export const listRooms = /* GraphQL */ `
+  query ListRooms(
+    $filter: ModelRoomFilterInput
+    $limit: Int
+    $nextToken: String
   ) {
-    allMessageConnection(
-      after: $after
-      conversationId: $conversationId
-      first: $first
-    ) {
-      messages {
-        content
-        conversationId
-        createdAt
+    listRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
         id
-        isSent
-        sender
+        messages {
+          nextToken
+        }
       }
       nextToken
     }
   }
 `;
-export const allMessageFrom = /* GraphQL */ `
-  query AllMessageFrom(
-    $after: String
-    $conversationId: ID!
-    $first: Int
-    $sender: String!
-  ) {
-    allMessageFrom(
-      after: $after
-      conversationId: $conversationId
-      first: $first
-      sender: $sender
-    ) {
-      author {
-        cognitoId
-        id
-        username
-        registered
-      }
+export const getMessage = /* GraphQL */ `
+  query GetMessage($id: ID!) {
+    getMessage(id: $id) {
+      id
       content
-      conversationId
-      createdAt
-      id
-      isSent
-      recipient {
-        cognitoId
+      when
+      roomId
+      room {
         id
-        username
-        registered
+        messages {
+          nextToken
+        }
       }
-      sender
     }
   }
 `;
-export const allUser = /* GraphQL */ `
-  query AllUser($after: String, $first: Int) {
-    allUser(after: $after, first: $first) {
-      cognitoId
-      conversations {
-        nextToken
+export const listMessages = /* GraphQL */ `
+  query ListMessages(
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        content
+        when
+        roomId
+        room {
+          id
+        }
       }
-      id
-      messages {
-        nextToken
-      }
-      username
-      registered
-    }
-  }
-`;
-export const me = /* GraphQL */ `
-  query Me {
-    me {
-      cognitoId
-      conversations {
-        nextToken
-      }
-      id
-      messages {
-        nextToken
-      }
-      username
-      registered
+      nextToken
     }
   }
 `;

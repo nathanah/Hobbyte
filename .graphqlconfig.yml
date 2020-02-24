@@ -1,5 +1,5 @@
 projects:
-  ChatApp API:
+  hobbyte:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
@@ -10,6 +10,3 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
-        region: us-west-2
-        apiId: iprnqaepqfhnjdvht4nptwp36u
-        maxDepth: 2

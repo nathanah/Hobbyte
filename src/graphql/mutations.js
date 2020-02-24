@@ -1,88 +1,117 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createConversation = /* GraphQL */ `
-  mutation CreateConversation($createdAt: String, $id: ID!, $name: String!) {
-    createConversation(createdAt: $createdAt, id: $id, name: $name) {
-      createdAt
+export const createRoom = /* GraphQL */ `
+  mutation CreateRoom(
+    $input: CreateRoomInput!
+    $condition: ModelRoomConditionInput
+  ) {
+    createRoom(input: $input, condition: $condition) {
       id
       messages {
+        items {
+          id
+          content
+          when
+          roomId
+        }
         nextToken
       }
-      name
+    }
+  }
+`;
+export const updateRoom = /* GraphQL */ `
+  mutation UpdateRoom(
+    $input: UpdateRoomInput!
+    $condition: ModelRoomConditionInput
+  ) {
+    updateRoom(input: $input, condition: $condition) {
+      id
+      messages {
+        items {
+          id
+          content
+          when
+          roomId
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const deleteRoom = /* GraphQL */ `
+  mutation DeleteRoom(
+    $input: DeleteRoomInput!
+    $condition: ModelRoomConditionInput
+  ) {
+    deleteRoom(input: $input, condition: $condition) {
+      id
+      messages {
+        items {
+          id
+          content
+          when
+          roomId
+        }
+        nextToken
+      }
     }
   }
 `;
 export const createMessage = /* GraphQL */ `
   mutation CreateMessage(
-    $content: String
-    $conversationId: ID!
-    $createdAt: String!
-    $id: ID!
+    $input: CreateMessageInput!
+    $condition: ModelMessageConditionInput
   ) {
-    createMessage(
-      content: $content
-      conversationId: $conversationId
-      createdAt: $createdAt
-      id: $id
-    ) {
-      author {
-        cognitoId
-        id
-        username
-        registered
-      }
+    createMessage(input: $input, condition: $condition) {
+      id
       content
-      conversationId
-      createdAt
-      id
-      isSent
-      recipient {
-        cognitoId
+      when
+      roomId
+      room {
         id
-        username
-        registered
+        messages {
+          nextToken
+        }
       }
-      sender
     }
   }
 `;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser($username: String!) {
-    createUser(username: $username) {
-      cognitoId
-      conversations {
-        nextToken
-      }
+export const updateMessage = /* GraphQL */ `
+  mutation UpdateMessage(
+    $input: UpdateMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    updateMessage(input: $input, condition: $condition) {
       id
-      messages {
-        nextToken
+      content
+      when
+      roomId
+      room {
+        id
+        messages {
+          nextToken
+        }
       }
-      username
-      registered
     }
   }
 `;
-export const createUserConversations = /* GraphQL */ `
-  mutation CreateUserConversations($conversationId: ID!, $userId: ID!) {
-    createUserConversations(conversationId: $conversationId, userId: $userId) {
-      associated {
-        conversationId
-        userId
-      }
-      conversation {
-        createdAt
+export const deleteMessage = /* GraphQL */ `
+  mutation DeleteMessage(
+    $input: DeleteMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    deleteMessage(input: $input, condition: $condition) {
+      id
+      content
+      when
+      roomId
+      room {
         id
-        name
+        messages {
+          nextToken
+        }
       }
-      conversationId
-      user {
-        cognitoId
-        id
-        username
-        registered
-      }
-      userId
     }
   }
 `;
