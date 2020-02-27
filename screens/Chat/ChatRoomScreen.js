@@ -1,11 +1,16 @@
 
 import React, { Component } from 'react';
-import { Switch, Route, BrowserRouter as Router, ServerRouter } from 'react-router-dom';
-import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage} from "react-native";
-
 // import ChatScreen from './ChatScreen';
 import {createMemoryHistory} from 'history';
-
+// import { Switch, Route, BrowserRouter as Router, ServerRouter } from 'react-router-dom';
+// import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert } from "react-native";
+import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage} from "react-native";
+// import Rooms from './Rooms';
+// import ChatScreen from './ChatScreen';
+// import {createMemoryHistory} from 'history';
+// import {Connect} from "aws-amplify-react";
+import API, {graphqlOperation} from "aws-amplify";
+import * as mutations from '../../src/graphql/mutations';
 
 export default class ChatRoom extends Component {
   constructor(props) {
@@ -40,11 +45,14 @@ export default class ChatRoom extends Component {
           color="#0064e1"
           onPress={() => this.populate()}
         />
+      
         <Button
           title="MakeRoom"
           color="#0064e1"
           onPress={() => this.makeRoom()}
         />
+    
+      
         {
           rooms &&
           <FlatList
@@ -61,11 +69,30 @@ export default class ChatRoom extends Component {
   }
 
     makeRoom = async () => {
+   
+
       var newRooms = this.state.rooms;
       this.maxid++;
       newRooms.push({id:this.maxid, name:"Room"+this.maxid, createdAt: new Date().toDateString()});
       // this.setState({rooms:newRooms});
       this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
+    
+      // create room to send to AWS Amplify via API
+      const room = {
+        id: '1'
+      };
+
+      try {
+        console.log(room);
+        await API.graphql(graphqlOperation(mutations.createRoom, {input:room}));
+        console.log("success"); 
+
+      } catch (err){
+        console.log('error: ', err); 
+      }
+      // update state of rooms
+      this.setState({rooms:newRooms});
+
     }
     newid = async () =>{
       this.maxid++;
