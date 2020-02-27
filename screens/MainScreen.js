@@ -22,7 +22,6 @@ export default class MainScreen extends React.Component {
     );
   }
 }
-
 class StartScreen extends React.Component {
   render() {
     return(
