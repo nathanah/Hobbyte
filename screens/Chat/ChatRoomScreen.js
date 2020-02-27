@@ -11,7 +11,7 @@ export default class ChatRoom extends Component {
   constructor(props) {
     super(props);
 
-    const {navigation} = this.props;
+    // const {navigation} = this.props;
     // this.username = navigation.getParam("username");
     // AsyncStorage.removeItem("abc");
     this.roomsKey = "rooms";

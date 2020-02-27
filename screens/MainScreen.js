@@ -74,15 +74,6 @@ class ListScreen extends React.Component {
     );
   }
 }
-class ExploreScreen extends React.Component {
-    render() {
-      return(
-        <View style={{flex: 1}}>
-          <ChatScreen/>
-        </View>
-      );
-    }
-  }
 
 // Need to redo this... should only be one navigator!!! 
 // https://reactnavigation.org/docs/en/common-mistakes.html
@@ -93,14 +84,6 @@ const bottomTabNavigator = createBottomTabNavigator(
         navigationOptions: {
           tabBarIcon: ({ tintColor }) => (
             <Icon name="home" size={25} color={tintColor} />
-          )
-        }
-      },
-      Chat: {
-        screen: ExploreScreen,
-        navigationOptions: {
-          tabBarIcon: ({ tintColor }) => (
-            <Icon name="chat" size={25} color={tintColor} />
           )
         }
       },
