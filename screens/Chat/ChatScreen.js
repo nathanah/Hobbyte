@@ -127,22 +127,17 @@ class ChatScreen extends React.Component {
 
   // User's send Async function
   onSend(messages = []) {
+    console.log("send message:");
+    console.log(messages);
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-    // console.log(JSON.stringify(this.state.messages));
-    // console.log(JSON.stringify(messages));
-    // var newMessages = this.state.messages;
-    // console.log(newMessages);
-    // console.log(messages);
-    // newMessages.push(messages);
-    // console.log(newMessages)
-    AsyncStorage.setItem(this.state.id, JSON.stringify(this.state.messages));
+    AsyncStorage.setItem(this.state.id, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
   }
 
   loadMessages = async (key) => {
     var result = await AsyncStorage.getItem(key);
-    console.log("messages:")
+    console.log("load messages:")
     console.log(result);
     if(result != null && result.length){
       console.log("not null");
