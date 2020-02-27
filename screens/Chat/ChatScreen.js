@@ -1,27 +1,39 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
+import {AsyncStorage} from "react-native";
 
 
 class ChatScreen extends React.Component {
-  state = {
-    messages: [],
-    loadEarlier: true, 
-    isLoadingEarlier: false, 
-    typingText: null, 
-    isTyping: false, 
-    appIsReady: false,
-    title: 'Chat',
+  constructor(props) {
+    super(props);
+
+    const {navigation} = this.props;
+    // this.username = navigation.getParam("username");
+    // AsyncStorage.removeItem("abc");
+    this.state = {
+      messages: [],
+      loadEarlier: true,
+      isLoadingEarlier: false,
+      typingText: null,
+      isTyping: false,
+      appIsReady: false,
+      title: 'Chat',
+      id: this.props.navigation.getParam('id'),
+    }
+    // AsyncStorage.removeItem(this.state.id);
   }
+
 
   // should display user name from other user - currently shows sign in username
   static navigationOptions = ({navigation}) => ({
       title: (navigation.state.params || {}).name || 'Chat!',
+      id: (navigation.state.params || {}).id || 0,
   });
 
   get user() {
       return{
-          name: this.props.navigation.getParam('name'), 
-        //   _id: 
+          name: this.props.navigation.getParam('name'),
+          id: this.props.navigation.getParam('id'),
       };
   }
 
@@ -31,76 +43,80 @@ class ChatScreen extends React.Component {
   componentDidMount() {
       this._isMounted = true,
 
-      // This is for retrieving messages from AWS 
+      // This is for retrieving messages from AWS
     //   this.setState ({
-    //       messages:messagesDataAWS, 
-    //       appIsReady: true, 
+    //       messages:messagesDataAWS,
+    //       appIsReady: true,
     //       isTyping: false,
-    // 
-          
+    //
+
     //   })
 
-    // Hardcoded message example ---- 
-    this.setState({
-      messages: [
-        {
-            _id: 1,
-            text: 'This is a quick reply. Do you love Gifted Chat? (radio) KEEP IT',
-            createdAt: new Date(),
-            quickReplies: {
-              type: 'radio', // or 'checkbox',
-              keepIt: true,
-              values: [
-                {
-                  title: '😋 Yes',
-                  value: 'yes',
-                },
-                {
-                  title: '📷 Yes, let me show you with a picture!',
-                  value: 'yes_picture',
-                },
-                {
-                  title: '😞 Nope. What?',
-                  value: 'no',
-                },
-              ],
-            },
-            user: {
-              _id: 2,
-              name: 'React Native',
-            },
+    // Hardcoded message example ----
+    ////////////////////////////////////////////////////////////////
+    this.exampleMessage = [
+      {
+          _id: 1,
+          text: 'This is a quick reply. Do you love Gifted Chat? (radio) KEEP IT',
+          createdAt: new Date(),
+          quickReplies: {
+            type: 'radio', // or 'checkbox',
+            keepIt: true,
+            values: [
+              {
+                title: '😋 Yes',
+                value: 'yes',
+              },
+              {
+                title: '📷 Yes, let me show you with a picture!',
+                value: 'yes_picture',
+              },
+              {
+                title: '😞 Nope. What?',
+                value: 'no',
+              },
+            ],
           },
-          {
+          user: {
             _id: 2,
-            text: 'This is a quick reply. Do you love Gifted Chat? (checkbox)',
-            createdAt: new Date(),
-            quickReplies: {
-              type: 'checkbox', // or 'radio',
-              values: [
-                {
-                  title: 'Yes',
-                  value: 'yes',
-                },
-                {
-                  title: 'Yes, let me show you with a picture!',
-                  value: 'yes_picture',
-                },
-                {
-                  title: 'Nope. What?',
-                  value: 'no',
-                },
-              ],
-            },
-            user: {
-              _id: 2,
-              name: 'React Native',
-            },
-          }
+            name: 'React Native',
+          },
+        },
+        {
+          _id: 2,
+          text: 'This is a quick reply. Do you love Gifted Chat? (checkbox)',
+          createdAt: new Date(),
+          quickReplies: {
+            type: 'checkbox', // or 'radio',
+            values: [
+              {
+                title: 'Yes',
+                value: 'yes',
+              },
+              {
+                title: 'Yes, let me show you with a picture!',
+                value: 'yes_picture',
+              },
+              {
+                title: 'Nope. What?',
+                value: 'no',
+              },
+            ],
+          },
+          user: {
+            _id: 2,
+            name: 'React Native',
+          },
+        }
 
-      ],
+    ];
 
-      // end of hardcoded message example --- 
+    ////////////////////////////////////////////////////////////////////////////
+    this.setState({
+      messages: []
     })
+    this.loadMessages(this.state.id);
+
   }
 
 
@@ -108,12 +124,37 @@ class ChatScreen extends React.Component {
       this._isMounted = false
   }
 
-  
+
   // User's send Async function
   onSend(messages = []) {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
-    }))
+    }));
+    // console.log(JSON.stringify(this.state.messages));
+    // console.log(JSON.stringify(messages));
+    // var newMessages = this.state.messages;
+    // console.log(newMessages);
+    // console.log(messages);
+    // newMessages.push(messages);
+    // console.log(newMessages)
+    AsyncStorage.setItem(this.state.id, JSON.stringify(this.state.messages));
+  }
+
+  loadMessages = async (key) => {
+    var result = await AsyncStorage.getItem(key);
+    console.log("messages:")
+    console.log(result);
+    if(result != null && result.length){
+      console.log("not null");
+      // console.log(JSON.parse(result));
+      this.setState({messages: JSON.parse(result)});
+    }
+    else{
+      this.setState({
+        messages: []
+      })
+    }
+
   }
 
   // currently onReceive doesn't work:
@@ -153,7 +194,7 @@ class ChatScreen extends React.Component {
         user={{
           _id: 1,
         }}
-     
+
       />
     )
   }

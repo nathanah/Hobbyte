@@ -1,10 +1,9 @@
-// not working
+
 import React, { Component } from 'react';
 import { Switch, Route, BrowserRouter as Router, ServerRouter } from 'react-router-dom';
 import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage} from "react-native";
 
-// import Rooms from './Rooms';
-import ChatScreen from './ChatScreen';
+// import ChatScreen from './ChatScreen';
 import {createMemoryHistory} from 'history';
 
 
@@ -14,13 +13,9 @@ export default class ChatRoom extends Component {
 
     const {navigation} = this.props;
     // this.username = navigation.getParam("username");
-    this.data = [
-      {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
-      {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()},
-    ];
-    this.data2 = JSON.stringify(this.data);
-    this.storeRooms("abc", this.data2);
-    // this.loadRooms("abc");
+    // AsyncStorage.removeItem("abc");
+    this.roomsKey = "rooms";
+    this.loadRooms(this.roomsKey);
     this.state = {
       rooms: [],
     };
@@ -30,17 +25,21 @@ export default class ChatRoom extends Component {
     return (
       <View style={styles.list_item}>
         <Text style={styles.list_item_text}>{item.name}</Text>
-        <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage'/*,{ name:Auth.user.username}*/, item.id.toString())
-      /*alert('need to redirect to chat once implemented')*/} />
+        <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id.toString()  }) } />
       </View>
     );
   }
 
-  //add this back in when we can retrieve chat {this.enterChat(item);}
+
   render() {
     const {rooms} = this.state;
     return (
       <View>
+        <Button
+          title="Populate"
+          color="#0064e1"
+          onPress={() => this.populate()}
+        />
         <Button
           title="MakeRoom"
           color="#0064e1"
@@ -64,9 +63,9 @@ export default class ChatRoom extends Component {
     makeRoom = async () => {
       var newRooms = this.state.rooms;
       this.maxid++;
-      newRooms.push({id:this.maxid, name:this.maxid, createdAt: new Date().toDateString()});
+      newRooms.push({id:this.maxid, name:"Room"+this.maxid, createdAt: new Date().toDateString()});
       // this.setState({rooms:newRooms});
-      this.storeRooms("abc", JSON.stringify(newRooms));
+      this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
     }
     newid = async () =>{
       this.maxid++;
@@ -76,13 +75,15 @@ export default class ChatRoom extends Component {
     loadRooms = async (key) => {
       var result = await AsyncStorage.getItem(key);
       console.log(result);
-      if(result != null){
-        console.log("not null")
-        this.setState({"rooms": JSON.parse(result)});
-        console.log(result);
+      if(result != null && result.length){
+        // console.log("not null");
+        // console.log(JSON.parse(result));
+        this.maxid = JSON.parse(result).length;
+        this.setState({rooms: JSON.parse(result)});
       }
       else{
-        alert("result is null");
+        this.maxid = 0;
+        // alert("result is null");
       }
     }
     storeRooms = async (key, stringified) => {
@@ -90,6 +91,15 @@ export default class ChatRoom extends Component {
       console.log(stringified);
       this.maxid = JSON.parse(stringified).length;
       this.loadRooms(key);
+    }
+
+    populate = async() => {
+      this.data = [
+        {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
+        {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()}
+      ];
+      this.data2 = JSON.stringify(this.data);
+      this.storeRooms(this.roomsKey, this.data2);
     }
 }
 
