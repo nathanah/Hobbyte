@@ -9,8 +9,13 @@ import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Aler
 // import ChatScreen from './ChatScreen';
 // import {createMemoryHistory} from 'history';
 // import {Connect} from "aws-amplify-react";
-import API, {graphqlOperation} from "aws-amplify";
+import Amplify, {API, graphqlOperation} from "aws-amplify";
 import * as mutations from '../../src/graphql/mutations';
+import awsconfig from '../../aws-exports';
+ 
+// Considering you have an existing aws-exports.js configuration file 
+Amplify.configure(awsconfig);
+
 
 export default class ChatRoom extends Component {
   constructor(props) {
