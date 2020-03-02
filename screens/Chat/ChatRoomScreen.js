@@ -73,9 +73,19 @@ export default class ChatRoom extends Component {
     );
   }
 
+ 
+
     makeRoom = async () => {
    
-
+      // const AddRoom = `
+      // mutation ($id: String!, condition: $condition) {
+      //   CreateRoom(input: {
+      //     id: $id
+      //   }) {
+      //     id
+      //   }
+      // }
+      // `;
       var newRooms = this.state.rooms;
       this.maxid++;
       newRooms.push({id:this.maxid, name:"Room"+this.maxid, createdAt: new Date().toDateString()});
@@ -83,13 +93,16 @@ export default class ChatRoom extends Component {
       this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
     
       // create room to send to AWS Amplify via API
+      // not recognizing input/condition
       const room = {
-        id: '1'
+          id: this.maxid
+        
       };
 
       try {
         console.log(room);
-        await API.graphql(graphqlOperation(mutations.createRoom, {input:room}));
+        await API.graphql(graphqlOperation(mutations.CreateRoom, room));
+      //  await API.graphql(graphqlOperation(AddRoom, room)); 
         console.log("success"); 
 
       } catch (err){
