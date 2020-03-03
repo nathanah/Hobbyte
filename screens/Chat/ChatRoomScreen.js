@@ -9,10 +9,11 @@ import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Aler
 // import ChatScreen from './ChatScreen';
 // import {createMemoryHistory} from 'history';
 // import {Connect} from "aws-amplify-react";
+import { print as gqlToString } from 'graphql/language';
 import Amplify, {API, graphqlOperation} from "aws-amplify";
 import * as mutations from '../../src/graphql/mutations';
 import awsconfig from '../../aws-exports';
- 
+import CreateRoom from '../../src/graphql/mutations'; 
 // Considering you have an existing aws-exports.js configuration file 
 Amplify.configure(awsconfig);
 
@@ -95,15 +96,18 @@ export default class ChatRoom extends Component {
       // create room to send to AWS Amplify via API
       // not recognizing input/condition
       const room = {
-          id: this.maxid
-        
+          id: this.maxid,
+          messages: []
       };
 
       try {
         console.log(room);
-        await API.graphql(graphqlOperation(mutations.CreateRoom, room));
-      //  await API.graphql(graphqlOperation(AddRoom, room)); 
-        console.log("success"); 
+        const resp = await API.graphql(graphqlOperation(gqlToString(mutations.CreateRoom), room));
+        // const resp = await API.graphql(graphqlOperation(CreateRoom, room));
+        // const resp = await API.graphql(graphqlOperation(mutations.CreateRoom, room));
+        console.log(resp);
+        //  await API.graphql(graphqlOperation(AddRoom, room)); 
+        console.log("AWS store success"); 
 
       } catch (err){
         console.log('error: ', err); 
@@ -132,7 +136,7 @@ export default class ChatRoom extends Component {
       }
     }
     storeRooms = async (key, stringified) => {
-      await AsyncStorage.setItem(key, stringified).then(successMessage =>{console.log("store success")}).catch(fail => {console.log("fail")});
+      await AsyncStorage.setItem(key, stringified).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
       console.log(stringified);
       this.maxid = JSON.parse(stringified).length;
       this.loadRooms(key);
