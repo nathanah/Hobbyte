@@ -50,11 +50,11 @@ export default class HomeScreen extends React.Component {
         />
 
 
-          {/* TODO - note Not sure why going back to auth page leads to spinning loading button */}
-        <Button
-          title="Go back to auth page"
-          onPress={() => this.props.navigation.navigate('AuthLoading')}
-        />   
+        //   {/* TODO - note Not sure why going back to auth page leads to spinning loading button */}
+        // <Button
+        //   title="Go back to auth page"
+        //   onPress={() => this.props.navigation.navigate('AuthLoading')}
+        // />
 
        <Button
           title="Go back to main screen"
