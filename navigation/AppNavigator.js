@@ -38,6 +38,7 @@ const bottomTabNavigator = createBottomTabNavigator(
       Start: {
         screen: HomeScreen,
         navigationOptions: {
+          headerLeft: null, 
           tabBarIcon: ({ tintColor }) => (
             <Icon name="home" size={25} color={tintColor} />
           )
@@ -67,7 +68,12 @@ const bottomTabNavigator = createBottomTabNavigator(
 const RootStack = createStackNavigator({
   AuthLoading: AuthLoadingScreen,
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
-  SignIn: LoginScreen,
+  SignIn: {
+    screen: LoginScreen,
+    navigationOptions:{
+      headerLeft: null, 
+    } 
+  } ,
   SignUp: SignUpScreen,
 
   Home: bottomTabNavigator,

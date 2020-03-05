@@ -12,7 +12,7 @@ export default class LoginScreen extends React.Component {
     password: '',
     confirmationCode: '',
     user: {},
-    errorMessage: ''
+    errorMessage: '', 
   };
 
   render() {
@@ -31,7 +31,6 @@ export default class LoginScreen extends React.Component {
             style={styles.formBox}
             placeholderTextColor = "#2e4257"
             returnKeyType = "next"
-            autoFocus={true}
             onSubmitEditing = {() => {this.passwordInput.focus();}}
             keyboardType="email-address"
             autoCapitalize='none'
