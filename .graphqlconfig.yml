@@ -1,5 +1,5 @@
 projects:
-  hobyte:
+  hobbyte:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js

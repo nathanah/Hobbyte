@@ -12,7 +12,7 @@ export default class LoginScreen extends React.Component {
     password: '',
     confirmationCode: '',
     user: {},
-    errorMessage: ''
+    errorMessage: '', 
   };
 
   render() {
@@ -31,7 +31,6 @@ export default class LoginScreen extends React.Component {
             style={styles.formBox}
             placeholderTextColor = "#2e4257"
             returnKeyType = "next"
-            autoFocus={true}
             onSubmitEditing = {() => {this.passwordInput.focus();}}
             keyboardType="email-address"
             autoCapitalize='none'
@@ -61,7 +60,7 @@ export default class LoginScreen extends React.Component {
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text
-                  onPress={this._resetAsync}>Forgot password or username?</Text>
+                  onPress={this._goToPasswordReset}>Forgot password or username?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.resetContainer}>
@@ -72,6 +71,8 @@ export default class LoginScreen extends React.Component {
                 <Text
                   onPress={this._goToHome}>Home Screen</Text>
         </TouchableOpacity>
+
+
           </ScrollView>
 
 
@@ -123,6 +124,10 @@ export default class LoginScreen extends React.Component {
         console.log("Must login before going to home screen")
       }
     };
+    _goToPasswordReset = async () => {
+      console.log("Going to reset screen.")
+      this.props.navigation.navigate('PRS');
+    }
 }
 
 

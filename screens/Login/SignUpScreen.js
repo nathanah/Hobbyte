@@ -96,7 +96,7 @@ export default class SignUpScreen extends React.Component {
 
         <TouchableOpacity style={styles.loginContainer}>
                 <Text style={styles.buttonText}
-                  onPress={this._submitAsync}>Sumbit</Text>
+                  onPress={this._submitAsync}>Submit</Text>
         </TouchableOpacity>
 
           </ScrollView>

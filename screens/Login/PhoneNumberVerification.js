@@ -27,12 +27,13 @@ export default class PhoneNumberVerification extends React.Component {
             style={styles.logo}
             source={require('../../assets/images/logo.png')}
             />
-          <Text style={styles.header}>Varify Phone Number</Text>
+          <Text style={styles.header}>Verify Phone Number</Text>
           <TextInput
             placeholder="Code"
             style={styles.formBox}
             placeholderTextColor = "#2e4257"
             returnKeyType = "go"
+            keyboardType="phone-pad"
             autoFocus={true}
             onSubmitEditing = {this._loginAsync}
             autoCapitalize='none'
@@ -72,19 +73,22 @@ export default class PhoneNumberVerification extends React.Component {
       console.log("Passed form login: ", this.state.username)
       console.log("Varification type: ", this.state.authType)
 
-      if(this.state.authType == 'signup') { 
+      if(this.state.authType == 'signup') {
         Auth.confirmSignUp(this.state.username, this.state.verificationCode)
         .then(() => {
             console.log('successful confirm sign up!')
             this.props.navigation.navigate('Home');
           })
-        .catch(err => console.log('error confirming signing up!: ', err));
+        .catch(err => {console.log('error confirming signing up!: ', err);
+                alert('error confirming signing up!: '+ err.message);});
       } else if(this.state.authType == 'signin') {
         Auth.confirmSignIn(this.state.user, this.state.verificationCode)
         .then(() => {
           console.log('successful confirm sign in!');
+          this.props.navigation.navigate('Main');
         })
-        .catch(err => console.log('error confirming signing in!: ', err));
+        .catch(err => {console.log('error confirming signing in!: ', err);
+                alert('error confirming signing in!: '+err.message);});
       }
     };
 

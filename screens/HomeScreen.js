@@ -51,13 +51,23 @@ export default class HomeScreen extends React.Component {
 
 
           {/* TODO - note Not sure why going back to auth page leads to spinning loading button */}
-        <Button
+        {/*<Button
           title="Go back to auth page"
           onPress={() => this.props.navigation.navigate('AuthLoading')}
+        />*/}
+
+       <Button
+          title="Go back to main screen"
+          onPress={() => this.props.navigation.navigate('Main')}
         />
+        <Button
+        title="Go to conversation chat room page"
+        onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
+      />
       </View>
     );
   }
+
 
   /*--------------------Async------------------------*/
   _signOutAsync = async () => {
@@ -65,8 +75,8 @@ export default class HomeScreen extends React.Component {
     // await AsyncStorage.clear();
     Auth.signOut()
     .then(() => {
-      console.log("Signed Out")
-      this.props.navigation.navigate('SignIn')
+      console.log("Signed Out");
+      this.props.navigation.navigate('SignIn'); // not redirecting for some reason
     })
     .catch(err => console.log('error confirming signing in!: ', err));
   };
@@ -74,49 +84,9 @@ export default class HomeScreen extends React.Component {
 }
 
 
-
-
-  // Other HomeScreen Functions from Initial Project Set Up
-
-
 HomeScreen.navigationOptions = {
   header: null,
 };
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
 
 const styles = StyleSheet.create({
   container: {

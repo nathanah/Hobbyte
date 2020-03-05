@@ -31,6 +31,7 @@ export default class TwoFactorScreen extends React.Component {
             style={styles.formBox}
             placeholderTextColor = "#2e4257"
             returnKeyType = "go"
+            keyboardType="phone-pad"
             autoFocus={true}
             onSubmitEditing = {this._loginAsync}
             autoCapitalize='none'

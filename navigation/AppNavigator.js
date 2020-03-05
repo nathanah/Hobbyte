@@ -13,38 +13,86 @@ import * as React from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet,  TextInput } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator} from 'react-navigation-tabs';
+import {Icon} from 'react-native-elements';
 
 import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
+import MainScreen from "../screens/MainScreen";
 import ResetScreen from '../screens/Login/ResetScreen';
 import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
+import SignUpScreen from "../screens/Login/SignUpScreen";
+import ChatScreen from "../screens/Chat/ChatScreen";
+import ChatRoom from "../screens/Chat/ChatRoomScreen";
 import PhoneNumberVerification from "../screens/Login/PhoneNumberVerification"
 import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
 import HomeScreen from "../screens/HomeScreen"
-import SignUpScreen from "../screens/Login/SignUpScreen"
+import PasswordResetScreen from "../screens/Login/PasswordResetScreen"
 
 
 
+
+/*---------------------Navigation Tabs -----------------------------*/
+const bottomTabNavigator = createBottomTabNavigator(
+    {
+      Start: {
+        screen: HomeScreen,
+        navigationOptions: {
+          headerLeft: null, 
+          tabBarIcon: ({ tintColor }) => (
+            <Icon name="home" size={25} color={tintColor} />
+          )
+        }
+      },
+      List: {
+        screen: ChatRoom,
+        navigationOptions: {
+          tabBarIcon: ({ tintColor }) => (
+            <Icon name="chat" size={25} color={tintColor} />
+          )
+        }
+    },
+
+    },
+    {
+      initialRouteName: 'Start',
+      tabBarOptions: {
+        activeTintColor: '#eb6e3d'
+      }
+    }
+  );
 
 
 /*---------------------Navigation Stack -----------------------------*/
-
 //Define different pages
 const RootStack = createStackNavigator({
   AuthLoading: AuthLoadingScreen,
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
-  SignIn: LoginScreen,
+  SignIn: {
+    screen: LoginScreen,
+    navigationOptions:{
+      headerLeft: null, 
+    } 
+  } ,
   SignUp: SignUpScreen,
-  Home: HomeScreen,
+
+  Home: bottomTabNavigator,
+  Main: bottomTabNavigator,
+
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
   PNV: PhoneNumberVerification,
   PhoneReset: PhoneResetScreen,
+  ChatPage: ChatScreen,
+  ChatRoom: ChatRoom,
+  PRS: PasswordResetScreen
 },
 {
   initialRouteName: 'AuthLoading',
 }
 );
+
+
 
 /*----------------------Styles    ----------------------------*/
 const styles = StyleSheet.create ({
