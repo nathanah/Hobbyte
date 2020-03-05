@@ -54,13 +54,8 @@ export default class HomeScreen extends React.Component {
         <Button
           title="Go back to auth page"
           onPress={() => this.props.navigation.navigate('AuthLoading')}
-        />
+        />   
 
-      <Button
-          title="Go to test message page"
-          onPress={() => this.props.navigation.navigate('ChatPage',{ name:Auth.user.username})}
-        />    
-  
        <Button
           title="Go back to main screen"
           onPress={() => this.props.navigation.navigate('Main')}
@@ -68,7 +63,7 @@ export default class HomeScreen extends React.Component {
         <Button
         title="Go to conversation chat room page"
         onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
-      />    
+      />
       </View>
     );
   }

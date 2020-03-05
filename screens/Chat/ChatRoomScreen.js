@@ -13,8 +13,8 @@ import { print as gqlToString } from 'graphql/language';
 import Amplify, {API, graphqlOperation} from "aws-amplify";
 import * as mutations from '../../src/graphql/mutations';
 import awsconfig from '../../aws-exports';
-import CreateRoom from '../../src/graphql/mutations'; 
-// Considering you have an existing aws-exports.js configuration file 
+import CreateRoom from '../../src/graphql/mutations';
+// Considering you have an existing aws-exports.js configuration file
 Amplify.configure(awsconfig);
 
 
@@ -51,14 +51,14 @@ export default class ChatRoom extends Component {
           color="#0064e1"
           onPress={() => this.populate()}
         />
-      
+
         <Button
           title="MakeRoom"
           color="#0064e1"
           onPress={() => this.makeRoom()}
         />
-    
-      
+
+
         {
           rooms &&
           <FlatList
@@ -74,10 +74,10 @@ export default class ChatRoom extends Component {
     );
   }
 
- 
+
 
     makeRoom = async () => {
-   
+
       // const AddRoom = `
       // mutation ($id: String!, condition: $condition) {
       //   CreateRoom(input: {
@@ -92,7 +92,7 @@ export default class ChatRoom extends Component {
       newRooms.push({id:this.maxid, name:"Room"+this.maxid, createdAt: new Date().toDateString()});
       // this.setState({rooms:newRooms});
       this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
-    
+
       // create room to send to AWS Amplify via API
       // not recognizing input/condition
       const room = {
@@ -102,15 +102,16 @@ export default class ChatRoom extends Component {
 
       try {
         console.log(room);
-        const resp = await API.graphql(graphqlOperation(gqlToString(mutations.CreateRoom), room));
+        // console.log(mutations.createRoom);
+        const resp = await API.graphql(graphqlOperation(mutations.createRoom, room));
         // const resp = await API.graphql(graphqlOperation(CreateRoom, room));
         // const resp = await API.graphql(graphqlOperation(mutations.CreateRoom, room));
         console.log(resp);
-        //  await API.graphql(graphqlOperation(AddRoom, room)); 
-        console.log("AWS store success"); 
+        //  await API.graphql(graphqlOperation(AddRoom, room));
+        console.log("AWS store success");
 
       } catch (err){
-        console.log('error: ', err); 
+        console.log('error: ', err);
       }
       // update state of rooms
       this.setState({rooms:newRooms});

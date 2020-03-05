@@ -13,6 +13,8 @@ import * as React from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet,  TextInput } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator} from 'react-navigation-tabs';
+import {Icon} from 'react-native-elements';
 
 import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
@@ -30,17 +32,47 @@ import PasswordResetScreen from "../screens/Login/PasswordResetScreen"
 
 
 
+/*---------------------Navigation Tabs -----------------------------*/
+const bottomTabNavigator = createBottomTabNavigator(
+    {
+      Start: {
+        screen: HomeScreen,
+        navigationOptions: {
+          tabBarIcon: ({ tintColor }) => (
+            <Icon name="home" size={25} color={tintColor} />
+          )
+        }
+      },
+      List: {
+        screen: ChatRoom,
+        navigationOptions: {
+          tabBarIcon: ({ tintColor }) => (
+            <Icon name="chat" size={25} color={tintColor} />
+          )
+        }
+    },
+
+    },
+    {
+      initialRouteName: 'Start',
+      tabBarOptions: {
+        activeTintColor: '#eb6e3d'
+      }
+    }
+  );
+
 
 /*---------------------Navigation Stack -----------------------------*/
-
 //Define different pages
 const RootStack = createStackNavigator({
   AuthLoading: AuthLoadingScreen,
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
   SignIn: LoginScreen,
   SignUp: SignUpScreen,
-  Home: HomeScreen,
-  Main: MainScreen,
+
+  Home: bottomTabNavigator,
+  Main: bottomTabNavigator,
+
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
   PNV: PhoneNumberVerification,
@@ -53,6 +85,8 @@ const RootStack = createStackNavigator({
   initialRouteName: 'AuthLoading',
 }
 );
+
+
 
 /*----------------------Styles    ----------------------------*/
 const styles = StyleSheet.create ({
