@@ -1,13 +1,12 @@
 
 import React, { Component } from 'react';
-import {createMemoryHistory} from 'history';
 import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage} from "react-native";
 
 
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import PubSub from '@aws-amplify/pubsub';
-import { createTodo, createRoom, createMessage} from '../../src/graphql/mutations';
+import { createRoom} from '../../src/graphql/mutations';
 import awsconfig from '../../aws-exports';
 
 
@@ -15,10 +14,8 @@ import awsconfig from '../../aws-exports';
 API.configure(awsconfig);
 PubSub.configure(awsconfig);
 
-async function createNewTodo() {
-  const todo = { name: "We Use AWS AppSync" , description: "Wow s todoList! Thats not what I wanted I wanted Mother %$*@($% chat room!" };
-  const room_ = {id:"The best and first ROOM EVER!!!!!!"}
-  //await API.graphql(graphqlOperation(createTodo, { input: todo }));
+async function createNewTodo(roomId) {
+  const room_ = {id:roomId}
   await API.graphql(graphqlOperation(createRoom, { input: room_ }));
 }
 
@@ -97,18 +94,12 @@ export default class ChatRoom extends Component {
 
       try {
         console.log(room);
-        // console.log(mutations.createRoom);
-        //const resp = await API.graphql(graphqlOperation(mutations.createRoom, room));
-        // const resp = await API.graphql(graphqlOperation(CreateRoom, room));
-        // const resp = await API.graphql(graphqlOperation(mutations.CreateRoom, room));
-        //console.log(resp);
         console.log("About to create toDo");
 
-        createNewTodo();
+        createNewTodo(this.maxid);
 
         console.log("Just created a toDo");
 
-        //  await API.graphql(graphqlOperation(AddRoom, room));
         console.log("AWS store success");
 
       } catch (err){
@@ -251,21 +242,3 @@ const styles = {
     }
 
 }
-
-
-//
-// const history = createMemoryHistory();
-//
-//
-// class ChatRoom extends Component {
-//   render() {
-//     return (
-//       <Router history = {history}>
-//         <Switch>
-//           <Route path='/room/:roomId' component={ChatScreen} />
-//           <Route path='/' component={Rooms} />
-//         </Switch>
-//       </Router>
-//     );
-//   }
-// }
