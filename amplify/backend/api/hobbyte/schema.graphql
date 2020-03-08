@@ -1,3 +1,9 @@
+type Todo @model {
+  id: ID!
+  name: String!
+  description: String
+}
+
 type Room @model {
   id: ID!
   messages: [Message] @connection(name: "RoomMessages", keyField: "roomId", sortField: "when")
