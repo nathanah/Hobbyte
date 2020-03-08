@@ -6,7 +6,8 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
 
 async function createNewChatMessage(messages, room) {
-  const roomId_ = id + room; // need to add both sender and reciever names here
+  // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
+  const roomId_ = id + room; 
   const message_ = {
         content: messages[0].text, 
         when: messages[0].createdAt, 

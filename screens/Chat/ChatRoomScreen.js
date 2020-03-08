@@ -15,7 +15,9 @@ API.configure(awsconfig);
 PubSub.configure(awsconfig);
 
 async function createNewTodo(roomId) {
-  const room_ = {id:roomId}
+  // need to make this unique with receiver and sender usernames
+    // forward to chatScreen
+  const room_ = {id:roomId} 
   await API.graphql(graphqlOperation(createRoom, { input: room_ }));
 }
 
