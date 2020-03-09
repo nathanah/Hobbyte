@@ -86,7 +86,7 @@
         }
     },
     "Resources": {
-        "RoomTable": {
+        "TodoTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
                 "TableName": {
@@ -96,7 +96,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Room",
+                                    "Todo",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
                                     },
@@ -110,7 +110,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Room",
+                                    "Todo",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
                                     }
@@ -182,7 +182,7 @@
             },
             "DeletionPolicy": "Delete"
         },
-        "RoomIAMRole": {
+        "TodoIAMRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
                 "RoleName": {
@@ -192,7 +192,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Room",
+                                    "Todo",
                                     "role",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
@@ -207,7 +207,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Room",
+                                    "Todo",
                                     "role",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
@@ -259,7 +259,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Room",
+                                                                        "Todo",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         },
@@ -273,7 +273,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Room",
+                                                                        "Todo",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         }
@@ -296,7 +296,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Room",
+                                                                        "Todo",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         },
@@ -310,7 +310,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Room",
+                                                                        "Todo",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         }
@@ -330,17 +330,17 @@
                 ]
             }
         },
-        "RoomDataSource": {
+        "TodoDataSource": {
             "Type": "AWS::AppSync::DataSource",
             "Properties": {
                 "ApiId": {
                     "Ref": "GetAttGraphQLAPIApiId"
                 },
-                "Name": "RoomTable",
+                "Name": "TodoTable",
                 "Type": "AMAZON_DYNAMODB",
                 "ServiceRoleArn": {
                     "Fn::GetAtt": [
-                        "RoomIAMRole",
+                        "TodoIAMRole",
                         "Arn"
                     ]
                 },
@@ -355,7 +355,7 @@
                                 "Fn::Join": [
                                     "-",
                                     [
-                                        "Room",
+                                        "Todo",
                                         {
                                             "Ref": "GetAttGraphQLAPIApiId"
                                         },
@@ -369,7 +369,7 @@
                                 "Fn::Join": [
                                     "-",
                                     [
-                                        "Room",
+                                        "Todo",
                                         {
                                             "Ref": "GetAttGraphQLAPIApiId"
                                         }
@@ -381,10 +381,10 @@
                 }
             },
             "DependsOn": [
-                "RoomIAMRole"
+                "TodoIAMRole"
             ]
         },
-        "GetRoomResolver": {
+        "GetTodoResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -392,11 +392,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "RoomDataSource",
+                        "TodoDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "getRoom",
+                "FieldName": "getTodo",
                 "TypeName": "Query",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -413,7 +413,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "getRoom",
+                                        "getTodo",
                                         "req",
                                         "vtl"
                                     ]
@@ -437,7 +437,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "getRoom",
+                                        "getTodo",
                                         "res",
                                         "vtl"
                                     ]
@@ -448,7 +448,7 @@
                 }
             }
         },
-        "ListRoomResolver": {
+        "ListTodoResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -456,11 +456,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "RoomDataSource",
+                        "TodoDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "listRooms",
+                "FieldName": "listTodos",
                 "TypeName": "Query",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -477,7 +477,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "listRooms",
+                                        "listTodos",
                                         "req",
                                         "vtl"
                                     ]
@@ -501,7 +501,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "listRooms",
+                                        "listTodos",
                                         "res",
                                         "vtl"
                                     ]
@@ -512,7 +512,7 @@
                 }
             }
         },
-        "CreateRoomResolver": {
+        "CreateTodoResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -520,11 +520,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "RoomDataSource",
+                        "TodoDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "createRoom",
+                "FieldName": "createTodo",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -541,7 +541,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "createRoom",
+                                        "createTodo",
                                         "req",
                                         "vtl"
                                     ]
@@ -565,7 +565,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "createRoom",
+                                        "createTodo",
                                         "res",
                                         "vtl"
                                     ]
@@ -576,7 +576,7 @@
                 }
             }
         },
-        "UpdateRoomResolver": {
+        "UpdateTodoResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -584,11 +584,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "RoomDataSource",
+                        "TodoDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "updateRoom",
+                "FieldName": "updateTodo",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -605,7 +605,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "updateRoom",
+                                        "updateTodo",
                                         "req",
                                         "vtl"
                                     ]
@@ -629,7 +629,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "updateRoom",
+                                        "updateTodo",
                                         "res",
                                         "vtl"
                                     ]
@@ -640,7 +640,7 @@
                 }
             }
         },
-        "DeleteRoomResolver": {
+        "DeleteTodoResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -648,11 +648,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "RoomDataSource",
+                        "TodoDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "deleteRoom",
+                "FieldName": "deleteTodo",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -669,7 +669,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "deleteRoom",
+                                        "deleteTodo",
                                         "req",
                                         "vtl"
                                     ]
@@ -693,7 +693,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "deleteRoom",
+                                        "deleteTodo",
                                         "res",
                                         "vtl"
                                     ]
@@ -706,11 +706,11 @@
         }
     },
     "Outputs": {
-        "GetAttRoomTableStreamArn": {
+        "GetAttTodoTableStreamArn": {
             "Description": "Your DynamoDB table StreamArn.",
             "Value": {
                 "Fn::GetAtt": [
-                    "RoomTable",
+                    "TodoTable",
                     "StreamArn"
                 ]
             },
@@ -723,18 +723,18 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "RoomTable",
+                            "TodoTable",
                             "StreamArn"
                         ]
                     ]
                 }
             }
         },
-        "GetAttRoomDataSourceName": {
+        "GetAttTodoDataSourceName": {
             "Description": "Your model DataSource name.",
             "Value": {
                 "Fn::GetAtt": [
-                    "RoomDataSource",
+                    "TodoDataSource",
                     "Name"
                 ]
             },
@@ -747,17 +747,17 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "RoomDataSource",
+                            "TodoDataSource",
                             "Name"
                         ]
                     ]
                 }
             }
         },
-        "GetAttRoomTableName": {
+        "GetAttTodoTableName": {
             "Description": "Your DynamoDB table name.",
             "Value": {
-                "Ref": "RoomTable"
+                "Ref": "TodoTable"
             },
             "Export": {
                 "Name": {
@@ -768,7 +768,7 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "RoomTable",
+                            "TodoTable",
                             "Name"
                         ]
                     ]

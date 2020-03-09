@@ -2,6 +2,23 @@ import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import {AsyncStorage} from "react-native";
 
+import API, { graphqlOperation } from '@aws-amplify/api';
+import {createMessage} from '../../src/graphql/mutations';
+
+async function createNewChatMessage(messages, room) {
+  // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
+  const roomId_ = id + room; 
+  const message_ = {
+        content: messages[0].text, 
+        when: messages[0].createdAt, 
+        roomId: roomId_, 
+        // room {}
+
+      
+  };
+  const resp = await API.graphql(graphqlOperation(createMessage, { input: message_ }));
+  console.log(resp);
+}
 
 class ChatScreen extends React.Component {
   constructor(props) {
@@ -30,6 +47,7 @@ class ChatScreen extends React.Component {
       id: (navigation.state.params || {}).id || 0,
   });
 
+  // this currently brings in name  and id of room
   get user() {
       return{
           name: this.props.navigation.getParam('name'),
@@ -43,75 +61,6 @@ class ChatScreen extends React.Component {
   componentDidMount() {
       this._isMounted = true,
 
-      // This is for retrieving messages from AWS
-    //   this.setState ({
-    //       messages:messagesDataAWS,
-    //       appIsReady: true,
-    //       isTyping: false,
-    //
-
-    //   })
-
-    // Hardcoded message example ----
-    ////////////////////////////////////////////////////////////////
-    this.exampleMessage = [
-      {
-          _id: 1,
-          text: 'This is a quick reply. Do you love Gifted Chat? (radio) KEEP IT',
-          createdAt: new Date(),
-          quickReplies: {
-            type: 'radio', // or 'checkbox',
-            keepIt: true,
-            values: [
-              {
-                title: '😋 Yes',
-                value: 'yes',
-              },
-              {
-                title: '📷 Yes, let me show you with a picture!',
-                value: 'yes_picture',
-              },
-              {
-                title: '😞 Nope. What?',
-                value: 'no',
-              },
-            ],
-          },
-          user: {
-            _id: 2,
-            name: 'React Native',
-          },
-        },
-        {
-          _id: 2,
-          text: 'This is a quick reply. Do you love Gifted Chat? (checkbox)',
-          createdAt: new Date(),
-          quickReplies: {
-            type: 'checkbox', // or 'radio',
-            values: [
-              {
-                title: 'Yes',
-                value: 'yes',
-              },
-              {
-                title: 'Yes, let me show you with a picture!',
-                value: 'yes_picture',
-              },
-              {
-                title: 'Nope. What?',
-                value: 'no',
-              },
-            ],
-          },
-          user: {
-            _id: 2,
-            name: 'React Native',
-          },
-        }
-
-    ];
-
-    ////////////////////////////////////////////////////////////////////////////
     this.setState({
       messages: []
     })
@@ -125,10 +74,30 @@ class ChatScreen extends React.Component {
   }
 
 
+
+
   // User's send Async function
   onSend(messages = []) {
     console.log("send message:");
     console.log(messages);
+    console.log("message text:");
+    console.log(messages[0].text);
+    const room = this.user; 
+
+    console.log("Room name:");
+    console.log(room.name);
+    
+    try{
+      console.log ("sending message to AWS... "); 
+      
+      createNewChatMessage(messages, room.name); 
+
+      console.log("AWS store success!");
+    }catch (err){
+      console.log('error: ', err); 
+    }
+
+    console.log 
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -151,6 +120,9 @@ class ChatScreen extends React.Component {
     }
 
   }
+
+  // we need to restructure this to retrieve any messages
+  // waiting in queue in Dynamo and existing from local 
 
   // currently onReceive doesn't work:
 //   onReceive = (text: string) => {

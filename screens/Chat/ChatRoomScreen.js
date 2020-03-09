@@ -1,22 +1,25 @@
 
 import React, { Component } from 'react';
-// import ChatScreen from './ChatScreen';
-import {createMemoryHistory} from 'history';
-// import { Switch, Route, BrowserRouter as Router, ServerRouter } from 'react-router-dom';
-// import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert } from "react-native";
 import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage} from "react-native";
-// import Rooms from './Rooms';
-// import ChatScreen from './ChatScreen';
-// import {createMemoryHistory} from 'history';
-// import {Connect} from "aws-amplify-react";
-import { print as gqlToString } from 'graphql/language';
-import Amplify, {API, graphqlOperation} from "aws-amplify";
-import * as mutations from '../../src/graphql/mutations';
-import awsconfig from '../../aws-exports';
-import CreateRoom from '../../src/graphql/mutations';
-// Considering you have an existing aws-exports.js configuration file
-Amplify.configure(awsconfig);
 
+
+
+import API, { graphqlOperation } from '@aws-amplify/api';
+import PubSub from '@aws-amplify/pubsub';
+import { createRoom} from '../../src/graphql/mutations';
+import awsconfig from '../../aws-exports';
+
+
+
+API.configure(awsconfig);
+PubSub.configure(awsconfig);
+
+async function createNewTodo(roomId) {
+  // need to make this unique with receiver and sender usernames
+    // forward to chatScreen
+  const room_ = {id:roomId} 
+  await API.graphql(graphqlOperation(createRoom, { input: room_ }));
+}
 
 export default class ChatRoom extends Component {
   constructor(props) {
@@ -78,15 +81,6 @@ export default class ChatRoom extends Component {
 
     makeRoom = async () => {
 
-      // const AddRoom = `
-      // mutation ($id: String!, condition: $condition) {
-      //   CreateRoom(input: {
-      //     id: $id
-      //   }) {
-      //     id
-      //   }
-      // }
-      // `;
       var newRooms = this.state.rooms;
       this.maxid++;
       newRooms.push({id:this.maxid, name:"Room"+this.maxid, createdAt: new Date().toDateString()});
@@ -102,12 +96,12 @@ export default class ChatRoom extends Component {
 
       try {
         console.log(room);
-        // console.log(mutations.createRoom);
-        const resp = await API.graphql(graphqlOperation(mutations.createRoom, room));
-        // const resp = await API.graphql(graphqlOperation(CreateRoom, room));
-        // const resp = await API.graphql(graphqlOperation(mutations.CreateRoom, room));
-        console.log(resp);
-        //  await API.graphql(graphqlOperation(AddRoom, room));
+        console.log("About to create toDo");
+
+        createNewTodo(this.maxid);
+
+        console.log("Just created a toDo");
+
         console.log("AWS store success");
 
       } catch (err){
@@ -250,21 +244,3 @@ const styles = {
     }
 
 }
-
-
-//
-// const history = createMemoryHistory();
-//
-//
-// class ChatRoom extends Component {
-//   render() {
-//     return (
-//       <Router history = {history}>
-//         <Switch>
-//           <Route path='/room/:roomId' component={ChatScreen} />
-//           <Route path='/' component={Rooms} />
-//         </Switch>
-//       </Router>
-//     );
-//   }
-// }
