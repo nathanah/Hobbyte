@@ -16,19 +16,25 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator} from 'react-navigation-tabs';
 import {Icon} from 'react-native-elements';
 
-import AuthLoadingScreen from "../screens/AuthLoadingScreen";
-import LoginScreen from "../screens/Login/LoginScreen";
-import MainScreen from "../screens/MainScreen";
-import ResetScreen from '../screens/Login/ResetScreen';
-import TwoFactorScreen from "../screens/Login/TwoFactorScreen"
-import SignUpScreen from "../screens/Login/SignUpScreen";
-import ChatScreen from "../screens/Chat/ChatScreen";
-import ChatRoom from "../screens/Chat/ChatRoomScreen";
-import PhoneNumberVerification from "../screens/Login/PhoneNumberVerification"
-import PhoneResetScreen from "../screens/Login/PhoneResetScreen"
-import HomeScreen from "../screens/HomeScreen"
-import PasswordResetScreen from "../screens/Login/PasswordResetScreen"
+//Import screens
+//Login Screens
+import AuthLoadingScreen        from "../screens/AuthLoadingScreen";
+import LoginScreen              from "../screens/Login/LoginScreen";
+import ResetScreen              from '../screens/Login/ResetScreen';
+import TwoFactorScreen          from "../screens/Login/TwoFactorScreen";
+import SignUpScreen             from "../screens/Login/SignUpScreen";
+import PhoneNumberVerification  from "../screens/Login/PhoneNumberVerification";
+import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
+import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 
+//Main Screens
+import MainScreen               from "../screens/MainScreen";
+import HomeScreen               from "../screens/HomeScreen";
+
+//Chat Screens
+import ChatRoom                 from "../screens/Chat/ChatRoomScreen";
+import ChatScreen               from "../screens/Chat/ChatScreen";
+import CreateChatRoom           from "../screens/Chat/CreateChatRoomScreen";
 
 
 
@@ -38,7 +44,7 @@ const bottomTabNavigator = createBottomTabNavigator(
       Start: {
         screen: HomeScreen,
         navigationOptions: {
-          headerLeft: null, 
+          headerLeft: null,
           tabBarIcon: ({ tintColor }) => (
             <Icon name="home" size={25} color={tintColor} />
           )
@@ -71,21 +77,23 @@ const RootStack = createStackNavigator({
   SignIn: {
     screen: LoginScreen,
     navigationOptions:{
-      headerLeft: null, 
-    } 
+      headerLeft: null,
+    }
   } ,
   SignUp: SignUpScreen,
-
-  Home: bottomTabNavigator,
-  Main: bottomTabNavigator,
-
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
   PNV: PhoneNumberVerification,
   PhoneReset: PhoneResetScreen,
+  PRS: PasswordResetScreen,
+
+  Home: bottomTabNavigator,
+  Main: bottomTabNavigator,
+
+
   ChatPage: ChatScreen,
   ChatRoom: ChatRoom,
-  PRS: PasswordResetScreen
+  makeRoom: CreateChatRoom,
 },
 {
   initialRouteName: 'AuthLoading',

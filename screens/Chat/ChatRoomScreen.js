@@ -17,7 +17,7 @@ PubSub.configure(awsconfig);
 async function createNewTodo(roomId) {
   // need to make this unique with receiver and sender usernames
     // forward to chatScreen
-  const room_ = {id:roomId} 
+  const room_ = {id:roomId}
   await API.graphql(graphqlOperation(createRoom, { input: room_ }));
 }
 
@@ -26,7 +26,7 @@ export default class ChatRoom extends Component {
     super(props);
 
     // const {navigation} = this.props;
-    // this.username = navigation.getParam("username");
+    this.username = this.props.navigation.getParam("username");
     // AsyncStorage.removeItem("abc");
     this.roomsKey = "rooms";
     this.loadRooms(this.roomsKey);
@@ -58,7 +58,14 @@ export default class ChatRoom extends Component {
         <Button
           title="MakeRoom"
           color="#0064e1"
-          onPress={() => this.makeRoom()}
+          onPress={() => this.props.navigation.navigate('makeRoom',
+              {
+                "roomsKey": this.roomsKey,
+                "rooms": this.state.rooms,
+                "username": this.username
+              }
+            )
+          }
         />
 
 
@@ -110,7 +117,7 @@ export default class ChatRoom extends Component {
       // update state of rooms
       this.setState({rooms:newRooms});
 
-    }
+    };
     newid = async () =>{
       this.maxid++;
       return this.maxid;
@@ -129,13 +136,13 @@ export default class ChatRoom extends Component {
         this.maxid = 0;
         // alert("result is null");
       }
-    }
+    };
     storeRooms = async (key, stringified) => {
       await AsyncStorage.setItem(key, stringified).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
       console.log(stringified);
       this.maxid = JSON.parse(stringified).length;
       this.loadRooms(key);
-    }
+    };
 
     populate = async() => {
       this.data = [
@@ -143,6 +150,7 @@ export default class ChatRoom extends Component {
         {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()}
       ];
       this.data2 = JSON.stringify(this.data);
+      await AsyncStorage.clear();
       this.storeRooms(this.roomsKey, this.data2);
     }
 }
