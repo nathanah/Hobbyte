@@ -7,6 +7,7 @@ import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Aler
 import API, { graphqlOperation } from '@aws-amplify/api';
 import PubSub from '@aws-amplify/pubsub';
 import { createRoom} from '../../src/graphql/mutations';
+import {listRooms} from '../../src/graphql/queries';
 import awsconfig from '../../aws-exports';
 
 
@@ -21,6 +22,23 @@ async function createNewTodo(roomId) {
   await API.graphql(graphqlOperation(createRoom, { input: room_ }));
 }
 
+// Abby - still working on retrieving only rooms that user is in
+// listRooms returns all rooms and prints in console log
+async function retrieveRooms(){
+  console.log("attempting to retrieve rooms"); 
+  // const user_ = {}
+  const resp = await API.graphql(graphqlOperation(listRooms));
+  console.log("retrieved rooms");
+  console.log(resp); 
+  const data = JSON.parse(resp);
+  console.log(data);
+  // these don't work:
+  // const list = data.listRooms[1];
+  // console.log("room list");
+  // console.log(list);
+  // console.log("end of list");
+  return resp;
+}
 export default class ChatRoom extends Component {
   constructor(props) {
     super(props);
@@ -138,12 +156,23 @@ export default class ChatRoom extends Component {
     }
 
     populate = async() => {
+      try{
+        const roomObject = retrieveRooms(); 
+      } catch (err) {
+        console.log(err); 
+      }
+     
+      
+      // todo: cycle through rooms object and add to list display
+
       this.data = [
         {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
         {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()}
       ];
       this.data2 = JSON.stringify(this.data);
       this.storeRooms(this.roomsKey, this.data2);
+
+     
     }
 }
 
