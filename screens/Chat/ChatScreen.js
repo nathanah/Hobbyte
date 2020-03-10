@@ -7,14 +7,14 @@ import {createMessage} from '../../src/graphql/mutations';
 
 async function createNewChatMessage(messages, room) {
   // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
-  const roomId_ = id + room; 
+  const roomId_ = id + room;
   const message_ = {
-        content: messages[0].text, 
-        when: messages[0].createdAt, 
-        roomId: roomId_, 
+        content: messages[0].text,
+        when: messages[0].createdAt,
+        roomId: roomId_,
         // room {}
 
-      
+
   };
   const resp = await API.graphql(graphqlOperation(createMessage, { input: message_ }));
   console.log(resp);
@@ -82,22 +82,22 @@ class ChatScreen extends React.Component {
     console.log(messages);
     console.log("message text:");
     console.log(messages[0].text);
-    const room = this.user; 
+    const room = this.user;
 
     console.log("Room name:");
     console.log(room.name);
-    
+
     try{
-      console.log ("sending message to AWS... "); 
-      
-      createNewChatMessage(messages, room.name); 
+      console.log ("sending message to AWS... ");
+
+      createNewChatMessage(messages, room.name);
 
       console.log("AWS store success!");
     }catch (err){
-      console.log('error: ', err); 
+      console.log('error: ', err);
     }
 
-    console.log 
+    console.log
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -122,7 +122,7 @@ class ChatScreen extends React.Component {
   }
 
   // we need to restructure this to retrieve any messages
-  // waiting in queue in Dynamo and existing from local 
+  // waiting in queue in Dynamo and existing from local
 
   // currently onReceive doesn't work:
 //   onReceive = (text: string) => {
