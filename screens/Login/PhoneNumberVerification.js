@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
+import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 
 /*=====================================================*/
@@ -77,6 +77,7 @@ export default class PhoneNumberVerification extends React.Component {
         Auth.confirmSignUp(this.state.username, this.state.verificationCode)
         .then(() => {
             console.log('successful confirm sign up!')
+            AsyncStorage.setItem("userToken",JSON.stringify(Auth))
             this.props.navigation.navigate('Home', Auth.user);
           })
         .catch(err => {console.log('error confirming signing up!: ', err);
@@ -85,6 +86,7 @@ export default class PhoneNumberVerification extends React.Component {
         Auth.confirmSignIn(this.state.user, this.state.verificationCode)
         .then(() => {
           console.log('successful confirm sign in!');
+          AsyncStorage.setItem("userToken",JSON.stringify(Auth))
           this.props.navigation.navigate('Main', Auth.user);
         })
         .catch(err => {console.log('error confirming signing in!: ', err);

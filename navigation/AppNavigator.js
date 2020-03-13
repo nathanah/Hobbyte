@@ -87,8 +87,18 @@ const RootStack = createStackNavigator({
   PhoneReset: PhoneResetScreen,
   PRS: PasswordResetScreen,
 
-  Home: bottomTabNavigator,
-  Main: bottomTabNavigator,
+  Home: {
+    screen: bottomTabNavigator,
+    navigationOptions:{
+      headerLeft: null,
+    }
+  } ,
+  Main: {
+    screen: bottomTabNavigator,
+    navigationOptions:{
+      headerLeft: null,
+    }
+  } ,
 
 
   ChatPage: ChatScreen,
