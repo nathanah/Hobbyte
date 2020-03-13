@@ -22,22 +22,29 @@ async function createNewTodo(roomId) {
   await API.graphql(graphqlOperation(createRoom, { input: room_ }));
 }
 
-// Abby - still working on retrieving only rooms that user is in
-// listRooms returns all rooms and prints in console log
-async function retrieveRooms(){
-  console.log("attempting to retrieve rooms"); 
-  // const user_ = {}
+async function retrieveRooms(currentRooms){
   const resp = await API.graphql(graphqlOperation(listRooms));
   console.log("retrieved rooms");
-  console.log(resp); 
-  const data = JSON.parse(resp);
-  console.log(data);
-  // these don't work:
-  // const list = data.listRooms[1];
-  // console.log("room list");
-  // console.log(list);
-  // console.log("end of list");
-  return resp;
+  const roomItems = resp.data.listRooms.items;
+  console.log("Room Items");
+  console.log(roomItems);
+
+
+  const numRooms = roomItems.length; 
+  for (i = 0; i < numRooms; i++){
+    // add filter to get only rooms with user in it 
+    // parse room name from id
+    const roomItem = {id: roomItems[i].id, name: roomItems[i].id};
+    console.log("new room");
+    console.log(roomItem);
+    currentRooms.data.push(roomItem); 
+
+  }
+
+  currentRooms.data2 = JSON.stringify(currentRooms.data);
+  currentRooms.storeRooms(currentRooms.roomsKey, currentRooms.data2);
+
+  return roomItems;
 }
 export default class ChatRoom extends Component {
   constructor(props) {
@@ -156,23 +163,21 @@ export default class ChatRoom extends Component {
     }
 
     populate = async() => {
-      try{
-        const roomObject = retrieveRooms(); 
-      } catch (err) {
-        console.log(err); 
-      }
-     
-      
-      // todo: cycle through rooms object and add to list display
 
+      
       this.data = [
         {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
         {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()}
       ];
-      this.data2 = JSON.stringify(this.data);
-      this.storeRooms(this.roomsKey, this.data2);
-
-     
+   
+      
+      try{
+        const roomObject = retrieveRooms(this);
+         
+      } catch (err) {
+        console.log(err); 
+      }
+    
     }
 }
 
