@@ -91,12 +91,14 @@ const RootStack = createStackNavigator({
     screen: bottomTabNavigator,
     navigationOptions:{
       headerLeft: null,
+      gesturesEnabled: false,
     }
   } ,
   Main: {
     screen: bottomTabNavigator,
     navigationOptions:{
       headerLeft: null,
+      gesturesEnabled: false,
     }
   } ,
 

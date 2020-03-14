@@ -38,12 +38,11 @@ export default class ChatRoom extends Component {
     let swipeBtns = [{
       text: 'Delete',
       backgroundColor: 'red',
-      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
       onPress: () => { this.removeRoom(item.id.toString()) }
     }];
 
     return (
-      <Swipeout left={swipeBtns}
+      <Swipeout right={swipeBtns}
         // autoClose='true'
         backgroundColor= 'transparent'>
         <TouchableHighlight>
