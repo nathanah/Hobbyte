@@ -63,9 +63,9 @@ export default class ChatRoom extends Component {
     return (
       <View>
         <Button
-          title="Populate"
+          title="Refresh"
           color="#0064e1"
-          onPress={() => this.populate()}
+          onPress={() => this.loadRooms(this.roomsKey)}
         />
 
         <Button
