@@ -1,6 +1,7 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import {AsyncStorage} from "react-native";
+import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
@@ -45,6 +46,13 @@ class ChatScreen extends React.Component {
   static navigationOptions = ({navigation}) => ({
       title: (navigation.state.params || {}).name || 'Chat!',
       id: (navigation.state.params || {}).id || 0,
+      headerRight:
+          <Icon
+          style={{ paddingRight: 10 }}
+          onPress={() => navigation.navigate('RoomSettings', (navigation.state.params || {}).id)}
+          name="settings"
+          size={30}
+        />
   });
 
   // this currently brings in name  and id of room

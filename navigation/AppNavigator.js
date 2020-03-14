@@ -35,6 +35,7 @@ import HomeScreen               from "../screens/HomeScreen";
 import ChatRoom                 from "../screens/Chat/ChatRoomScreen";
 import ChatScreen               from "../screens/Chat/ChatScreen";
 import CreateChatRoom           from "../screens/Chat/CreateChatRoomScreen";
+import RoomSettings             from "../screens/Chat/RoomSettingsScreen";
 
 
 
@@ -106,6 +107,7 @@ const RootStack = createStackNavigator({
   ChatPage: ChatScreen,
   ChatRoom: ChatRoom,
   makeRoom: CreateChatRoom,
+  RoomSettings: RoomSettings,
 },
 {
   initialRouteName: 'AuthLoading',
