@@ -4,6 +4,7 @@ import {AsyncStorage} from "react-native";
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
+import {onCreateMessage} from '../../src/graphql/subscriptions'; 
 
 async function createNewChatMessage(messages, room) {
   // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
@@ -18,6 +19,15 @@ async function createNewChatMessage(messages, room) {
   };
   const resp = await API.graphql(graphqlOperation(createMessage, { input: message_ }));
   console.log(resp);
+}
+
+
+async function getNewMessages(currentObj){
+  // send over room Id
+  
+  // this sets up subscriber 
+  const messages = await API.graphql(graphqlOperation(onCreateMessage, ));
+  console.log(messages);
 }
 
 class ChatScreen extends React.Component {
@@ -105,6 +115,7 @@ class ChatScreen extends React.Component {
   }
 
   loadMessages = async (key) => {
+    const messageItems = this;
     var result = await AsyncStorage.getItem(key);
     console.log("load messages:")
     console.log(result);
@@ -118,6 +129,20 @@ class ChatScreen extends React.Component {
         messages: []
       })
     }
+
+    // messageItems.setState({_id: 1000, text: "This is a manually hardcoded message", createdAt: "3/15/2020", user: { _id: 2, name:'React Native', avatar: 'https://placeimg.com/140/140/any'}});
+    console.log("here");    
+    // query messages in DynamoDB queue
+    try{
+      getNewMessages(this); 
+    } catch (err){
+      console.log(err);
+    }
+    
+
+      // map to gifted chat and display 
+      // save to local storage
+
 
   }
 
