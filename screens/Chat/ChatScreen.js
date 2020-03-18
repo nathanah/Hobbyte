@@ -5,6 +5,7 @@ import {AsyncStorage} from "react-native";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
 import {onCreateMessage} from '../../src/graphql/subscriptions'; 
+import {listMessages} from '../../src/graphql/queries'; 
 
 async function createNewChatMessage(messages, room) {
   // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
@@ -22,12 +23,35 @@ async function createNewChatMessage(messages, room) {
 }
 
 
-async function getNewMessages(currentObj){
+async function getNewMessages(currentObj, room){
   // send over room Id
-  
-  // this sets up subscriber 
-  const messages = await API.graphql(graphqlOperation(onCreateMessage, ));
-  console.log(messages);
+  // const roomId = {
+  //   filter: {
+  //     roomId:{contains: "subscriptionRoom"} 
+  //   }
+  // }; 
+  const roomId = 
+   {
+      roomId:{contains: "subscriptionRoom"} 
+    }
+  ; 
+  console.log("loading messages from queue:"); 
+  // // load messages in waiting in DynamoDB queue
+  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomId )); 
+  console.log(messagesFromQueue); 
+
+  console.log("set up subscriber:"); 
+  // this sets up subscriber for new incoming messages
+  const subscription = await API.graphql(graphqlOperation(onCreateMessage )).subscribe({
+    next: eventData  => console.log(eventData),
+  });
+
+  console.log(subscription);
+
+  // need to unsubscribe once user leaves app or back button or signs out? 
+  // subscription.unsubscribe(); // move this to a different function
+
+
 }
 
 class ChatScreen extends React.Component {
@@ -117,7 +141,7 @@ class ChatScreen extends React.Component {
   loadMessages = async (key) => {
     const messageItems = this;
     var result = await AsyncStorage.getItem(key);
-    console.log("load messages:")
+    console.log("load messages from local storage:")
     console.log(result);
     if(result != null && result.length){
       console.log("not null");
@@ -134,7 +158,7 @@ class ChatScreen extends React.Component {
     console.log("here");    
     // query messages in DynamoDB queue
     try{
-      getNewMessages(this); 
+      getNewMessages(this, this.state.title); 
     } catch (err){
       console.log(err);
     }
