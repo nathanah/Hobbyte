@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage} from "react-native";
+import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage, TouchableHighlight} from "react-native";
 
-
+import Swipeout from 'react-native-swipeout';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import PubSub from '@aws-amplify/pubsub';
@@ -18,7 +18,7 @@ PubSub.configure(awsconfig);
 async function createNewTodo(roomId) {
   // need to make this unique with receiver and sender usernames
     // forward to chatScreen
-  const room_ = {id:roomId} 
+  const room_ = {id:roomId}
   await API.graphql(graphqlOperation(createRoom, { input: room_ }));
 }
 
@@ -51,8 +51,7 @@ export default class ChatRoom extends Component {
     super(props);
 
     // const {navigation} = this.props;
-    // this.username = navigation.getParam("username");
-    // AsyncStorage.removeItem("abc");
+    this.username = this.props.navigation.getParam("username");
     this.roomsKey = "rooms";
     this.loadRooms(this.roomsKey);
     this.state = {
@@ -61,11 +60,25 @@ export default class ChatRoom extends Component {
   }
 
   renderRoom = ({ item }) => {
+    let swipeBtns = [{
+      text: 'Delete',
+      backgroundColor: 'red',
+      onPress: () => { this.removeRoom(item.id.toString()) }
+    }];
+
     return (
-      <View style={styles.list_item}>
-        <Text style={styles.list_item_text}>{item.name}</Text>
-        <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id.toString()  }) } />
-      </View>
+      <Swipeout right={swipeBtns}
+        // autoClose='true'
+        backgroundColor= 'transparent'>
+        <TouchableHighlight>
+
+          <View style={styles.list_item}>
+            <Text style={styles.list_item_text}>{item.name}</Text>
+            <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id.toString()  }) } />
+          </View>
+
+          </TouchableHighlight>
+      </Swipeout>
     );
   }
 
@@ -75,15 +88,22 @@ export default class ChatRoom extends Component {
     return (
       <View>
         <Button
-          title="Populate"
+          title="Refresh"
           color="#0064e1"
-          onPress={() => this.populate()}
+          onPress={() => this.loadRooms(this.roomsKey)}
         />
 
         <Button
           title="MakeRoom"
           color="#0064e1"
-          onPress={() => this.makeRoom()}
+          onPress={() => this.props.navigation.navigate('makeRoom',
+              {
+                "roomsKey": this.roomsKey,
+                "rooms": this.state.rooms,
+                "username": this.username
+              }
+            )
+          }
         />
 
 
@@ -103,64 +123,24 @@ export default class ChatRoom extends Component {
   }
 
 
-
-    makeRoom = async () => {
-
-      var newRooms = this.state.rooms;
-      this.maxid++;
-      newRooms.push({id:this.maxid, name:"Room"+this.maxid, createdAt: new Date().toDateString()});
-      // this.setState({rooms:newRooms});
-      this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
-
-      // create room to send to AWS Amplify via API
-      // not recognizing input/condition
-      const room = {
-          id: this.maxid,
-          messages: []
-      };
-
-      try {
-        console.log(room);
-        console.log("About to create toDo");
-
-        createNewTodo(this.maxid);
-
-        console.log("Just created a toDo");
-
-        console.log("AWS store success");
-
-      } catch (err){
-        console.log('error: ', err);
-      }
-      // update state of rooms
-      this.setState({rooms:newRooms});
-
-    }
-    newid = async () =>{
-      this.maxid++;
-      return this.maxid;
-    }
-
     loadRooms = async (key) => {
       var result = await AsyncStorage.getItem(key);
-      console.log(result);
+      // console.log(result);
       if(result != null && result.length){
         // console.log("not null");
         // console.log(JSON.parse(result));
-        this.maxid = JSON.parse(result).length;
         this.setState({rooms: JSON.parse(result)});
       }
       else{
-        this.maxid = 0;
         // alert("result is null");
       }
-    }
+    };
+
     storeRooms = async (key, stringified) => {
       await AsyncStorage.setItem(key, stringified).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
       console.log(stringified);
-      this.maxid = JSON.parse(stringified).length;
-      this.loadRooms(key);
-    }
+      await this.loadRooms(key);
+    };
 
     populate = async() => {
 
@@ -169,6 +149,7 @@ export default class ChatRoom extends Component {
         {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
         {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()}
       ];
+<<<<<<< HEAD
    
       
       try{
@@ -178,6 +159,28 @@ export default class ChatRoom extends Component {
         console.log(err); 
       }
     
+=======
+      this.data2 = JSON.stringify(this.data);
+      await AsyncStorage.clear();
+      this.storeRooms(this.roomsKey, this.data2);
+>>>>>>> d5666e7bc6399f67baf07c8f394affc707fd9598
+    }
+
+    removeRoom = async(roomId) => {
+      console.log(roomId)
+      await this.loadRooms(this.roomsKey);
+
+      var newRooms = this.state.rooms;
+      console.log("prefilter");
+      newRooms = newRooms.filter(function( room ) {
+        return room.id.toString() !== roomId;
+      });
+      console.log("postfilter");
+      console.log(newRooms);
+
+      AsyncStorage.removeItem(roomId);
+
+      await this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
     }
 }
 

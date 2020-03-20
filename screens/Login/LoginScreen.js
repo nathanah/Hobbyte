@@ -12,7 +12,7 @@ export default class LoginScreen extends React.Component {
     password: '',
     confirmationCode: '',
     user: {},
-    errorMessage: '', 
+    errorMessage: '',
   };
 
   render() {
@@ -52,7 +52,7 @@ export default class LoginScreen extends React.Component {
             onSubmitEditing = {this._loginAsync}
             underlineColorAndroid = "transparent"
           />
-            
+
         <TouchableOpacity style={styles.loginContainer}>
                 <Text style={styles.buttonText}
                   onPress={this._loginAsync}>LOGIN</Text>
@@ -91,7 +91,7 @@ export default class LoginScreen extends React.Component {
       console.log("Login information input from user: ");
       console.log("username:" + this.state.username);
       console.log("password:" + this.state.password);
-      
+
       const { username, password } = this.state;
       Auth.signIn(username, password)
         .then(user => {
@@ -118,7 +118,7 @@ export default class LoginScreen extends React.Component {
     };
     _goToHome = async () => {
       if(Auth.user !== null) {
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('Home', Auth.user);
       } else {
         console.log("User is ", Auth.user)
         console.log("Must login before going to home screen")

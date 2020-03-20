@@ -1,6 +1,7 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import {AsyncStorage} from "react-native";
+import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
@@ -9,14 +10,14 @@ import {listMessages} from '../../src/graphql/queries';
 
 async function createNewChatMessage(messages, room) {
   // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
-  const roomId_ = id + room; 
+  const roomId_ = id + room;
   const message_ = {
-        content: messages[0].text, 
-        when: messages[0].createdAt, 
-        roomId: roomId_, 
+        content: messages[0].text,
+        when: messages[0].createdAt,
+        roomId: roomId_,
         // room {}
 
-      
+
   };
   const resp = await API.graphql(graphqlOperation(createMessage, { input: message_ }));
   console.log(resp);
@@ -79,6 +80,13 @@ class ChatScreen extends React.Component {
   static navigationOptions = ({navigation}) => ({
       title: (navigation.state.params || {}).name || 'Chat!',
       id: (navigation.state.params || {}).id || 0,
+      headerRight:
+          <Icon
+          style={{ paddingRight: 10 }}
+          onPress={() => navigation.navigate('RoomSettings', (navigation.state.params || {}).id)}
+          name="settings"
+          size={30}
+        />
   });
 
   // this currently brings in name  and id of room
@@ -116,22 +124,22 @@ class ChatScreen extends React.Component {
     console.log(messages);
     console.log("message text:");
     console.log(messages[0].text);
-    const room = this.user; 
+    const room = this.user;
 
     console.log("Room name:");
     console.log(room.name);
-    
+
     try{
-      console.log ("sending message to AWS... "); 
-      
-      createNewChatMessage(messages, room.name); 
+      console.log ("sending message to AWS... ");
+
+      createNewChatMessage(messages, room.name);
 
       console.log("AWS store success!");
     }catch (err){
-      console.log('error: ', err); 
+      console.log('error: ', err);
     }
 
-    console.log 
+    console.log
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -171,7 +179,7 @@ class ChatScreen extends React.Component {
   }
 
   // we need to restructure this to retrieve any messages
-  // waiting in queue in Dynamo and existing from local 
+  // waiting in queue in Dynamo and existing from local
 
   // currently onReceive doesn't work:
 //   onReceive = (text: string) => {
