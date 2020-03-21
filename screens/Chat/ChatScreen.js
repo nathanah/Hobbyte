@@ -47,16 +47,14 @@ async function getNewMessages(currentObj, room){
   // replace contains with otherUser+room
   console.log("room name:");
   console.log(room);
-  const roomId = 
-   {data:{
-      roomId: 
-        {'eq': "subscriptionRoom"} // need to update with room name. 
-   }
-    };
+ 
+  const roomFilter = {
+    filter: {roomId: {eq: room}}
+  };
     console.log(listMessages); 
   console.log("loading messages from DynamoDB queue:"); 
 // load messages in waiting in DynamoDB queue
-  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomId )); 
+  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter )); 
   console.log(messagesFromQueue); 
   
   displayIncomingMessages(messagesFromQueue, currentObj); 
