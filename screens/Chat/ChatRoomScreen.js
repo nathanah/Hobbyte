@@ -149,7 +149,6 @@ export default class ChatRoom extends Component {
         {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
         {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()}
       ];
-<<<<<<< HEAD
    
       
       try{
@@ -159,11 +158,9 @@ export default class ChatRoom extends Component {
         console.log(err); 
       }
     
-=======
       this.data2 = JSON.stringify(this.data);
       await AsyncStorage.clear();
       this.storeRooms(this.roomsKey, this.data2);
->>>>>>> d5666e7bc6399f67baf07c8f394affc707fd9598
     }
 
     removeRoom = async(roomId) => {

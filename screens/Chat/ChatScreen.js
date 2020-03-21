@@ -23,31 +23,54 @@ async function createNewChatMessage(messages, room) {
   console.log(resp);
 }
 
+// todo update with other user information
+function displayIncomingMessages(messagesFromQueue, currentObj){
+  // Function: Takes AWS object returned from DynamoDB and adds it to Gifted Chat display
+  const newMessages = messagesFromQueue.data.listMessages; 
+  const numMessages = newMessages.items.length;
+  var k; 
+  for (k = 0; k < numMessages; k++){
+    const messageItem = {
+      _id: newMessages.items[k].id, 
+      text: newMessages.items[k].content, 
+      user: {_id:2, name: "user2"} // todo update with other user name
+    };
+    currentObj.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, [messageItem]),
+    }));
+
+  }
+}
 
 async function getNewMessages(currentObj, room){
-  // send over room Id
-  // const roomId = {
-  //   filter: {
-  //     roomId:{contains: "subscriptionRoom"} 
-  //   }
-  // }; 
+
+  // replace contains with otherUser+room
+  console.log("room name:");
+  console.log(room);
   const roomId = 
-   {
-      roomId:{contains: "subscriptionRoom"} 
-    }
-  ; 
-  console.log("loading messages from queue:"); 
-  // // load messages in waiting in DynamoDB queue
+   {data:{
+      roomId: 
+        {'eq': "subscriptionRoom"} // need to update with room name. 
+   }
+    };
+    console.log(listMessages); 
+  console.log("loading messages from DynamoDB queue:"); 
+// load messages in waiting in DynamoDB queue
   const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomId )); 
   console.log(messagesFromQueue); 
+  
+  displayIncomingMessages(messagesFromQueue, currentObj); 
+ 
+  // todo finish attaching subscriber object and handle incoming messages by
+    // calling displayIncomingMessages 
 
-  console.log("set up subscriber:"); 
-  // this sets up subscriber for new incoming messages
-  const subscription = await API.graphql(graphqlOperation(onCreateMessage )).subscribe({
-    next: eventData  => console.log(eventData),
-  });
+  // console.log("set up subscriber:"); 
+  // // this sets up subscriber for new incoming messages
+  // const subscription = await API.graphql(graphqlOperation(onCreateMessage )).subscribe({
+  //   next: eventData  => console.log(eventData),
+  // });
 
-  console.log(subscription);
+  // console.log(subscription);
 
   // need to unsubscribe once user leaves app or back button or signs out? 
   // subscription.unsubscribe(); // move this to a different function
@@ -69,7 +92,7 @@ class ChatScreen extends React.Component {
       typingText: null,
       isTyping: false,
       appIsReady: false,
-      title: 'Chat',
+      title: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
     }
     // AsyncStorage.removeItem(this.state.id);
@@ -139,7 +162,8 @@ class ChatScreen extends React.Component {
       console.log('error: ', err);
     }
 
-    console.log
+    console.log("message in gifted chat:");
+    console.log(messages);
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -182,24 +206,24 @@ class ChatScreen extends React.Component {
   // waiting in queue in Dynamo and existing from local
 
   // currently onReceive doesn't work:
-//   onReceive = (text: string) => {
-//     this.setState((previousState: any) => {
-//       return {
-//         messages: GiftedChat.append(
-//           previousState.messages as any,
-//           [
-//             {
-//               _id: Math.round(Math.random() * 1000000),
-//               text,
-//               createdAt: new Date(),
-//               user: otherUser,
-//             },
-//           ],
-//           Platform.OS !== 'web',
-//         ),
-//       }
-//     })
-//   }
+  // onReceive = (text: string) => {
+  //   this.setState((previousState: any) => {
+  //     return {
+  //       messages: GiftedChat.append(
+  //         previousState.messages as any,
+  //         [
+  //           {
+  //             _id: Math.round(Math.random() * 1000000),
+  //             text,
+  //             createdAt: new Date(),
+  //             user: otherUser,
+  //           },
+  //         ],
+  //         Platform.OS !== 'web',
+  //       ),
+  //     }
+  //   })
+  // }
 
 
   render() {
