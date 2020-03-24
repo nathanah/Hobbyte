@@ -29,6 +29,7 @@ export default class LoginScreen extends React.Component {
           <TextInput
             placeholder="Username"
             style={styles.formBox}
+            underlineColorAndroid = {'transparent'}
             placeholderTextColor = "#2e4257"
             returnKeyType = "next"
             onSubmitEditing = {() => {this.passwordInput.focus();}}
@@ -53,9 +54,10 @@ export default class LoginScreen extends React.Component {
             underlineColorAndroid = "transparent"
           />
 
-        <TouchableOpacity style={styles.loginContainer}>
-                <Text style={styles.buttonText}
-                  onPress={this._loginAsync}>LOGIN</Text>
+        <TouchableOpacity 
+        style={styles.loginContainer}
+        onPress={this._loginAsync}>
+                <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.resetContainer}>
@@ -139,9 +141,11 @@ const styles = StyleSheet.create({
 
   formBox:{
       height: 45,
-      backgroundColor: '#FFF',
+      backgroundColor: '#d0e0f1',
       marginBottom: 15,
       paddingHorizontal: 20,
+      borderBottomColor: '#2e4257',
+      borderBottomWidth: 1
 
   },
 

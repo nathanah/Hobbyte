@@ -77,10 +77,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   formBox:{
-      height: 45,
-      backgroundColor: '#FFF',
-      marginBottom: 15,
-      paddingHorizontal: 20,
+    height: 45,
+    backgroundColor: '#b5e788',
+    marginBottom: 15,
+    paddingHorizontal: 20,
+    borderBottomColor: '#2e4257',
+    borderBottomWidth: 1
 
   },
 
