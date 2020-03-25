@@ -21,7 +21,7 @@ export default class PhoneResetScreen extends React.Component {
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
-            source={require('../../assets/images/logo.png')}
+            source={require('../../assets/images/islands100black.png')}
             />
         <Text style={styles.header}>Reset Phone Number</Text>
         <TextInput

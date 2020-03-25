@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+//import { Video } from 'expo-av';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
 import {Auth} from 'aws-amplify';
 
@@ -17,20 +17,20 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#d0e0f1", flex: 1}}>
+      <View style={{backgroundColor: "#129649", flex: 1}}>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
           <Image
             style={styles.logo}
-            source={require('../../assets/images/logo.png')}
+            source={require('../../assets/images/islands100black.png')}
             />
-
+          <Text style={styles.title}>Welcome to Sanctuary</Text>
           <TextInput
             placeholder="Username"
             style={styles.formBox}
             underlineColorAndroid = {'transparent'}
-            placeholderTextColor = "#2e4257"
+            placeholderTextColor = "#000000"
             returnKeyType = "next"
             onSubmitEditing = {() => {this.passwordInput.focus();}}
             keyboardType="email-address"
@@ -44,7 +44,7 @@ export default class LoginScreen extends React.Component {
           <TextInput
             placeholder = "Password"
             style={styles.formBox}
-            placeholderTextColor = "#2e4257"
+            placeholderTextColor = "#000000"
             secureTextEntry
             returnKeyType="go"
             ref = {(input) => {this.passwordInput = input;}}
@@ -56,6 +56,7 @@ export default class LoginScreen extends React.Component {
 
         <TouchableOpacity 
         style={styles.loginContainer}
+        activeOpacity = { .8 }
         onPress={this._loginAsync}>
                 <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
@@ -75,7 +76,7 @@ export default class LoginScreen extends React.Component {
         </TouchableOpacity>
 
 
-          </ScrollView>
+        </ScrollView>
 
 
 
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
 
   formBox:{
       height: 45,
-      backgroundColor: '#d0e0f1',
+      backgroundColor: '#129649',
       marginBottom: 15,
       paddingHorizontal: 20,
       borderBottomColor: '#2e4257',
@@ -149,6 +150,9 @@ const styles = StyleSheet.create({
 
   },
 
+  //backgroundVideo: {
+  //  ...StyleSheet.absoluteFillObject,
+  //},
   loginContainer:{
 
       paddingVertical: 10,
@@ -158,7 +162,7 @@ const styles = StyleSheet.create({
   resetContainer:{
 
     paddingVertical: 5,
-    backgroundColor: '#d0e0f1',
+    backgroundColor: '#129649',
 },
 
   buttonText:{
@@ -166,15 +170,27 @@ const styles = StyleSheet.create({
       color:'#FFF',
       fontWeight: "600",
       backgroundColor:'#db8a75',
+      borderRadius:20,
+      borderWidth: 1,
       padding:10
+
 
   },
 
-  logo: {
-    width: 100,
-    height:200,
-    marginBottom:30
+  title:{
+    paddingTop:20,
+    textAlign:'center'
+  },
 
-  }
+  logo: {
+    alignSelf: 'center',
+    height: 200,
+    width: 200,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+     
+    }
 
 });
