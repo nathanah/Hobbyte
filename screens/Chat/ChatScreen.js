@@ -8,15 +8,27 @@ import {createMessage} from '../../src/graphql/mutations';
 import {onCreateMessage} from '../../src/graphql/subscriptions'; 
 import {listMessages} from '../../src/graphql/queries'; 
 
-async function createNewChatMessage(messages, room) {
-  // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
-  const roomId_ = id + room;
+/*=====================================================*/
+// ASYNC FUNCTIONS 
+/*=====================================================*/
+
+async function getAuthObject() {
+  // obtains userToken and parses it to access username
+  var user = await AsyncStorage.getItem("userToken"); 
+  var userTokenParsed = JSON.parse(user); 
+  var username = userTokenParsed.user.signInUserSession.accessToken.payload.username; 
+  return username; // returns a promise
+}
+
+async function createNewChatMessage(messages, room, username) {
+  const roomId_ = room;
+  // obtained username, not sure where to save it in message
+  console.log("username in create new message"); 
+  console.log(username); 
   const message_ = {
         content: messages[0].text,
         when: messages[0].createdAt,
         roomId: roomId_,
-        // room {}
-
 
   };
   const resp = await API.graphql(graphqlOperation(createMessage, { input: message_ }));
@@ -49,9 +61,9 @@ async function getNewMessages(currentObj, room){
   console.log(room);
  
   const roomFilter = {
-    filter: {roomId: {eq: room}}
+    filter: {roomId: {contains: room}}
   };
-    console.log(listMessages); 
+    // console.log(listMessages); 
   console.log("loading messages from DynamoDB queue:"); 
 // load messages in waiting in DynamoDB queue
   const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter )); 
@@ -76,13 +88,16 @@ async function getNewMessages(currentObj, room){
 
 }
 
+
+/*=====================================================*/
+// ChatScreen Component 
+/*=====================================================*/
+
 class ChatScreen extends React.Component {
   constructor(props) {
     super(props);
-
+    var username = getAuthObject(); // get username from userToken
     const {navigation} = this.props;
-    // this.username = navigation.getParam("username");
-    // AsyncStorage.removeItem("abc");
     this.state = {
       messages: [],
       loadEarlier: true,
@@ -92,8 +107,11 @@ class ChatScreen extends React.Component {
       appIsReady: false,
       title: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
+      username: username
     }
-    // AsyncStorage.removeItem(this.state.id);
+    
+
+
   }
 
 
@@ -149,11 +167,13 @@ class ChatScreen extends React.Component {
 
     console.log("Room name:");
     console.log(room.name);
+    console.log("username :"); 
+    console.log(this.state.username._55);
 
     try{
       console.log ("sending message to AWS... ");
 
-      createNewChatMessage(messages, room.name);
+      createNewChatMessage(messages, room.name, this.state.username._55);
 
       console.log("AWS store success!");
     }catch (err){
@@ -184,8 +204,6 @@ class ChatScreen extends React.Component {
       })
     }
 
-    // messageItems.setState({_id: 1000, text: "This is a manually hardcoded message", createdAt: "3/15/2020", user: { _id: 2, name:'React Native', avatar: 'https://placeimg.com/140/140/any'}});
-    console.log("here");    
     // query messages in DynamoDB queue
     try{
       getNewMessages(this, this.state.title); 

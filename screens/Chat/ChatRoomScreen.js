@@ -23,23 +23,27 @@ async function createNewTodo(roomId) {
 }
 
 async function retrieveRooms(currentRooms){
-  const resp = await API.graphql(graphqlOperation(listRooms));
-  console.log("retrieved rooms");
-  const roomItems = resp.data.listRooms.items;
-  console.log("Room Items");
-  console.log(roomItems);
+  // todo change retrive Rooms
+    // query for NEW rooms only
+    // attach subscriber for NEW room creation 
+    
+  // const resp = await API.graphql(graphqlOperation(listRooms));
+  // console.log("retrieved rooms");
+  // const roomItems = resp.data.listRooms.items;
+  // console.log("Room Items");
+  // console.log(roomItems);
 
 
-  const numRooms = roomItems.length; 
-  for (i = 0; i < numRooms; i++){
-    // add filter to get only rooms with user in it 
-    // parse room name from id
-    const roomItem = {id: roomItems[i].id, name: roomItems[i].id};
-    console.log("new room");
-    console.log(roomItem);
-    currentRooms.data.push(roomItem); 
+  // const numRooms = roomItems.length; 
+  // for (i = 0; i < numRooms; i++){
+  //   // add filter to get only rooms with user in it 
+  //   // parse room name from id
+  //   const roomItem = {id: roomItems[i].id, name: roomItems[i].id};
+  //   console.log("new room");
+  //   console.log(roomItem);
+  //   currentRooms.data.push(roomItem); 
 
-  }
+  // }
 
   currentRooms.data2 = JSON.stringify(currentRooms.data);
   currentRooms.storeRooms(currentRooms.roomsKey, currentRooms.data2);
