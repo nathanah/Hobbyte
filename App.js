@@ -13,6 +13,7 @@ import MainScreen from './screens/MainScreen';
 import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
+global.Buffer = global.Buffer || require('buffer').Buffer
 /*</John>*/
 
 // Abby - Setup for AWS AppSync and Apollo
