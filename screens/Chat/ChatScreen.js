@@ -7,6 +7,7 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
 import {onCreateMessage} from '../../src/graphql/subscriptions'; 
 import {listMessages} from '../../src/graphql/queries'; 
+import MyComponent from '../../MyComponent'
 
 /*=====================================================*/
 // ASYNC FUNCTIONS 
@@ -244,22 +245,23 @@ class ChatScreen extends React.Component {
 
   render() {
     return (
-      <GiftedChat
-      title
-        messages={this.state.messages}
-        scrollToBottom
-        loadEarlier = {this.state.loadEarlier}
-        isLoadingEarlier = {this.state.isLoadingEarlier}
-        onLongPressAvatar = {user => alert(JSON.stringify(user))}
-        onPressAvatar = {() => alert('short press')}
-        keyboardShouldPersistTaps = 'never'
-        isTyping={this.state.isTyping}
-        onSend={messages => this.onSend(messages)}
-        user={{
-          _id: 1,
-        }}
+      <MyComponent/>
+      // <GiftedChat
+      // title
+      //   messages={this.state.messages}
+      //   scrollToBottom
+      //   loadEarlier = {this.state.loadEarlier}
+      //   isLoadingEarlier = {this.state.isLoadingEarlier}
+      //   onLongPressAvatar = {user => alert(JSON.stringify(user))}
+      //   onPressAvatar = {() => alert('short press')}
+      //   keyboardShouldPersistTaps = 'never'
+      //   isTyping={this.state.isTyping}
+      //   onSend={messages => this.onSend(messages)}
+      //   user={{
+      //     _id: 1,
+      //   }}
 
-      />
+      //>
     )
   }
 }
