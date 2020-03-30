@@ -11,9 +11,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/islands100white.png",
+    "icon": "./assets/images/logo.png",
     "splash": {
-      "image": "./assets/images/islands100blacks.png",
+      "image": "./assets/images/islands100black.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
