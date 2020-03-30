@@ -16,18 +16,18 @@ export default class ResetScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#b5e788", flex: 1}}>
+      <View style={{backgroundColor: "#129649", flex: 1}}>
          <ScrollView keyboardShouldPersistTaps='never'>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
-            source={require('../../assets/images/logo.png')}	 
+            source={require('../../assets/images/islands100black.png')}	 
             />
         <Text style={styles.header}>Reset Password</Text>
         <TextInput
                 placeholder="Email"
                 style={styles.formBox}
-                placeholderTextColor = "#2e4257"
+                placeholderTextColor = "#000000"
                 returnKeyType = "next"
                 autoFocus={true}
                 onSubmitEditing = {() => {this.phoneInput.focus();}}
@@ -42,7 +42,7 @@ export default class ResetScreen extends React.Component {
             <TextInput
                 placeholder = "Phone Number"
                 style={styles.formBox}
-                placeholderTextColor = "#2e4257"
+                placeholderTextColor = "#000000"
                 keyboardType="phone-pad"
                 returnKeyType="send"
                 ref = {(input) => {this.phoneInput = input;}}
@@ -52,9 +52,11 @@ export default class ResetScreen extends React.Component {
             />
 
 
-        <TouchableOpacity style={styles.submitContainer}>
+        <TouchableOpacity style={styles.submitContainer}
+        onPress={this._submitAsync}
+        activeOpacity = { .8 }>
                 <Text style={styles.buttonText}
-                  onPress={this._submitAsync}>SUBMIT</Text>
+                  >SUBMIT</Text>
         </TouchableOpacity>
 
 
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
   },
   formBox:{
     height: 45,
-    backgroundColor: '#d0e0f1',
+    backgroundColor: '#129649',
     marginBottom: 15,
     paddingHorizontal: 20,
     borderBottomColor: '#2e4257',
@@ -108,18 +110,23 @@ const styles = StyleSheet.create({
 },
 
   buttonText:{
-      textAlign:'center',
-      color:'#FFF',
-      fontWeight: "600",
-      backgroundColor:'#db8a75',
-      padding:10
+    textAlign:'center',
+    color:'#FFF',
+    fontWeight: "600",
+    backgroundColor:'#db8a75',
+    borderRadius:20,
+    borderWidth: 1,
+    padding:10
 
   },
 
   logo: {
+    alignSelf: 'center',
+    height: 200,
     width: 200,
-    height:200,
-    marginBottom:30
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
 
   }
 

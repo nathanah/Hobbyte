@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#129649',
       marginBottom: 15,
       paddingHorizontal: 20,
-      borderBottomColor: '#2e4257',
+      borderBottomColor: '#000000',
       borderBottomWidth: 1
 
   },
@@ -179,7 +179,8 @@ const styles = StyleSheet.create({
 
   title:{
     paddingTop:20,
-    textAlign:'center'
+    textAlign:'center',
+    color:'#000'
   },
 
   logo: {

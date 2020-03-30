@@ -16,12 +16,12 @@ export default class PhoneResetScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#b5e788", flex: 1}}>
+      <View style={{backgroundColor: "#129649", flex: 1}}>
          <ScrollView keyboardShouldPersistTaps='never'>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
-            source={require('../../assets/images/islands100black.png')}
+            source={require('../../assets/images/islands100white.png')}
             />
         <Text style={styles.header}>Reset Phone Number</Text>
         <TextInput
@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
   },
   formBox:{
     height: 45,
-    backgroundColor: '#d0e0f1',
+    backgroundColor: '#129649',
     marginBottom: 15,
     paddingHorizontal: 20,
-    borderBottomColor: '#2e4257',
+    borderBottomColor: '#FFFFFF',
     borderBottomWidth: 1
 
   },
@@ -105,9 +105,12 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 100,
-    height:200,
-    marginBottom:30
+    alignSelf: 'center',
+    height: 200,
+    width: 200,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
 
   }
 

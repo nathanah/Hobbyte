@@ -17,19 +17,19 @@ export default class TwoFactorScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#d0e0f1", flex: 1}}>
+      <View style={{backgroundColor: "#129649", flex: 1}}>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
           <Image
             style={styles.logo}
-            source={require('../../assets/images/logo.png')}
+            source={require('../../assets/images/islands100white.png')}
             />
           <Text style={styles.header}>Phone Number Confermation</Text>
           <TextInput
             placeholder="Code"
             style={styles.formBox}
-            placeholderTextColor = "#2e4257"
+            placeholderTextColor = "#000000"
             returnKeyType = "go"
             keyboardType="phone-pad"
             autoFocus={true}
@@ -42,9 +42,11 @@ export default class TwoFactorScreen extends React.Component {
           />
 
 
-        <TouchableOpacity style={styles.loginContainer}>
+        <TouchableOpacity style={styles.loginContainer}
+        onPress={this._loginAsync}
+        activeOpacity = { .8 }>
                 <Text style={styles.buttonText}
-                  onPress={this._loginAsync}>LOGIN</Text>
+                  >LOGIN</Text>
         </TouchableOpacity>
 
 
@@ -94,10 +96,10 @@ const styles = StyleSheet.create({
   },
   formBox:{
     height: 45,
-    backgroundColor: '#d0e0f1',
+    backgroundColor: '#129649',
     marginBottom: 15,
     paddingHorizontal: 20,
-    borderBottomColor: '#2e4257',
+    borderBottomColor: '#000000',
     borderBottomWidth: 1
   },
 
@@ -114,18 +116,23 @@ const styles = StyleSheet.create({
 },
 
   buttonText:{
-      textAlign:'center',
-      color:'#FFF',
-      fontWeight: "600",
-      backgroundColor:'#db8a75',
-      padding:10
+    textAlign:'center',
+    color:'#FFF',
+    fontWeight: "600",
+    backgroundColor:'#db8a75',
+    borderRadius:20,
+    borderWidth: 1,
+    padding:10
 
   },
 
   logo: {
-    width: 100,
-    height:200,
-    marginBottom:30
+    alignSelf: 'center',
+    height: 200,
+    width: 200,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
 
   }
 

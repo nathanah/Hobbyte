@@ -59,15 +59,15 @@ export default function App(props) {
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      require('./assets/images/logo.png'),
-      require('./assets/images/logo-small.png'),
+      require('./assets/images/islands100black.png'),
+      
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
-      'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+      'space-mono': require('./assets/fonts/Baloo2-Regular.ttf'),
     }),
   ]);
 }

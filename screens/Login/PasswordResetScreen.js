@@ -15,19 +15,19 @@ export default class PasswordResetScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#b5e788", flex: 1}}>
+      <View style={{backgroundColor: "#129649", flex: 1}}>
          <ScrollView keyboardShouldPersistTaps='never'>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
-            source={require('../../assets/images/logo.png')}	 
+            source={require('../../assets/images/islands100black.png')}	 
             />
         <Text style={styles.header}>Reset Password</Text>
 
         <TextInput
                 placeholder="Username"
                 style={styles.formBox}
-                placeholderTextColor = "#2e4257"
+                placeholderTextColor = "#000000"
                 returnKeyType = "next"
                 autoFocus={true}
                 onSubmitEditing = {() => {this.phoneInput.focus();}}
@@ -40,9 +40,11 @@ export default class PasswordResetScreen extends React.Component {
             />
 
 
-        <TouchableOpacity style={styles.submitContainer}>
+        <TouchableOpacity style={styles.submitContainer}
+        activeOpacity = { .8 }
+        onPress={this._submitAsync}>
                 <Text style={styles.buttonText}
-                  onPress={this._submitAsync}>SUBMIT</Text>
+                  >SUBMIT</Text>
         </TouchableOpacity>
 
 
@@ -73,15 +75,16 @@ const styles = StyleSheet.create({
   },
 
   header:{
-    paddingBottom: 25,
-    fontSize: 18,
+    paddingTop:20,
+    textAlign:'center',
+    color:'#000'
   },
   formBox:{
     height: 45,
-    backgroundColor: '#b5e788',
+    backgroundColor: '#129649',
     marginBottom: 15,
     paddingHorizontal: 20,
-    borderBottomColor: '#2e4257',
+    borderBottomColor: '#000000',
     borderBottomWidth: 1
 
   },
@@ -95,22 +98,27 @@ const styles = StyleSheet.create({
   resetContainer:{
 
     paddingVertical: 5,
-    backgroundColor: '#d0e0f1',
+    backgroundColor: '#129649',
 },
 
   buttonText:{
-      textAlign:'center',
-      color:'#FFF',
-      fontWeight: "600",
-      backgroundColor:'#db8a75',
-      padding:10
+    textAlign:'center',
+    color:'#FFF',
+    fontWeight: "600",
+    backgroundColor:'#db8a75',
+    borderRadius:20,
+    borderWidth: 1,
+    padding:10
 
   },
 
   logo: {
-    width: 100,
-    height:200,
-    marginBottom:30
+    alignSelf: 'center',
+    height: 200,
+    width: 200,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
 
   }
 
