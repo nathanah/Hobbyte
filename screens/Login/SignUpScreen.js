@@ -12,7 +12,7 @@ import {
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import {Auth} from 'aws-amplify';
-
+import {styles} from '../../styles/styles'
 const FieldWrapper = ({ children, label, formikProps, formikKey }) => (
   <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
     <Text style={{ marginBottom: 3 }}>{label}</Text>
@@ -24,23 +24,16 @@ const FieldWrapper = ({ children, label, formikProps, formikKey }) => (
 );
 
 const StyledInput = ({ label, formikProps, formikKey, ...rest }) => {
-  const inputStyles = {
-    height: 45,
-    backgroundColor: '#129649',
-    marginBottom: 5,
-    paddingHorizontal: 20,
-    borderBottomColor: '#FFFFFF',
-    borderBottomWidth: 1
-  };
+
 
   if (formikProps.touched[formikKey] && formikProps.errors[formikKey]) {
-    inputStyles.borderColor = 'red';
+    styles.formBox.borderColor = 'red';
   }
 
   return (
     <FieldWrapper label={label} formikKey={formikKey} formikProps={formikProps}>
       <TextInput
-        style={inputStyles}
+        style={styles.formBox}
         onChangeText={formikProps.handleChange(formikKey)}
         onBlur={formikProps.handleBlur(formikKey)}
         placeholderTextColor = "#FFFFFF"

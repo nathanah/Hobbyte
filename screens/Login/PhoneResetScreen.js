@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, ScrollView,Keyboard } from 'react-native';
-
+import {styles} from '../../styles/styles'
 /*=====================================================*/
 /*            Phone Reset Screen                       */
 /*=====================================================*/
@@ -40,7 +40,7 @@ export default class PhoneResetScreen extends React.Component {
             />
 
 
-        <TouchableOpacity style={styles.submitContainer}>
+        <TouchableOpacity style={styles.ButtonContainer}>
                 <Text style={styles.buttonText}
                   onPress={this._submitAsync}>SUBMIT</Text>
         </TouchableOpacity>
@@ -64,54 +64,4 @@ export default class PhoneResetScreen extends React.Component {
 }
 
 
-const styles = StyleSheet.create({
-  container:{
-      padding:20,
-  },
 
-  header:{
-    paddingBottom: 25,
-    fontSize: 18,
-  },
-  formBox:{
-    height: 45,
-    backgroundColor: '#129649',
-    marginBottom: 15,
-    paddingHorizontal: 20,
-    borderBottomColor: '#FFFFFF',
-    borderBottomWidth: 1
-
-  },
-
-  submitContainer:{
-
-      paddingVertical: 10,
-
-  },
-
-  resetContainer:{
-
-    paddingVertical: 5,
-    backgroundColor: '#d0e0f1',
-},
-
-  buttonText:{
-      textAlign:'center',
-      color:'#FFF',
-      fontWeight: "600",
-      backgroundColor:'#db8a75',
-      padding:10
-
-  },
-
-  logo: {
-    alignSelf: 'center',
-    height: 200,
-    width: 200,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-  }
-
-});

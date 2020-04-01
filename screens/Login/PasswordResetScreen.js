@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, ScrollView,Keyboard } from 'react-native';
+import {styles} from '../../styles/styles'
+import {View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, ScrollView,Keyboard } from 'react-native';
 import {Auth} from 'aws-amplify';
 
 /*=====================================================*/
@@ -40,7 +40,7 @@ export default class PasswordResetScreen extends React.Component {
             />
 
 
-        <TouchableOpacity style={styles.submitContainer}
+        <TouchableOpacity style={styles.ButtonContainer}
         activeOpacity = { .8 }
         onPress={this._submitAsync}>
                 <Text style={styles.buttonText}
@@ -69,57 +69,3 @@ export default class PasswordResetScreen extends React.Component {
 }
 
 
-const styles = StyleSheet.create({
-  container:{
-      padding:20,
-  },
-
-  header:{
-    paddingTop:20,
-    textAlign:'center',
-    color:'#000'
-  },
-  formBox:{
-    height: 45,
-    backgroundColor: '#129649',
-    marginBottom: 15,
-    paddingHorizontal: 20,
-    borderBottomColor: '#000000',
-    borderBottomWidth: 1
-
-  },
-
-  submitContainer:{
-
-      paddingVertical: 10,
-
-  },
-
-  resetContainer:{
-
-    paddingVertical: 5,
-    backgroundColor: '#129649',
-},
-
-  buttonText:{
-    textAlign:'center',
-    color:'#FFF',
-    fontWeight: "600",
-    backgroundColor:'#db8a75',
-    borderRadius:20,
-    borderWidth: 1,
-    padding:10
-
-  },
-
-  logo: {
-    alignSelf: 'center',
-    height: 200,
-    width: 200,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-  }
-
-});

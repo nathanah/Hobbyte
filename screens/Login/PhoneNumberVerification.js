@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
-
+import {styles} from '../../styles/styles'
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
@@ -44,7 +44,7 @@ export default class PhoneNumberVerification extends React.Component {
           />
 
 
-        <TouchableOpacity style={styles.loginContainer}
+        <TouchableOpacity style={styles.ButtonContainer}
         onPress={this._loginAsync}
         activeOpacity = { .8 }>
                 <Text style={styles.buttonText}
@@ -114,55 +114,3 @@ export default class PhoneNumberVerification extends React.Component {
 }
 
 
-const styles = StyleSheet.create({
-  container:{
-      padding:20,
-  },
-  header:{
-    paddingBottom: 25,
-    fontSize: 18,
-  },
-  formBox:{
-    height: 45,
-    backgroundColor: '#129649',
-    marginBottom: 15,
-    paddingHorizontal: 20,
-    borderBottomColor: '#000000',
-    borderBottomWidth: 1
-
-  },
-
-  loginContainer:{
-
-      paddingVertical: 10,
-
-  },
-
-  resetContainer:{
-
-    paddingVertical: 5,
-    backgroundColor: '#129649',
-},
-
-  buttonText:{
-    textAlign:'center',
-    color:'#FFF',
-    fontWeight: "600",
-    backgroundColor:'#db8a75',
-    borderRadius:20,
-    borderWidth: 1,
-    padding:10
-
-  },
-
-  logo: {
-    alignSelf: 'center',
-    height: 200,
-    width: 200,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-  }
-
-});
