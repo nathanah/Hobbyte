@@ -17,6 +17,24 @@ https://drive.google.com/open?id=1NOSihXdLQdE7UW4YGySvFcAMfIGLLAZq
 
 ## About the Project
 
+### Setup
+
+Install npm. (https://www.npmjs.com/get-npm)
+
+Install expo-cli with `npm install -g expo-cli`. 
+
+`git clone` project.
+
+run `npm install`.
+
+(potentially npm install other global packages I'm forgetting)
+
+(potentially set up own aws)
+
+run `expo start`.
+
+scan qr code on smartphone(with expo installed) or set up device emulator.
+
 ### Software 
 
 Frontend: React Native App 
