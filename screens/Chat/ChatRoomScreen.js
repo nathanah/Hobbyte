@@ -171,6 +171,7 @@ export default class ChatRoom extends Component {
       console.log(newRooms);
 
       AsyncStorage.removeItem(roomId);
+      AsyncStorage.removeItem(roomId+"settings");
 
       await this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
     }
