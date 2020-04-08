@@ -209,7 +209,7 @@ class ChatScreen extends React.Component {
       console.log("not null");
       var parsed = JSON.parse(result)
       console.log(parsed.title)
-      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor})
+      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor})
       this.props.navigation.state.params.name = this.state.title;
 
     }
@@ -232,10 +232,10 @@ class ChatScreen extends React.Component {
         }}
         wrapperStyle={{
           left: {
-            backgroundColor: this.state.backgroundColor || '#0084ff'
+            backgroundColor: this.state.bubbleColor || '#0084ff'
           },
           right: {
-            backgroundColor: this.state.backgroundColor || '#0084ff'
+            backgroundColor: this.state.bubbleColor || '#0084ff'
           },
         }}
       />

@@ -23,8 +23,6 @@ export default class RoomSettings extends Component {
   render(){
     return(
       <View style={{ flex: 1, /*alignItems: 'center'/*, justifyContent: 'center'*/ }}>
-        <Text> Settings aren't implemented yet</Text>
-
 
         <Text>Room Name</Text>
 
@@ -34,12 +32,46 @@ export default class RoomSettings extends Component {
           underlineColorAndroid = {'transparent'}
           placeholderTextColor = "#000000"
           returnKeyType = "done"
-          onSubmitEditing = {() => {this.submitNameChange();}}
+          onSubmitEditing = {() => {this.submitChange();}}
           keyboardType="default"
           autoCapitalize='none'
           autoCorrect={false}
           value={this.state.title}
           onChange ={event => this.setState({title:event.nativeEvent.text})}
+          underlineColorAndroid = "transparent"
+        />
+
+        <Text>Bubble Color</Text>
+
+        <TextInput
+          placeholder={this.state.bubbleColor}
+          style={styles.formBox}
+          underlineColorAndroid = {'transparent'}
+          placeholderTextColor = "#000000"
+          returnKeyType = "done"
+          onSubmitEditing = {() => {this.submitChange();}}
+          keyboardType="default"
+          autoCapitalize='none'
+          autoCorrect={false}
+          value={this.state.bubbleColor || '#0084ff'}
+          onChange ={event => this.setState({bubbleColor:event.nativeEvent.text})}
+          underlineColorAndroid = "transparent"
+        />
+
+        <Text>Text Color</Text>
+
+        <TextInput
+          placeholder={this.state.textColor}
+          style={styles.formBox}
+          underlineColorAndroid = {'transparent'}
+          placeholderTextColor = "#000000"
+          returnKeyType = "done"
+          onSubmitEditing = {() => {this.submitChange();}}
+          keyboardType="default"
+          autoCapitalize='none'
+          autoCorrect={false}
+          value={this.state.textColor || '#000000'}
+          onChange ={event => this.setState({textColor:event.nativeEvent.text})}
           underlineColorAndroid = "transparent"
         />
       </View>
@@ -52,14 +84,14 @@ export default class RoomSettings extends Component {
     if(result != null){
       console.log("not null");
       var parsed = JSON.parse(result);
-      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor});
+      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor});
     }
     else{
 
     }
   }
 
-  submitNameChange = async () => {
+  submitChange = async () => {
     var rooms = await AsyncStorage.getItem("rooms");
     console.log("load rooms from local storage")
     // console.log(rooms);
@@ -89,7 +121,6 @@ export default class RoomSettings extends Component {
         // console.log(room.name)
         parsed[idx] = room;
         // console.log(parsed[idx]);
-
         // console.log(JSON.stringify(parsed))
 
         AsyncStorage.setItem("rooms", JSON.stringify(parsed));
@@ -107,4 +138,6 @@ export default class RoomSettings extends Component {
 
     AsyncStorage.setItem(this.state.id+"settings", JSON.stringify(this.state))
   }
+
+
 }
