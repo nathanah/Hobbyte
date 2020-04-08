@@ -61,9 +61,13 @@ export default class HomeScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('Main')}
         />
         <Button
-        title="Go to conversation chat room page"
-        onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
-      />
+          title="Go to conversation chat room page"
+          onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
+        />
+        <Button
+          title="Clear Rooms"
+          onPress={() => AsyncStorage.removeItem("rooms")}
+        />
       </View>
     );
   }
@@ -76,6 +80,7 @@ export default class HomeScreen extends React.Component {
     Auth.signOut()
     .then(() => {
       console.log("Signed Out");
+      AsyncStorage.clear();
       this.props.navigation.navigate('SignIn'); // not redirecting for some reason
     })
     .catch(err => console.log('error confirming signing in!: ', err));

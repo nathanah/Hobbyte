@@ -1,12 +1,12 @@
 import React from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import {AsyncStorage} from "react-native";
 import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
-import {onCreateMessage} from '../../src/graphql/subscriptions'; 
-import {listMessages} from '../../src/graphql/queries'; 
+import {onCreateMessage} from '../../src/graphql/subscriptions';
+import {listMessages} from '../../src/graphql/queries';
 
 async function createNewChatMessage(messages, room) {
   // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
@@ -26,13 +26,13 @@ async function createNewChatMessage(messages, room) {
 // todo update with other user information
 function displayIncomingMessages(messagesFromQueue, currentObj){
   // Function: Takes AWS object returned from DynamoDB and adds it to Gifted Chat display
-  const newMessages = messagesFromQueue.data.listMessages; 
+  const newMessages = messagesFromQueue.data.listMessages;
   const numMessages = newMessages.items.length;
-  var k; 
+  var k;
   for (k = 0; k < numMessages; k++){
     const messageItem = {
-      _id: newMessages.items[k].id, 
-      text: newMessages.items[k].content, 
+      _id: newMessages.items[k].id,
+      text: newMessages.items[k].content,
       user: {_id:2, name: "user2"} // todo update with other user name
     };
     currentObj.setState(previousState => ({
@@ -47,22 +47,22 @@ async function getNewMessages(currentObj, room){
   // replace contains with otherUser+room
   console.log("room name:");
   console.log(room);
- 
+
   const roomFilter = {
     filter: {roomId: {eq: room}}
   };
-    console.log(listMessages); 
-  console.log("loading messages from DynamoDB queue:"); 
+    console.log(listMessages);
+  console.log("loading messages from DynamoDB queue:");
 // load messages in waiting in DynamoDB queue
-  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter )); 
-  console.log(messagesFromQueue); 
-  
-  displayIncomingMessages(messagesFromQueue, currentObj); 
- 
-  // todo finish attaching subscriber object and handle incoming messages by
-    // calling displayIncomingMessages 
+  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter ));
+  console.log(messagesFromQueue);
 
-  // console.log("set up subscriber:"); 
+  displayIncomingMessages(messagesFromQueue, currentObj);
+
+  // todo finish attaching subscriber object and handle incoming messages by
+    // calling displayIncomingMessages
+
+  // console.log("set up subscriber:");
   // // this sets up subscriber for new incoming messages
   // const subscription = await API.graphql(graphqlOperation(onCreateMessage )).subscribe({
   //   next: eventData  => console.log(eventData),
@@ -70,7 +70,7 @@ async function getNewMessages(currentObj, room){
 
   // console.log(subscription);
 
-  // need to unsubscribe once user leaves app or back button or signs out? 
+  // need to unsubscribe once user leaves app or back button or signs out?
   // subscription.unsubscribe(); // move this to a different function
 
 
@@ -81,9 +81,9 @@ class ChatScreen extends React.Component {
     super(props);
 
     const {navigation} = this.props;
-    // this.username = navigation.getParam("username");
-    // AsyncStorage.removeItem("abc");
     this.state = {
+      textColor: "",
+      backgroundColor: "",
       messages: [],
       loadEarlier: true,
       isLoadingEarlier: false,
@@ -93,18 +93,17 @@ class ChatScreen extends React.Component {
       title: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
     }
-    // AsyncStorage.removeItem(this.state.id);
   }
 
 
   // should display user name from other user - currently shows sign in username
   static navigationOptions = ({navigation}) => ({
-      title: (navigation.state.params || {}).name || 'Chat!',
+      title: (navigation.state.params || {}).name || "Chat!",
       id: (navigation.state.params || {}).id || 0,
       headerRight:
           <Icon
           style={{ paddingRight: 10 }}
-          onPress={() => navigation.navigate('RoomSettings', (navigation.state.params || {}).id)}
+          onPress={() => navigation.navigate('RoomSettings', { "id": (navigation.state.params || {}).id})}
           name="settings"
           size={30}
         />
@@ -128,6 +127,11 @@ class ChatScreen extends React.Component {
       messages: []
     })
     this.loadMessages(this.state.id);
+    this.loadSettings(this.state.id);
+
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+     this.loadSettings(this.state.id);
+    });
 
   }
 
@@ -141,14 +145,14 @@ class ChatScreen extends React.Component {
 
   // User's send Async function
   onSend(messages = []) {
-    console.log("send message:");
-    console.log(messages);
-    console.log("message text:");
-    console.log(messages[0].text);
+    // console.log("send message:");
+    // console.log(messages);
+    // console.log("message text:");
+    // console.log(messages[0].text);
     const room = this.user;
 
-    console.log("Room name:");
-    console.log(room.name);
+    // console.log("Room name:");
+    // console.log(room.name);
 
     try{
       console.log ("sending message to AWS... ");
@@ -160,8 +164,8 @@ class ChatScreen extends React.Component {
       console.log('error: ', err);
     }
 
-    console.log("message in gifted chat:");
-    console.log(messages);
+    // console.log("message in gifted chat:");
+    // console.log(messages);
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -185,19 +189,57 @@ class ChatScreen extends React.Component {
     }
 
     // messageItems.setState({_id: 1000, text: "This is a manually hardcoded message", createdAt: "3/15/2020", user: { _id: 2, name:'React Native', avatar: 'https://placeimg.com/140/140/any'}});
-    console.log("here");    
+    console.log("here");
     // query messages in DynamoDB queue
     try{
-      getNewMessages(this, this.state.title); 
+      getNewMessages(this, this.state.title);
     } catch (err){
       console.log(err);
     }
-    
 
-      // map to gifted chat and display 
+
+      // map to gifted chat and display
       // save to local storage
+  }
 
+  loadSettings = async (key) => {
+    var result = await AsyncStorage.getItem(key+"settings")
+    console.log("load settings from local storage:")
+    if(result != null){
+      console.log("not null");
+      var parsed = JSON.parse(result)
+      console.log(parsed.title)
+      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor})
+      this.props.navigation.state.params.name = this.state.title;
 
+    }
+    else{
+
+    }
+  }
+
+  renderBubble = props => {
+    return(
+      <Bubble
+        {...props}
+        textStyle={{
+          left: {
+            color: this.state.textColor || 'white'
+          },
+          right: {
+            color: this.state.textColor || 'white'
+          },
+        }}
+        wrapperStyle={{
+          left: {
+            backgroundColor: this.state.backgroundColor || '#0084ff'
+          },
+          right: {
+            backgroundColor: this.state.backgroundColor || '#0084ff'
+          },
+        }}
+      />
+    )
   }
 
   // we need to restructure this to retrieve any messages
@@ -230,6 +272,7 @@ class ChatScreen extends React.Component {
       title
         messages={this.state.messages}
         scrollToBottom
+        renderBubble = {this.renderBubble}
         loadEarlier = {this.state.loadEarlier}
         isLoadingEarlier = {this.state.isLoadingEarlier}
         onLongPressAvatar = {user => alert(JSON.stringify(user))}
