@@ -62,21 +62,17 @@ export default class RoomSettings extends Component {
   submitNameChange = async () => {
     var rooms = await AsyncStorage.getItem("rooms");
     console.log("load rooms from local storage")
-    console.log(rooms);
+    // console.log(rooms);
 
     if(rooms != null){
 
       var parsed = await JSON.parse(rooms);
-      console.log(parsed);
-      console.log("parsed");
-      console.log(this.state.id)
+      // console.log(parsed);
+      // console.log("parsed");
+      // console.log(this.state.id)
 
-      // var tempId = this.state.id
-      // var room = parsed.filter(function( roomSearch ) {
-      //   return roomSearch.id.toString() == tempId;
-      // });
+
       var idx = -1
-      // parsed.findIndex((room => room.id == this.state.id))
       for (let i = 0; i < parsed.length; i++){
         if (parsed[i].id == this.state.id){
           idx = i;
@@ -84,19 +80,17 @@ export default class RoomSettings extends Component {
         }
       }
 
-      // console.log(room);
-      // var idx = parsed.indexOf(room);
-      console.log(idx)
+      // console.log(idx)
       if(idx != -1){
         var room = parsed[idx]
-        console.log(room)
-        console.log(this.state.title)
+        // console.log(room)
+        // console.log(this.state.title)
         room.name = this.state.title;
-        console.log(room.name)
+        // console.log(room.name)
         parsed[idx] = room;
-        console.log(parsed[idx]);
+        // console.log(parsed[idx]);
 
-        console.log(JSON.stringify(parsed))
+        // console.log(JSON.stringify(parsed))
 
         AsyncStorage.setItem("rooms", JSON.stringify(parsed));
       }
