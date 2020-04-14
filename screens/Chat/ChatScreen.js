@@ -131,14 +131,17 @@ class ChatScreen extends React.Component {
     this.setState({
       messages: []
     })
-    this.loadMessages(this.state.id);
+    //<john>this.loadMessages(this.state.id);
     this.subscription = API.graphql(
-      graphqlOperation(onCreateMessageByRecipient,{to:"Sam"})
+      graphqlOperation(onCreateMessageByRecipient, {to:"Sam"})
       ).subscribe({
+      error: err => console.log("______________ERROR__________", err),
       next: event => {
           // console.log("Chat screen Subscription: " + JSON.stringify(event.value.data, null, 2));
           const newMessage = JSON.stringify(event.value.data, null, 2); 
-          this.onReceive(event.value.data);
+         //<john> this.onReceive(event.value.data);
+         console.log(event.value)
+        
       }
       });
   }

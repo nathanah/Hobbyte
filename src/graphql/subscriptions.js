@@ -6,11 +6,12 @@ export const onCreateMessageByRecipient = /* GraphQL */ `
       id
       actionType
       roomID
-      roomName
-      textContent
-      when
       from
       to
+      joiningMember
+      leavingMember
+      roomName
+      textContent
     }
   }
 `;
