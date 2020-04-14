@@ -1,160 +1,45 @@
-type Todo {
-  id: ID!
-  name: String!
-  description: String
-}
-
-type Room {
-  id: ID!
-  messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
+﻿schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
 }
 
 type Message {
+  actionType: Int!
+  from: String!
   id: ID!
-  content: String!
+  roomID: Int!
+  roomName: String
+  textContent: String
+  to: String!
   when: String!
-  roomId: ID
-  room: Room
 }
 
-enum ModelSortDirection {
-  ASC
-  DESC
-}
-
-type ModelTodoConnection {
-  items: [Todo]
+type ModelMessageConnection {
+  items: [Message]
   nextToken: String
 }
 
-input ModelStringInput {
-  ne: String
-  eq: String
-  le: String
-  lt: String
-  ge: String
-  gt: String
-  contains: String
-  notContains: String
-  between: [String]
-  beginsWith: String
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-  size: ModelSizeInput
-}
-
-input ModelIDInput {
-  ne: ID
-  eq: ID
-  le: ID
-  lt: ID
-  ge: ID
-  gt: ID
-  contains: ID
-  notContains: ID
-  between: [ID]
-  beginsWith: ID
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-  size: ModelSizeInput
-}
-
-input ModelIntInput {
-  ne: Int
-  eq: Int
-  le: Int
-  lt: Int
-  ge: Int
-  gt: Int
-  between: [Int]
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-}
-
-input ModelFloatInput {
-  ne: Float
-  eq: Float
-  le: Float
-  lt: Float
-  ge: Float
-  gt: Float
-  between: [Float]
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-}
-
-input ModelBooleanInput {
-  ne: Boolean
-  eq: Boolean
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-}
-
-input ModelSizeInput {
-  ne: Int
-  eq: Int
-  le: Int
-  lt: Int
-  ge: Int
-  gt: Int
-  between: [Int]
-}
-
-input ModelTodoFilterInput {
-  id: ModelIDInput
-  name: ModelStringInput
-  description: ModelStringInput
-  and: [ModelTodoFilterInput]
-  or: [ModelTodoFilterInput]
-  not: ModelTodoFilterInput
+type Mutation {
+  createMessage(condition: ModelMessageConditionInput, input: CreateMessageInput!): Message
+  deleteMessage(condition: ModelMessageConditionInput, input: DeleteMessageInput!): Message
+  updateMessage(condition: ModelMessageConditionInput, input: UpdateMessageInput!): Message
 }
 
 type Query {
-  getTodo(id: ID!): Todo
-  listTodos(filter: ModelTodoFilterInput, limit: Int, nextToken: String): ModelTodoConnection
-  getRoom(id: ID!): Room
-  listRooms(filter: ModelRoomFilterInput, limit: Int, nextToken: String): ModelRoomConnection
   getMessage(id: ID!): Message
   listMessages(filter: ModelMessageFilterInput, limit: Int, nextToken: String): ModelMessageConnection
 }
 
-input CreateTodoInput {
-  id: ID
-  name: String!
-  description: String
-}
-
-input UpdateTodoInput {
-  id: ID!
-  name: String
-  description: String
-}
-
-input DeleteTodoInput {
-  id: ID
-}
-
-type Mutation {
-  createTodo(input: CreateTodoInput!, condition: ModelTodoConditionInput): Todo
-  updateTodo(input: UpdateTodoInput!, condition: ModelTodoConditionInput): Todo
-  deleteTodo(input: DeleteTodoInput!, condition: ModelTodoConditionInput): Todo
-  createRoom(input: CreateRoomInput!, condition: ModelRoomConditionInput): Room
-  updateRoom(input: UpdateRoomInput!, condition: ModelRoomConditionInput): Room
-  deleteRoom(input: DeleteRoomInput!, condition: ModelRoomConditionInput): Room
-  createMessage(input: CreateMessageInput!, condition: ModelMessageConditionInput): Message
-  updateMessage(input: UpdateMessageInput!, condition: ModelMessageConditionInput): Message
-  deleteMessage(input: DeleteMessageInput!, condition: ModelMessageConditionInput): Message
-}
-
-input ModelTodoConditionInput {
-  name: ModelStringInput
-  description: ModelStringInput
-  and: [ModelTodoConditionInput]
-  or: [ModelTodoConditionInput]
-  not: ModelTodoConditionInput
+type Subscription {
+  onCreateMessage: Message @aws_subscribe(mutations : ["createMessage"])
+  onCreateMessageByRecipient(to: String!): Message @aws_subscribe(mutations : ["createMessage"])
+  onDeleteMessage: Message @aws_subscribe(mutations : ["deleteMessage"])
+  onUpdateMessage: Message @aws_subscribe(mutations : ["updateMessage"])
 }
 
 enum ModelAttributeTypes {
+  _null
   binary
   binarySet
   bool
@@ -164,89 +49,135 @@ enum ModelAttributeTypes {
   numberSet
   string
   stringSet
-  _null
 }
 
-type Subscription {
-  onCreateTodo: Todo @aws_subscribe(mutations: ["createTodo"])
-  onUpdateTodo: Todo @aws_subscribe(mutations: ["updateTodo"])
-  onDeleteTodo: Todo @aws_subscribe(mutations: ["deleteTodo"])
-  onCreateRoom: Room @aws_subscribe(mutations: ["createRoom"])
-  onUpdateRoom: Room @aws_subscribe(mutations: ["updateRoom"])
-  onDeleteRoom: Room @aws_subscribe(mutations: ["deleteRoom"])
-  onCreateMessage: Message @aws_subscribe(mutations: ["createMessage"])
-  onUpdateMessage: Message @aws_subscribe(mutations: ["updateMessage"])
-  onDeleteMessage: Message @aws_subscribe(mutations: ["deleteMessage"])
-}
-
-type ModelRoomConnection {
-  items: [Room]
-  nextToken: String
-}
-
-input ModelRoomFilterInput {
-  id: ModelIDInput
-  and: [ModelRoomFilterInput]
-  or: [ModelRoomFilterInput]
-  not: ModelRoomFilterInput
-}
-
-input CreateRoomInput {
-  id: ID
-}
-
-input UpdateRoomInput {
-  id: ID!
-}
-
-input DeleteRoomInput {
-  id: ID
-}
-
-input ModelRoomConditionInput {
-  and: [ModelRoomConditionInput]
-  or: [ModelRoomConditionInput]
-  not: ModelRoomConditionInput
-}
-
-type ModelMessageConnection {
-  items: [Message]
-  nextToken: String
-}
-
-input ModelMessageFilterInput {
-  id: ModelIDInput
-  content: ModelStringInput
-  when: ModelStringInput
-  roomId: ModelIDInput
-  and: [ModelMessageFilterInput]
-  or: [ModelMessageFilterInput]
-  not: ModelMessageFilterInput
+enum ModelSortDirection {
+  ASC
+  DESC
 }
 
 input CreateMessageInput {
+  actionType: Int!
+  from: String!
   id: ID
-  content: String!
+  roomID: Int!
+  roomName: String
+  textContent: String
+  to: String!
   when: String!
-  roomId: ID
-}
-
-input UpdateMessageInput {
-  id: ID!
-  content: String
-  when: String
-  roomId: ID
 }
 
 input DeleteMessageInput {
   id: ID
 }
 
+input ModelBooleanInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelFloatInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+}
+
+input ModelIDInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
 input ModelMessageConditionInput {
-  content: ModelStringInput
-  when: ModelStringInput
-  roomId: ModelIDInput
+  actionType: ModelIntInput
   and: [ModelMessageConditionInput]
-  or: [ModelMessageConditionInput]
+  from: ModelStringInput
   not: ModelMessageConditionInput
+  or: [ModelMessageConditionInput]
+  roomID: ModelIntInput
+  roomName: ModelStringInput
+  textContent: ModelStringInput
+  to: ModelStringInput
+  when: ModelStringInput
+}
+
+input ModelMessageFilterInput {
+  actionType: ModelIntInput
+  and: [ModelMessageFilterInput]
+  from: ModelStringInput
+  id: ModelIDInput
+  not: ModelMessageFilterInput
+  or: [ModelMessageFilterInput]
+  roomID: ModelIntInput
+  roomName: ModelStringInput
+  textContent: ModelStringInput
+  to: ModelStringInput
+  when: ModelStringInput
+}
+
+input ModelSizeInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelStringInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  size: ModelSizeInput
+}
+
+input UpdateMessageInput {
+  actionType: Int
+  from: String
+  id: ID!
+  roomID: Int
+  roomName: String
+  textContent: String
+  to: String
+  when: String
 }

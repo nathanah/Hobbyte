@@ -134,7 +134,7 @@
 					"DynamoDBBillingMode": "PAY_PER_REQUEST",
 					"DynamoDBEnableServerSideEncryption": "false",
 					"S3DeploymentBucket": "amplify-hobbyte-hobbyte-123439-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/9a363074b7b576c861e5896eeaee7b09d1030a65",
+					"S3DeploymentRootKey": "amplify-appsync-files/dba2dda2a53650c3c68a2727ec0df364db294315",
 					"env": "hobbyte"
 				}
 			}

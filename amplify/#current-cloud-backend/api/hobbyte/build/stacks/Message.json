@@ -129,14 +129,6 @@
                     {
                         "AttributeName": "id",
                         "AttributeType": "S"
-                    },
-                    {
-                        "AttributeName": "roomId",
-                        "AttributeType": "S"
-                    },
-                    {
-                        "AttributeName": "when",
-                        "AttributeType": "S"
                     }
                 ],
                 "StreamSpecification": {
@@ -186,41 +178,7 @@
                             "Ref": "AWS::NoValue"
                         }
                     ]
-                },
-                "GlobalSecondaryIndexes": [
-                    {
-                        "IndexName": "gsi-RoomMessages",
-                        "KeySchema": [
-                            {
-                                "AttributeName": "roomId",
-                                "KeyType": "HASH"
-                            },
-                            {
-                                "AttributeName": "when",
-                                "KeyType": "RANGE"
-                            }
-                        ],
-                        "Projection": {
-                            "ProjectionType": "ALL"
-                        },
-                        "ProvisionedThroughput": {
-                            "Fn::If": [
-                                "ShouldUsePayPerRequestBilling",
-                                {
-                                    "Ref": "AWS::NoValue"
-                                },
-                                {
-                                    "ReadCapacityUnits": {
-                                        "Ref": "DynamoDBModelTableReadIOPS"
-                                    },
-                                    "WriteCapacityUnits": {
-                                        "Ref": "DynamoDBModelTableWriteIOPS"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                ]
+                }
             },
             "DeletionPolicy": "Delete"
         },

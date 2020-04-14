@@ -1,18 +1,11 @@
-type Todo @model {
-  id: ID!
-  name: String!
-  description: String
-}
-
-type Room @model {
-  id: ID!
-  messages: [Message] @connection(name: "RoomMessages", keyField: "roomId", sortField: "when")
-}
-
 type Message @model {
-  id: ID!
-  content: String!
-  when: String!
-  roomId: ID
-  room: Room @connection(name: "RoomMessages", keyField: "roomId")
+    id: ID!
+    actionType: Int!
+    roomID: Int!
+    from: String!
+    to: String!
+    joiningMember:String
+    leavingMember:String
+    roomName: String
+    textContent: String
 }
