@@ -1,13 +1,18 @@
 
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage, TouchableHighlight} from "react-native";
+import {  View, 
+          Text, 
+          Button, 
+          FlatList, 
+          AsyncStorage, 
+          TouchableHighlight
+        
+        } from "react-native";
 
 import Swipeout from 'react-native-swipeout';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import PubSub from '@aws-amplify/pubsub';
-import { createRoom} from '../../src/graphql/mutations';
-import {listRooms} from '../../src/graphql/queries';
 import awsconfig from '../../aws-exports';
 
 
@@ -15,31 +20,8 @@ import awsconfig from '../../aws-exports';
 API.configure(awsconfig);
 PubSub.configure(awsconfig);
 
-async function createNewTodo(roomId) {
-  // need to make this unique with receiver and sender usernames
-    // forward to chatScreen
-  const room_ = {id:roomId}
-  await API.graphql(graphqlOperation(createRoom, { input: room_ }));
-}
-
+// todo add subscriber to onCreateMessage(filter) 
 async function retrieveRooms(currentRooms){
-  const resp = await API.graphql(graphqlOperation(listRooms));
-  console.log("retrieved rooms");
-  const roomItems = resp.data.listRooms.items;
-  console.log("Room Items");
-  console.log(roomItems);
-
-
-  const numRooms = roomItems.length; 
-  for (i = 0; i < numRooms; i++){
-    // add filter to get only rooms with user in it 
-    // parse room name from id
-    const roomItem = {id: roomItems[i].id, name: roomItems[i].id};
-    console.log("new room");
-    console.log(roomItem);
-    currentRooms.data.push(roomItem); 
-
-  }
 
   currentRooms.data2 = JSON.stringify(currentRooms.data);
   currentRooms.storeRooms(currentRooms.roomsKey, currentRooms.data2);
@@ -50,7 +32,6 @@ export default class ChatRoom extends Component {
   constructor(props) {
     super(props);
 
-    // const {navigation} = this.props;
     this.username = this.props.navigation.getParam("username");
     this.roomsKey = "rooms";
     this.loadRooms(this.roomsKey);
@@ -68,7 +49,6 @@ export default class ChatRoom extends Component {
 
     return (
       <Swipeout right={swipeBtns}
-        // autoClose='true'
         backgroundColor= 'transparent'>
         <TouchableHighlight>
 
@@ -125,10 +105,7 @@ export default class ChatRoom extends Component {
 
     loadRooms = async (key) => {
       var result = await AsyncStorage.getItem(key);
-      // console.log(result);
       if(result != null && result.length){
-        // console.log("not null");
-        // console.log(JSON.parse(result));
         this.setState({rooms: JSON.parse(result)});
       }
       else{
@@ -181,6 +158,9 @@ export default class ChatRoom extends Component {
     }
 }
 
+
+/*=====================================================*/
+// todo move styling to standard sheet 
 const styles = {
   container: {
       flex: 1

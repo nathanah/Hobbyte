@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "social-media-app",
-    "slug": "social-media-app",
+    "name": "Sanctuary App",
+    "slug": "sanctuary-app",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -25,6 +25,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Echo Chamber version 4.9.2020"
   }
 }

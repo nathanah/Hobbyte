@@ -5,84 +5,90 @@ import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
-import {onCreateMessage} from '../../src/graphql/subscriptions'; 
+import {onCreateMessageByRecipient} from '../../src/graphql/subscriptions'; 
 import {listMessages} from '../../src/graphql/queries'; 
 
-async function createNewChatMessage(messages, room) {
-  // need to keep roomId's consistent and get this from roomId created in ChatRoomScreen
-  const roomId_ = id + room;
+/*=====================================================*/
+// ASYNC FUNCTIONS 
+/*=====================================================*/
+
+async function getAuthObject() {
+  // obtains userToken and parses it to access username
+  var user = await AsyncStorage.getItem("userToken"); 
+  var userTokenParsed = JSON.parse(user); 
+  var username = userTokenParsed.user.signInUserSession.accessToken.payload.username; 
+  return username; // returns a promise
+}
+
+async function createNewChatMessage(messages, room, username) {
+  const roomId_ = room;
+  // obtained username, not sure where to save it in message
+  console.log("username in create new message"); 
+  console.log(username); 
   const message_ = {
         content: messages[0].text,
         when: messages[0].createdAt,
         roomId: roomId_,
-        // room {}
-
 
   };
   const resp = await API.graphql(graphqlOperation(createMessage, { input: message_ }));
   console.log(resp);
 }
 
-// todo update with other user information
+function displayOneMessage(incomingMessageItem, currentObj){
+  // displays one message at a time on gifted chat and stores in AsyncStorage
+  var addMessage = {
+    _id: incomingMessageItem.id, 
+    text: incomingMessageItem.content, 
+    user: {_id:2, name: "user2"} // todo update with other user name
+    // when
+  };
+  currentObj.setState(previousState => ({
+    messages: GiftedChat.append(previousState.messages, [addMessage]),
+  }));
+
+  // todo make sure only new messages stored, check if message already stored
+  AsyncStorage.setItem(currentObj.state.id, JSON.stringify(GiftedChat.append(currentObj.state.messages, [addMessage])));
+}
+
 function displayIncomingMessages(messagesFromQueue, currentObj){
   // Function: Takes AWS object returned from DynamoDB and adds it to Gifted Chat display
+ 
   const newMessages = messagesFromQueue.data.listMessages; 
   const numMessages = newMessages.items.length;
   var k; 
   for (k = 0; k < numMessages; k++){
-    const messageItem = {
-      _id: newMessages.items[k].id, 
-      text: newMessages.items[k].content, 
-      user: {_id:2, name: "user2"} // todo update with other user name
-    };
-    currentObj.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, [messageItem]),
-    }));
-
+    displayOneMessage(newMessages.items[k], currentObj);
   }
 }
 
 async function getNewMessages(currentObj, room){
-
-  // replace contains with otherUser+room
-  console.log("room name:");
-  console.log(room);
+  // query messages in DynamoDB queue
  
   const roomFilter = {
-    filter: {roomId: {eq: room}}
+    filter: {roomId: {contains: room}}
   };
-    console.log(listMessages); 
   console.log("loading messages from DynamoDB queue:"); 
-// load messages in waiting in DynamoDB queue
+  
+  // load messages in waiting in DynamoDB queue
   const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter )); 
   console.log(messagesFromQueue); 
   
+  // todo filter messages ONLY from other users to display
   displayIncomingMessages(messagesFromQueue, currentObj); 
  
-  // todo finish attaching subscriber object and handle incoming messages by
-    // calling displayIncomingMessages 
-
-  // console.log("set up subscriber:"); 
-  // // this sets up subscriber for new incoming messages
-  // const subscription = await API.graphql(graphqlOperation(onCreateMessage )).subscribe({
-  //   next: eventData  => console.log(eventData),
-  // });
-
-  // console.log(subscription);
-
-  // need to unsubscribe once user leaves app or back button or signs out? 
-  // subscription.unsubscribe(); // move this to a different function
-
-
 }
+
+
+/*=====================================================*/
+// ChatScreen Component 
+/*=====================================================*/
 
 class ChatScreen extends React.Component {
   constructor(props) {
     super(props);
-
+    var username = getAuthObject(); // get username from userToken
     const {navigation} = this.props;
-    // this.username = navigation.getParam("username");
-    // AsyncStorage.removeItem("abc");
     this.state = {
       messages: [],
       loadEarlier: true,
@@ -92,8 +98,8 @@ class ChatScreen extends React.Component {
       appIsReady: false,
       title: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
+      username: username
     }
-    // AsyncStorage.removeItem(this.state.id);
   }
 
 
@@ -119,16 +125,25 @@ class ChatScreen extends React.Component {
   }
 
 
-  // mounts test messages and sets it as a state
-  // This example has quick replies setting demonstrated with buttons in hardcoded section
   componentDidMount() {
       this._isMounted = true,
 
     this.setState({
       messages: []
     })
-    this.loadMessages(this.state.id);
-
+    //<john>this.loadMessages(this.state.id);
+    this.subscription = API.graphql(
+      graphqlOperation(onCreateMessageByRecipient, {to:"Sam"})
+      ).subscribe({
+      error: err => console.log("______________ERROR__________", err),
+      next: event => {
+          // console.log("Chat screen Subscription: " + JSON.stringify(event.value.data, null, 2));
+          const newMessage = JSON.stringify(event.value.data, null, 2); 
+         //<john> this.onReceive(event.value.data);
+         console.log(event.value)
+        
+      }
+      });
   }
 
 
@@ -136,24 +151,20 @@ class ChatScreen extends React.Component {
       this._isMounted = false
   }
 
-
-
-
-  // User's send Async function
   onSend(messages = []) {
     console.log("send message:");
     console.log(messages);
-    console.log("message text:");
-    console.log(messages[0].text);
     const room = this.user;
 
     console.log("Room name:");
     console.log(room.name);
+    console.log("username :"); 
+    console.log(this.state.username._55);
 
     try{
       console.log ("sending message to AWS... ");
 
-      createNewChatMessage(messages, room.name);
+      createNewChatMessage(messages, room.name, this.state.username._55);
 
       console.log("AWS store success!");
     }catch (err){
@@ -175,7 +186,6 @@ class ChatScreen extends React.Component {
     console.log(result);
     if(result != null && result.length){
       console.log("not null");
-      // console.log(JSON.parse(result));
       this.setState({messages: JSON.parse(result)});
     }
     else{
@@ -184,50 +194,24 @@ class ChatScreen extends React.Component {
       })
     }
 
-    // messageItems.setState({_id: 1000, text: "This is a manually hardcoded message", createdAt: "3/15/2020", user: { _id: 2, name:'React Native', avatar: 'https://placeimg.com/140/140/any'}});
-    console.log("here");    
-    // query messages in DynamoDB queue
+    
     try{
       getNewMessages(this, this.state.title); 
     } catch (err){
       console.log(err);
     }
-    
-
-      // map to gifted chat and display 
-      // save to local storage
-
 
   }
 
-  // we need to restructure this to retrieve any messages
-  // waiting in queue in Dynamo and existing from local
-
-  // currently onReceive doesn't work:
-  // onReceive = (text: string) => {
-  //   this.setState((previousState: any) => {
-  //     return {
-  //       messages: GiftedChat.append(
-  //         previousState.messages as any,
-  //         [
-  //           {
-  //             _id: Math.round(Math.random() * 1000000),
-  //             text,
-  //             createdAt: new Date(),
-  //             user: otherUser,
-  //           },
-  //         ],
-  //         Platform.OS !== 'web',
-  //       ),
-  //     }
-  //   })
-  // }
+  onReceive = ( messageObject) => {
+    displayOneMessage(messageObject.onCreateMessage, this); 
+  }
 
 
   render() {
     return (
       <GiftedChat
-      title
+        title
         messages={this.state.messages}
         scrollToBottom
         loadEarlier = {this.state.loadEarlier}

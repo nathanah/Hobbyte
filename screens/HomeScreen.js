@@ -1,5 +1,3 @@
-// NO longer being called - need to delete 1/31/2020 Abby
-
 
 // HomeScreen
 // Should appear after Login page
@@ -44,17 +42,8 @@ export default class HomeScreen extends React.Component {
           title="Sign out"
           onPress={this._signOutAsync}
         />
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
 
 
-          {/* TODO - note Not sure why going back to auth page leads to spinning loading button */}
-        {/*<Button
-          title="Go back to auth page"
-          onPress={() => this.props.navigation.navigate('AuthLoading')}
-        />*/}
 
        <Button
           title="Go back to main screen"

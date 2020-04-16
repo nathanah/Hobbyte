@@ -37,10 +37,6 @@ class StartScreen extends React.Component {
           title="Sign out"
           onPress={this._signOutAsync}
         />
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
 
 
  
