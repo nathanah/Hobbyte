@@ -8,14 +8,8 @@ export const createMessage = /* GraphQL */ `
   ) {
     createMessage(input: $input, condition: $condition) {
       id
-      actionType
-      roomID
-      from
       to
-      joiningMember
-      leavingMember
-      roomName
-      textContent
+      payload
     }
   }
 `;
@@ -26,14 +20,8 @@ export const updateMessage = /* GraphQL */ `
   ) {
     updateMessage(input: $input, condition: $condition) {
       id
-      actionType
-      roomID
-      from
       to
-      joiningMember
-      leavingMember
-      roomName
-      textContent
+      payload
     }
   }
 `;
@@ -44,14 +32,8 @@ export const deleteMessage = /* GraphQL */ `
   ) {
     deleteMessage(input: $input, condition: $condition) {
       id
-      actionType
-      roomID
-      from
       to
-      joiningMember
-      leavingMember
-      roomName
-      textContent
+      payload
     }
   }
 `;

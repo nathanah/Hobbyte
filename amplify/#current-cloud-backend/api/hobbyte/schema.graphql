@@ -1,11 +1,5 @@
 type Message @model {
     id: ID!
-    actionType: Int!
-    roomID: Int!
-    from: String!
     to: String!
-    joiningMember:String
-    leavingMember:String
-    roomName: String
-    textContent: String
+    payload: String!
 }

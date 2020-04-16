@@ -5,14 +5,8 @@ export const getMessage = /* GraphQL */ `
   query GetMessage($id: ID!) {
     getMessage(id: $id) {
       id
-      actionType
-      roomID
-      from
       to
-      joiningMember
-      leavingMember
-      roomName
-      textContent
+      payload
     }
   }
 `;
@@ -25,14 +19,8 @@ export const listMessages = /* GraphQL */ `
     listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        actionType
-        roomID
-        from
         to
-        joiningMember
-        leavingMember
-        roomName
-        textContent
+        payload
       }
       nextToken
     }

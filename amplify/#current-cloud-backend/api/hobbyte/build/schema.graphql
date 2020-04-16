@@ -1,13 +1,7 @@
 type Message {
   id: ID!
-  actionType: Int!
-  roomID: Int!
-  from: String!
   to: String!
-  joiningMember: String
-  leavingMember: String
-  roomName: String
-  textContent: String
+  payload: String!
 }
 
 enum ModelSortDirection {
@@ -95,14 +89,8 @@ input ModelSizeInput {
 
 input ModelMessageFilterInput {
   id: ModelIDInput
-  actionType: ModelIntInput
-  roomID: ModelIntInput
-  from: ModelStringInput
   to: ModelStringInput
-  joiningMember: ModelStringInput
-  leavingMember: ModelStringInput
-  roomName: ModelStringInput
-  textContent: ModelStringInput
+  payload: ModelStringInput
   and: [ModelMessageFilterInput]
   or: [ModelMessageFilterInput]
   not: ModelMessageFilterInput
@@ -115,26 +103,14 @@ type Query {
 
 input CreateMessageInput {
   id: ID
-  actionType: Int!
-  roomID: Int!
-  from: String!
   to: String!
-  joiningMember: String
-  leavingMember: String
-  roomName: String
-  textContent: String
+  payload: String!
 }
 
 input UpdateMessageInput {
   id: ID!
-  actionType: Int
-  roomID: Int
-  from: String
   to: String
-  joiningMember: String
-  leavingMember: String
-  roomName: String
-  textContent: String
+  payload: String
 }
 
 input DeleteMessageInput {
@@ -148,14 +124,8 @@ type Mutation {
 }
 
 input ModelMessageConditionInput {
-  actionType: ModelIntInput
-  roomID: ModelIntInput
-  from: ModelStringInput
   to: ModelStringInput
-  joiningMember: ModelStringInput
-  leavingMember: ModelStringInput
-  roomName: ModelStringInput
-  textContent: ModelStringInput
+  payload: ModelStringInput
   and: [ModelMessageConditionInput]
   or: [ModelMessageConditionInput]
   not: ModelMessageConditionInput

@@ -1,18 +1,13 @@
-﻿schema {
+﻿﻿schema {
   query: Query
   mutation: Mutation
   subscription: Subscription
 }
 
 type Message {
-  actionType: Int!
-  from: String!
   id: ID!
-  roomID: Int!
-  roomName: String
-  textContent: String
+  payload: String!
   to: String!
-  when: String!
 }
 
 type ModelMessageConnection {
@@ -57,14 +52,9 @@ enum ModelSortDirection {
 }
 
 input CreateMessageInput {
-  actionType: Int!
-  from: String!
   id: ID
-  roomID: Int!
-  roomName: String
-  textContent: String
+  payload: String!
   to: String!
-  when: String!
 }
 
 input DeleteMessageInput {
@@ -119,30 +109,20 @@ input ModelIntInput {
 }
 
 input ModelMessageConditionInput {
-  actionType: ModelIntInput
   and: [ModelMessageConditionInput]
-  from: ModelStringInput
   not: ModelMessageConditionInput
   or: [ModelMessageConditionInput]
-  roomID: ModelIntInput
-  roomName: ModelStringInput
-  textContent: ModelStringInput
+  payload: ModelStringInput
   to: ModelStringInput
-  when: ModelStringInput
 }
 
 input ModelMessageFilterInput {
-  actionType: ModelIntInput
   and: [ModelMessageFilterInput]
-  from: ModelStringInput
   id: ModelIDInput
   not: ModelMessageFilterInput
   or: [ModelMessageFilterInput]
-  roomID: ModelIntInput
-  roomName: ModelStringInput
-  textContent: ModelStringInput
+  payload: ModelStringInput
   to: ModelStringInput
-  when: ModelStringInput
 }
 
 input ModelSizeInput {
@@ -172,12 +152,7 @@ input ModelStringInput {
 }
 
 input UpdateMessageInput {
-  actionType: Int
-  from: String
   id: ID!
-  roomID: Int
-  roomName: String
-  textContent: String
+  payload: String
   to: String
-  when: String
 }

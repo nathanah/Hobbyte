@@ -5,7 +5,7 @@ import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
-import {onCreateMessageByRecipient} from '../../src/graphql/subscriptions'; 
+import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions'; 
 import {listMessages} from '../../src/graphql/queries'; 
 
 /*=====================================================*/
@@ -133,14 +133,14 @@ class ChatScreen extends React.Component {
     })
     //<john>this.loadMessages(this.state.id);
     this.subscription = API.graphql(
-      graphqlOperation(onCreateMessageByRecipient, {to:"Sam"})
+      graphqlOperation(OnCreateMessageByRecipient, {to:"Sam"})
       ).subscribe({
       error: err => console.log("______________ERROR__________", err),
       next: event => {
           // console.log("Chat screen Subscription: " + JSON.stringify(event.value.data, null, 2));
           const newMessage = JSON.stringify(event.value.data, null, 2); 
          //<john> this.onReceive(event.value.data);
-         console.log(event.value)
+         console.log(event.value.data)
         
       }
       });
