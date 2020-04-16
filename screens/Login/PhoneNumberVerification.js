@@ -85,14 +85,14 @@ export default class PhoneNumberVerification extends React.Component {
         .catch(err => {console.log('error confirming signing up!: ', err);
                 alert('error confirming signing up!: '+ err.message);});
       } else if(this.state.authType == 'signin') {
-        
-        // remove from final version 
+
+        // remove from final version
         // if (this.state.verificationCode==1111){
         //   console.log('Debug code entered - redirecting to main');
         //   this.props.navigation.navigate('Main', Auth.user);
         // }
 
-       
+
         // need to comment back in when texting works in AWS
         Auth.confirmSignIn(this.state.user, this.state.verificationCode)
         .then(() => {
@@ -112,5 +112,3 @@ export default class PhoneNumberVerification extends React.Component {
       this.props.navigation.navigate('PhoneReset');
     };
 }
-
-

@@ -1,12 +1,12 @@
 
 import React, { Component } from 'react';
-import {  View, 
-          Text, 
-          Button, 
-          FlatList, 
-          AsyncStorage, 
+import {  View,
+          Text,
+          Button,
+          FlatList,
+          AsyncStorage,
           TouchableHighlight
-        
+
         } from "react-native";
 
 import Swipeout from 'react-native-swipeout';
@@ -20,8 +20,25 @@ import awsconfig from '../../aws-exports';
 API.configure(awsconfig);
 PubSub.configure(awsconfig);
 
-// todo add subscriber to onCreateMessage(filter) 
+// todo add subscriber to onCreateMessage(filter)
 async function retrieveRooms(currentRooms){
+  const resp = await API.graphql(graphqlOperation(listRooms));
+  console.log("retrieved rooms");
+  const roomItems = resp.data.listRooms.items;
+  console.log("Room Items");
+  console.log(roomItems);
+
+
+  const numRooms = roomItems.length;
+  for (i = 0; i < numRooms; i++){
+    // add filter to get only rooms with user in it
+    // parse room name from id
+    const roomItem = {id: roomItems[i].id, name: roomItems[i].id};
+    console.log("new room");
+    console.log(roomItem);
+    currentRooms.data.push(roomItem);
+
+  }
 
   currentRooms.data2 = JSON.stringify(currentRooms.data);
   currentRooms.storeRooms(currentRooms.roomsKey, currentRooms.data2);
@@ -40,6 +57,12 @@ export default class ChatRoom extends Component {
     };
   }
 
+  componentDidMount(){
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+     this.loadRooms(this.roomsKey)
+    });}
+
+
   renderRoom = ({ item }) => {
     let swipeBtns = [{
       text: 'Delete',
@@ -54,7 +77,7 @@ export default class ChatRoom extends Component {
 
           <View style={styles.list_item}>
             <Text style={styles.list_item_text}>{item.name}</Text>
-            <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id.toString()  }) } />
+            <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id  }) } />
           </View>
 
           </TouchableHighlight>
@@ -67,11 +90,6 @@ export default class ChatRoom extends Component {
     const {rooms} = this.state;
     return (
       <View>
-        <Button
-          title="Refresh"
-          color="#0064e1"
-          onPress={() => this.loadRooms(this.roomsKey)}
-        />
 
         <Button
           title="MakeRoom"
@@ -121,20 +139,14 @@ export default class ChatRoom extends Component {
 
     populate = async() => {
 
-      
-      this.data = [
-        {id:1, name: "Christmas Room 🎄", createdAt: new Date().toDateString()},
-        {id:2, name: "Room for cool people 🔥", createdAt: new Date().toDateString()}
-      ];
-   
-      
+
       try{
         const roomObject = retrieveRooms(this);
-         
+
       } catch (err) {
-        console.log(err); 
+        console.log(err);
       }
-    
+
       this.data2 = JSON.stringify(this.data);
       await AsyncStorage.clear();
       this.storeRooms(this.roomsKey, this.data2);
@@ -145,14 +157,15 @@ export default class ChatRoom extends Component {
       await this.loadRooms(this.roomsKey);
 
       var newRooms = this.state.rooms;
-      console.log("prefilter");
+      // console.log("prefilter");
       newRooms = newRooms.filter(function( room ) {
         return room.id.toString() !== roomId;
       });
-      console.log("postfilter");
+      // console.log("postfilter");
       console.log(newRooms);
 
       AsyncStorage.removeItem(roomId);
+      AsyncStorage.removeItem(roomId+"settings");
 
       await this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
     }
@@ -160,7 +173,7 @@ export default class ChatRoom extends Component {
 
 
 /*=====================================================*/
-// todo move styling to standard sheet 
+// todo move styling to standard sheet
 const styles = {
   container: {
       flex: 1

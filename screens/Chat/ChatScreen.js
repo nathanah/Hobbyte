@@ -1,30 +1,30 @@
 import React from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import {AsyncStorage} from "react-native";
 import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage} from '../../src/graphql/mutations';
-import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions'; 
-import {listMessages} from '../../src/graphql/queries'; 
+import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
+import {listMessages} from '../../src/graphql/queries';
 
 /*=====================================================*/
-// ASYNC FUNCTIONS 
+// ASYNC FUNCTIONS
 /*=====================================================*/
 
 async function getAuthObject() {
   // obtains userToken and parses it to access username
-  var user = await AsyncStorage.getItem("userToken"); 
-  var userTokenParsed = JSON.parse(user); 
-  var username = userTokenParsed.user.signInUserSession.accessToken.payload.username; 
+  var user = await AsyncStorage.getItem("userToken");
+  var userTokenParsed = JSON.parse(user);
+  var username = userTokenParsed.user.signInUserSession.accessToken.payload.username;
   return username; // returns a promise
 }
 
 async function createNewChatMessage(messages, room, username) {
   const roomId_ = room;
   // obtained username, not sure where to save it in message
-  console.log("username in create new message"); 
-  console.log(username); 
+  console.log("username in create new message");
+  console.log(username);
   const message_ = {
         content: messages[0].text,
         when: messages[0].createdAt,
@@ -38,8 +38,8 @@ async function createNewChatMessage(messages, room, username) {
 function displayOneMessage(incomingMessageItem, currentObj){
   // displays one message at a time on gifted chat and stores in AsyncStorage
   var addMessage = {
-    _id: incomingMessageItem.id, 
-    text: incomingMessageItem.content, 
+    _id: incomingMessageItem.id,
+    text: incomingMessageItem.content,
     user: {_id:2, name: "user2"} // todo update with other user name
     // when
   };
@@ -53,10 +53,10 @@ function displayOneMessage(incomingMessageItem, currentObj){
 
 function displayIncomingMessages(messagesFromQueue, currentObj){
   // Function: Takes AWS object returned from DynamoDB and adds it to Gifted Chat display
- 
-  const newMessages = messagesFromQueue.data.listMessages; 
+
+  const newMessages = messagesFromQueue.data.listMessages;
   const numMessages = newMessages.items.length;
-  var k; 
+  var k;
   for (k = 0; k < numMessages; k++){
     displayOneMessage(newMessages.items[k], currentObj);
   }
@@ -64,24 +64,24 @@ function displayIncomingMessages(messagesFromQueue, currentObj){
 
 async function getNewMessages(currentObj, room){
   // query messages in DynamoDB queue
- 
+
   const roomFilter = {
     filter: {roomId: {contains: room}}
   };
-  console.log("loading messages from DynamoDB queue:"); 
-  
+  console.log("loading messages from DynamoDB queue:");
+
   // load messages in waiting in DynamoDB queue
-  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter )); 
-  console.log(messagesFromQueue); 
-  
+  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter ));
+  console.log(messagesFromQueue);
+
   // todo filter messages ONLY from other users to display
-  displayIncomingMessages(messagesFromQueue, currentObj); 
- 
+  displayIncomingMessages(messagesFromQueue, currentObj);
+
 }
 
 
 /*=====================================================*/
-// ChatScreen Component 
+// ChatScreen Component
 /*=====================================================*/
 
 class ChatScreen extends React.Component {
@@ -90,6 +90,8 @@ class ChatScreen extends React.Component {
     var username = getAuthObject(); // get username from userToken
     const {navigation} = this.props;
     this.state = {
+      textColor: "",
+      backgroundColor: "",
       messages: [],
       loadEarlier: true,
       isLoadingEarlier: false,
@@ -105,12 +107,12 @@ class ChatScreen extends React.Component {
 
   // should display user name from other user - currently shows sign in username
   static navigationOptions = ({navigation}) => ({
-      title: (navigation.state.params || {}).name || 'Chat!',
+      title: (navigation.state.params || {}).name || "Chat!",
       id: (navigation.state.params || {}).id || 0,
       headerRight:
           <Icon
           style={{ paddingRight: 10 }}
-          onPress={() => navigation.navigate('RoomSettings', (navigation.state.params || {}).id)}
+          onPress={() => navigation.navigate('RoomSettings', { "id": (navigation.state.params || {}).id})}
           name="settings"
           size={30}
         />
@@ -132,17 +134,21 @@ class ChatScreen extends React.Component {
       messages: []
     })
     //<john>this.loadMessages(this.state.id);
+    this.loadSettings(this.state.id);
     this.subscription = API.graphql(
       graphqlOperation(OnCreateMessageByRecipient, {to:"Sam"})
       ).subscribe({
       error: err => console.log("______________ERROR__________", err),
       next: event => {
           // console.log("Chat screen Subscription: " + JSON.stringify(event.value.data, null, 2));
-          const newMessage = JSON.stringify(event.value.data, null, 2); 
+          const newMessage = JSON.stringify(event.value.data, null, 2);
          //<john> this.onReceive(event.value.data);
          console.log(event.value.data)
-        
+
       }
+      this._subscribe = this.props.navigation.addListener('didFocus', () => {
+       this.loadSettings(this.state.id);
+      });
       });
   }
 
@@ -158,7 +164,7 @@ class ChatScreen extends React.Component {
 
     console.log("Room name:");
     console.log(room.name);
-    console.log("username :"); 
+    console.log("username :");
     console.log(this.state.username._55);
 
     try{
@@ -171,8 +177,8 @@ class ChatScreen extends React.Component {
       console.log('error: ', err);
     }
 
-    console.log("message in gifted chat:");
-    console.log(messages);
+    // console.log("message in gifted chat:");
+    // console.log(messages);
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -194,17 +200,60 @@ class ChatScreen extends React.Component {
       })
     }
 
-    
+
     try{
-      getNewMessages(this, this.state.title); 
+      getNewMessages(this, this.state.title);
     } catch (err){
       console.log(err);
     }
 
+
+      // map to gifted chat and display
+      // save to local storage
+  }
+
+  loadSettings = async (key) => {
+    var result = await AsyncStorage.getItem(key+"settings")
+    console.log("load settings from local storage:")
+    if(result != null){
+      console.log("not null");
+      var parsed = JSON.parse(result)
+      console.log(parsed.title)
+      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor})
+      this.props.navigation.state.params.name = this.state.title;
+
+    }
+    else{
+
+    }
+  }
+
+  renderBubble = props => {
+    return(
+      <Bubble
+        {...props}
+        textStyle={{
+          left: {
+            color: this.state.textColor || 'white'
+          },
+          right: {
+            color: this.state.textColor || 'white'
+          },
+        }}
+        wrapperStyle={{
+          left: {
+            backgroundColor: this.state.bubbleColor || '#0084ff'
+          },
+          right: {
+            backgroundColor: this.state.bubbleColor || '#0084ff'
+          },
+        }}
+      />
+    )
   }
 
   onReceive = ( messageObject) => {
-    displayOneMessage(messageObject.onCreateMessage, this); 
+    displayOneMessage(messageObject.onCreateMessage, this);
   }
 
 
@@ -214,6 +263,7 @@ class ChatScreen extends React.Component {
         title
         messages={this.state.messages}
         scrollToBottom
+        renderBubble = {this.renderBubble}
         loadEarlier = {this.state.loadEarlier}
         isLoadingEarlier = {this.state.isLoadingEarlier}
         onLongPressAvatar = {user => alert(JSON.stringify(user))}
