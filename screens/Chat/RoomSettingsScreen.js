@@ -8,6 +8,7 @@ export default class RoomSettings extends Component {
   constructor(props) {
     super(props);
 
+    console.log(this.props.navigation.getParam('id'));
     const {navigation} = this.props;
     this.state = {
       id: this.props.navigation.getParam('id'),
