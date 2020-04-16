@@ -253,7 +253,48 @@ class ChatScreen extends React.Component {
   }
 
   onReceive = ( messageObject) => {
-    displayOneMessage(messageObject.onCreateMessage, this);
+    try{
+      //Decrypt
+
+      //take message type
+      switch(messageObj.actiontype){
+        //Regular message
+        case 1:{
+          //not sure if this is right
+          displayOneMessage(messageObject.onCreateMessage, this);
+          break;
+        }
+        //name change
+        case 2:{
+          break;
+        }
+        //User left room
+        case 3:{
+          break;
+        }
+        //User added to room
+        case 4:{
+          break;
+        }
+        //Backup Requested
+        case 5:{
+          break;
+        }
+        //
+        case 6:{
+          break;
+        }
+        //Case not recognized (version not up to date or )
+        default:
+          console.log("Message id not recognized");
+      }
+    }
+    catch(err){
+      console.log("message receive error: " + err)
+    }
+
+
+
   }
 
 
