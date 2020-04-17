@@ -22,33 +22,48 @@ async function getAuthObject() {
 
 async function createNewChatMessage(messages, room, username) {
   const roomId_ = room;
-  // obtained username, not sure where to save it in message
-  console.log("username in create new message");
-  console.log(username);
   const message_ = {
+        actionType: 1,
+        from: username, 
+        users: username + "need to add other users here, alphabetical",
         content: messages[0].text,
+        roomName: roomId_,
         when: messages[0].createdAt,
-        roomId: roomId_,
 
   };
-  const resp = await API.graphql(graphqlOperation(createMessage, { input: message_ }));
+
+  var stringMessage = JSON.stringify(message_); 
+  
+  const package_ = {
+    to: username, // currently hardcoded for echochamber, need to change to stored room users
+    payload: stringMessage,  
+
+  };
+  
+  // send package to AWS with createMessage mutation
+  const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ }));
   console.log(resp);
 }
 
-function displayOneMessage(incomingMessageItem, currentObj){
+function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
   // displays one message at a time on gifted chat and stores in AsyncStorage
+
+  // todo then match to addMessage: 
   var addMessage = {
-    _id: incomingMessageItem.id,
+    _id: fullPackage.id,
     text: incomingMessageItem.content,
-    user: {_id:2, name: "user2"} // todo update with other user name
-    // when
+    user: {_id:2, name: incomingMessageItem.from}, // todo update with other user name
+    createdAt: incomingMessageItem.when,
   };
   currentObj.setState(previousState => ({
     messages: GiftedChat.append(previousState.messages, [addMessage]),
   }));
 
   // todo make sure only new messages stored, check if message already stored
-  AsyncStorage.setItem(currentObj.state.id, JSON.stringify(GiftedChat.append(currentObj.state.messages, [addMessage])));
+  // AsyncStorage.setItem(currentObj.state.id, JSON.stringify(GiftedChat.append(currentObj.state.messages, [addMessage])));
+ 
+  //todo call delete mutation 
+
 }
 
 function displayIncomingMessages(messagesFromQueue, currentObj){
@@ -62,20 +77,21 @@ function displayIncomingMessages(messagesFromQueue, currentObj){
   }
 }
 
+// todo need to fix this 
 async function getNewMessages(currentObj, room){
   // query messages in DynamoDB queue
-
+  // need to update new query with correct filter of to field
   const roomFilter = {
     filter: {roomId: {contains: room}}
   };
   console.log("loading messages from DynamoDB queue:");
 
   // load messages in waiting in DynamoDB queue
-  const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter ));
-  console.log(messagesFromQueue);
+  // const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter ));
+  // console.log(messagesFromQueue);
 
   // todo filter messages ONLY from other users to display
-  displayIncomingMessages(messagesFromQueue, currentObj);
+  // displayIncomingMessages(messagesFromQueue, currentObj);
 
 }
 
@@ -139,14 +155,13 @@ class ChatScreen extends React.Component {
      this.loadSettings(this.state.roomid);
     });
     this.subscription = API.graphql(
-      graphqlOperation(OnCreateMessageByRecipient, {to:"Sam"})
+      graphqlOperation(OnCreateMessageByRecipient, {to: "abby"}) // hardcoded for echo chamber
       ).subscribe({
       error: err => console.log("______________ERROR__________", err),
       next: event => {
-          // console.log("Chat screen Subscription: " + JSON.stringify(event.value.data, null, 2));
           const newMessage = JSON.stringify(event.value.data, null, 2);
-         //<john> this.onReceive(event.value.data);
-         console.log(event.value.data)
+          console.log("New Message: " + newMessage); 
+         this.onReceive(event.value.data);
 
       }
       });
@@ -177,12 +192,11 @@ class ChatScreen extends React.Component {
       console.log('error: ', err);
     }
 
-    // console.log("message in gifted chat:");
-    // console.log(messages);
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-    AsyncStorage.setItem(this.state.roomid, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
+    // todo need to fix Async storage
+    // AsyncStorage.setItem(this.state.roomid, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
   }
 
   loadMessages = async (key) => {
@@ -253,35 +267,46 @@ class ChatScreen extends React.Component {
   }
 
   onReceive = ( messageObject) => {
+
+    
     try{
       //Decrypt
+      console.log("TODO: Implement decrypt"); 
 
-      //take message type
-      switch(messageObj.actiontype){
-        //Regular message
+      
+    // parse incomingMessageItem payload and save into new variable
+    var incomingPackage = messageObject.onCreateMessageByRecipient; 
+    var parsedPayload = JSON.parse(incomingPackage.payload);
+    
+      switch(parsedPayload.actionType){
+        //Incoming text message
         case 1:{
-          //not sure if this is right
-          displayOneMessage(messageObject.onCreateMessage, this);
+          displayOneMessage(incomingPackage, parsedPayload, this);
           break;
         }
         //name change
         case 2:{
+          console.log("TODO: Implement name change"); 
           break;
         }
         //User left room
         case 3:{
+          console.log("TODO: Implement user left the room"); 
           break;
         }
         //User added to room
         case 4:{
+          console.log("TODO: Implement User addeed to the room"); 
           break;
         }
         //Backup Requested
         case 5:{
+          console.log("TODO: Implement backup requested"); 
           break;
         }
         //
         case 6:{
+          console.log("TODO: ? ") ;
           break;
         }
         //Case not recognized (version not up to date or )
