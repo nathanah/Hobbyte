@@ -5,11 +5,12 @@ import {  View,
           Button,
           FlatList,
           AsyncStorage,
-          TouchableHighlight
+          TouchableHighlight,
+          TouchableOpacity
 
         } from "react-native";
 
-import Swipeout from 'react-native-swipeout';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import PubSub from '@aws-amplify/pubsub';
@@ -64,24 +65,29 @@ export default class ChatRoom extends Component {
 
 
   renderRoom = ({ item }) => {
-    let swipeBtns = [{
-      text: 'Delete',
-      backgroundColor: 'red',
-      onPress: () => { this.removeRoom(item.id.toString()) }
-    }];
 
     return (
-      <Swipeout right={swipeBtns}
-        backgroundColor= 'transparent'>
-        <TouchableHighlight>
+      <TouchableHighlight>
 
-          <View style={styles.list_item}>
-            <Text style={styles.list_item_text}>{item.name}</Text>
-            <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id  }) } />
-          </View>
+        <View style={styles.list_item}>
+          <Text style={styles.list_item_text}>{item.name}</Text>
+          <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id  }) } />
+        </View>
 
-          </TouchableHighlight>
-      </Swipeout>
+        </TouchableHighlight>
+    );
+  }
+
+  renderDeleteRoom = ({ item }) => {
+    return (
+      <View style={styles.rowBack}>
+            <TouchableOpacity
+              style={styles.delete}
+              onPress={() =>this.removeRoom(item.id.toString())}
+            >
+                <Text>Delete</Text>
+            </TouchableOpacity>
+        </View>
     );
   }
 
@@ -107,10 +113,13 @@ export default class ChatRoom extends Component {
 
         {
           rooms &&
-          <FlatList
+          <SwipeListView
             keyExtractor={(item) => item.id.toString()}
             data={rooms}
             renderItem={this.renderRoom}
+            renderHiddenItem={this.renderDeleteRoom}
+            leftOpenValue={0}
+            rightOpenValue={-75}
             ListEmptyComponent = {<View style={styles.list_item}>
               <Text style={styles.list_item_text}>{"No Current Conversations"}</Text>
               </View>}
@@ -240,12 +249,31 @@ const styles = {
       justifyContent: "space-between"
     },
     list_item: {
+      backgroundColor: 'white',
       flexDirection: 'row',
       justifyContent: 'space-between'
     },
     list_item_text: {
       marginLeft: 10,
       fontSize: 20,
+    },
+    rowBack: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
+    delete: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        width: 75,
+        backgroundColor: 'red',
+        color: '#FFF',
+        bottom: 0,
+        top: 0,
+        right: 0,
     },
     status_indicator: {
       width: 10,
