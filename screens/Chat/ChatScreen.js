@@ -33,16 +33,20 @@ async function createNewChatMessage(messages, room, username) {
   };
 
   var stringMessage = JSON.stringify(message_); 
+  var otherUsers = JSON.parse(room.id); 
+  // use this.user.name 
+  console.log("type  " +  otherUsers.typeof); 
+  for (var i = 0; i < otherUsers.length -1; i++){
+    console.log("other users: " + otherUsers[i]); 
+    const package_ = {
+      to: otherUsers[i], 
+      payload: stringMessage,
+    };
+    console.log("package: " + JSON.stringify(package_));
+    const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ }));
+    console.log(resp); 
+  }
   
-  const package_ = {
-    to: username, // currently hardcoded for echochamber, need to change to stored room users
-    payload: stringMessage,  
-
-  };
-  
-  // send package to AWS with createMessage mutation
-  const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ }));
-  console.log(resp);
 }
 
 function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
@@ -147,13 +151,14 @@ class ChatScreen extends React.Component {
       this._isMounted = true,
 
     this.setState({
-      messages: []
-    })
+      messages: [] 
+    });
     this.loadMessages(this.state.roomid);
     this.loadSettings(this.state.roomid);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
      this.loadSettings(this.state.roomid);
     });
+    // need to locate sender's username to use in filter
     this.subscription = API.graphql(
       graphqlOperation(OnCreateMessageByRecipient, {to: "abby"}) // hardcoded for echo chamber
       ).subscribe({
@@ -185,7 +190,7 @@ class ChatScreen extends React.Component {
     try{
       console.log ("sending message to AWS... ");
 
-      createNewChatMessage(messages, room.name, this.state.username._55);
+      createNewChatMessage(messages, room, this.state.username._55);
 
       console.log("AWS store success!");
     }catch (err){
