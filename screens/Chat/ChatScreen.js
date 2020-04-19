@@ -133,10 +133,10 @@ class ChatScreen extends React.Component {
     this.setState({
       messages: []
     })
-    this.loadMessages(this.state.roomid);
-    this.loadSettings(this.state.roomid);
+    this.loadMessages(this.state.id);
+    this.loadSettings(this.state.id);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-     this.loadSettings(this.state.roomid);
+     this.loadSettings(this.state.id);
     });
     this.subscription = API.graphql(
       graphqlOperation(OnCreateMessageByRecipient, {to:"Sam"})
@@ -182,7 +182,8 @@ class ChatScreen extends React.Component {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-    AsyncStorage.setItem(this.state.roomid, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
+    console.log(this.state.id)
+    AsyncStorage.setItem(this.state.id, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
   }
 
   loadMessages = async (key) => {
