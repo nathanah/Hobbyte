@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
   
     formBox:{
         height: 45,
-        backgroundColor: '#129649',
+        backgroundColor: '#FFFFFF',
         marginBottom: 15,
         paddingHorizontal: 20,
         borderBottomColor: '#000000',
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     resetContainer:{
   
       paddingVertical: 5,
-      backgroundColor: '#129649',
+      backgroundColor: '#728C69',
   },
   header:{
     paddingBottom: 25,
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
         color:'#FFF',
         fontWeight: "600",
         backgroundColor:'#db8a75',
-        borderRadius:20,
-        borderWidth: 1,
+        // borderRadius:20,
+        // borderWidth: 1,
         padding:10
   
   
