@@ -55,11 +55,11 @@ export default class LoginScreen extends React.Component {
             underlineColorAndroid = "transparent"
           />
 
-        <TouchableOpacity 
+        <TouchableOpacity
         style={styles.ButtonContainer}
         activeOpacity = { .8 }
         onPress={this._loginAsync}>
-                <Text style={styles.buttonText}>LOGIN</Text>
+                <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.resetContainer}>
@@ -133,7 +133,3 @@ export default class LoginScreen extends React.Component {
       this.props.navigation.navigate('PRS');
     }
 }
-
-
-
-

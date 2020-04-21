@@ -191,17 +191,17 @@ export default class SignUpScreen extends React.Component{
           {formikProps.isSubmitting ? (
             <ActivityIndicator />
           ) : (
-            <TouchableOpacity 
-        
+            <TouchableOpacity
+
         activeOpacity = { .8 }
         onPress={this._submitAsync}>
-                <Text 
+                <Text
                 style={{
                         textAlign:'center',
                         color:'#FFF',
                         fontWeight: "600",
                         backgroundColor:'#db8a75',
-                        borderRadius:20,
+                        // borderRadius:20,
                         borderWidth: 1,
                         padding:10
                       }}
@@ -217,8 +217,8 @@ export default class SignUpScreen extends React.Component{
   )
 }
 _submitAsync = async () => {
-  
-  
+
+
   // TODO - fetch user token and verify user identity
   // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
   console.log("Sign Up information input from user: ");
@@ -226,7 +226,7 @@ _submitAsync = async () => {
   console.log("email   :" + this.state.email);
   console.log("phone # :" + this.state.phoneNumber);
   console.log("password:" + this.state.password);
-  
+
 
   Auth.signUp({
     username: this.state.username,
@@ -246,4 +246,3 @@ _submitAsync = async () => {
 
 };
 }
-

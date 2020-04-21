@@ -80,7 +80,7 @@ export default class RoomSettings extends Component {
           style={styles.ButtonContainer}
           activeOpacity = { .8 }
           onPress={this.submitChange}>
-            <Text style={styles.buttonText}>SAVE</Text>
+            <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
 
       </View>

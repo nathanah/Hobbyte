@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     //},
     ButtonContainer:{
 
-        paddingVertical: 10,
+        padding: 10,
 
     },
 
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         color:'#FFF',
         fontWeight: "600",
         backgroundColor:'#db8a75',
-        borderRadius:20,
+        // borderRadius:20,
         borderWidth: 1,
         padding:10
 
