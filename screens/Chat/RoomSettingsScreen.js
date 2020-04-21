@@ -75,7 +75,16 @@ export default class RoomSettings extends Component {
           onChange ={event => this.setState({textColor:event.nativeEvent.text})}
           underlineColorAndroid = "transparent"
         />
+
+        <TouchableOpacity
+          style={styles.ButtonContainer}
+          activeOpacity = { .8 }
+          onPress={this.submitChange}>
+            <Text style={styles.buttonText}>SAVE</Text>
+        </TouchableOpacity>
+
       </View>
+
     )
   }
 
