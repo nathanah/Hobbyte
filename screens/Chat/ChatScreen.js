@@ -105,7 +105,7 @@ class ChatScreen extends React.Component {
   }
 
 
-  // should display user name from other user - currently shows sign in username
+  // Displays Room name and settings gear
   static navigationOptions = ({navigation}) => ({
       title: (navigation.state.params || {}).name || "Chat!",
       id: (navigation.state.params || {}).id || 0,
