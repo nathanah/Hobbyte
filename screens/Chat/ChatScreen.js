@@ -65,8 +65,9 @@ function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
   }));
 
   // todo make sure only new messages stored, check if message already stored
+  // console.log(currentObj.state.id)
   // AsyncStorage.setItem(currentObj.state.id, JSON.stringify(GiftedChat.append(currentObj.state.messages, [addMessage])));
- 
+
   //todo call delete mutation 
   // var messageID = fullPackage.id;
   // const messageID = {
@@ -160,11 +161,11 @@ class ChatScreen extends React.Component {
 
     this.setState({
       messages: []
-    });
-    this.loadMessages(this.state.roomid);
-    this.loadSettings(this.state.roomid);
+    })
+    this.loadMessages(this.state.id);
+    this.loadSettings(this.state.id);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-     this.loadSettings(this.state.roomid);
+     this.loadSettings(this.state.id);
     });
     this.loadUsername();
   }
@@ -197,8 +198,9 @@ class ChatScreen extends React.Component {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-    // todo need to fix Async storage
-    // AsyncStorage.setItem(this.state.roomid, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
+    console.log(this.state.id)
+    AsyncStorage.setItem(this.state.id, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
+ 
   }
 
   loadUsername = async () => {
@@ -216,7 +218,7 @@ class ChatScreen extends React.Component {
 
       }
       });
-  }
+ }
 
   loadMessages = async (key) => {
     const messageItems = this;
