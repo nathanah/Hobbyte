@@ -16,7 +16,7 @@ export default class PhoneResetScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#129649", flex: 1}}>
+      <View style={{backgroundColor: "#728C69", flex: 1}}>
          <ScrollView keyboardShouldPersistTaps='never'>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <Image

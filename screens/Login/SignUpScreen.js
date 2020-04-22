@@ -103,7 +103,7 @@ export default class SignUpScreen extends React.Component{
   };
   render(){
     return(
-  <SafeAreaView style={{ backgroundColor: "#129649",flex: 1 }}>
+  <SafeAreaView style={{ backgroundColor: "#728C69",flex: 1 }}>
     <Formik
       initialValues={{
         username:'',
