@@ -125,7 +125,7 @@ class ChatScreen extends React.Component {
   }
 
 
-  // should display user name from other user - currently shows sign in username
+  // Displays Room name and settings gear
   static navigationOptions = ({navigation}) => ({
       title: (navigation.state.params || {}).name || "Chat!",
       id: (navigation.state.params || {}).id || 0,
@@ -152,11 +152,11 @@ class ChatScreen extends React.Component {
 
     this.setState({
       messages: []
-    });
-    this.loadMessages(this.state.roomid);
-    this.loadSettings(this.state.roomid);
+    })
+    this.loadMessages(this.state.id);
+    this.loadSettings(this.state.id);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-     this.loadSettings(this.state.roomid);
+     this.loadSettings(this.state.id);
     });
     this.loadUsername();
   }
@@ -211,6 +211,7 @@ class ChatScreen extends React.Component {
       });
   }
 
+  //load messages from local storage and display
   loadMessages = async (key) => {
     const messageItems = this;
     var result = await AsyncStorage.getItem(key);
@@ -238,6 +239,7 @@ class ChatScreen extends React.Component {
       // save to local storage
   }
 
+  //load settings from local storage and update state
   loadSettings = async (key) => {
     var result = await AsyncStorage.getItem(key+"settings")
     console.log("load settings from local storage:")
@@ -250,7 +252,58 @@ class ChatScreen extends React.Component {
 
     }
     else{
+      console.log("ERROR: settings are null")
+    }
+  }
 
+////////////////////
+//Message handling//
+////////////////////
+
+
+  //change name----UNTESTED
+  changeName = async (id, newName) => {
+    //change room name in the room list
+    var rooms = await AsyncStorage.getItem("rooms");
+    console.log("load rooms from local storage")
+
+    if(rooms != null){
+
+      var parsed = await JSON.parse(rooms);
+      var idx = -1
+      for (let i = 0; i < parsed.length; i++){
+        if (parsed[i].id == id){
+          idx = i;
+          break;
+        }
+      }
+
+      if(idx != -1){
+        var room = parsed[idx]
+        room.name = newName;
+        parsed[idx] = room;
+        AsyncStorage.setItem("rooms", JSON.stringify(parsed));
+      }
+      else{
+        console.log("room with that ID was not found")
+        //Make room with that id?
+      }
+    }
+    else{
+      console.log("rooms null");
+      //TODO: make rooms list?
+    }
+
+    //change room name in room settings
+    var settings = JSON.parse(await AsyncStorage.getItem(id+"settings"))
+    if(settings != null){
+      settings.title = newName;
+      AsyncStorage.setItem(id+"settings", JSON.stringify(settings))
+      console.log("rooms updated");
+    }
+    else{
+      console.log("room with that ID does not exist")
+      //TODO: make room with that ID?
     }
   }
 
@@ -316,7 +369,7 @@ class ChatScreen extends React.Component {
           console.log("TODO: Implement backup requested");
           break;
         }
-        //
+        //id collision fix?
         case 6:{
           console.log("TODO: ? ") ;
           break;
@@ -333,6 +386,7 @@ class ChatScreen extends React.Component {
 
 
   }
+
 
 
   render() {

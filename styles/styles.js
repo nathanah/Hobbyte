@@ -4,28 +4,28 @@ const styles = StyleSheet.create({
     container:{
         padding:20,
     },
-  
+
     formBox:{
         height: 45,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F0F0F0',
         marginBottom: 15,
         paddingHorizontal: 20,
         borderBottomColor: '#000000',
         borderBottomWidth: 1
-  
+
     },
-  
+
     //backgroundVideo: {
     //  ...StyleSheet.absoluteFillObject,
     //},
     ButtonContainer:{
-  
-        paddingVertical: 10,
-  
+
+        padding: 10,
+
     },
-  
+
     resetContainer:{
-  
+
       paddingVertical: 5,
       backgroundColor: '#728C69',
   },
@@ -41,16 +41,16 @@ const styles = StyleSheet.create({
         // borderRadius:20,
         // borderWidth: 1,
         padding:10
-  
-  
+
+
     },
-  
+
     title:{
       paddingTop:20,
       textAlign:'center',
       color:'#000'
     },
-  
+
     logo: {
       alignSelf: 'center',
       height: 200,
@@ -58,11 +58,10 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      
-       
+
+
       }
-  
+
   })
 
   export {styles}
-  
