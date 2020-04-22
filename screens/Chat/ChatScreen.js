@@ -4,9 +4,10 @@ import {AsyncStorage} from "react-native";
 import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
-import {createMessage} from '../../src/graphql/mutations';
+import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
 import {listMessages} from '../../src/graphql/queries';
+
 
 /*=====================================================*/
 // ASYNC FUNCTIONS
@@ -67,6 +68,13 @@ function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
   // AsyncStorage.setItem(currentObj.state.id, JSON.stringify(GiftedChat.append(currentObj.state.messages, [addMessage])));
  
   //todo call delete mutation 
+  // var messageID = fullPackage.id;
+  // const messageID = {
+  //   filter: {id: {eq: fullPackage.id}}
+  // };
+  // const deleteresp = await API.graphql(graphqlOperation(deleteMessage, messageID ));
+  // console.log(messagesFromQueue);
+
 
 }
 
