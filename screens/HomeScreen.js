@@ -33,7 +33,7 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Wellcome To This Super Sweet App</Text>
+        <Text>Welcome To Sanctuary</Text>
         <Button
           title="Go to Details... again"
           onPress={() => this.props.navigation.navigate('Home')}

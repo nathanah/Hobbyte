@@ -18,7 +18,7 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#129649", flex: 1}}>
+      <View style={{backgroundColor: "#728C69", flex: 1}}>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
