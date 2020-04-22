@@ -186,6 +186,7 @@ class ChatScreen extends React.Component {
     AsyncStorage.setItem(this.state.id, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
   }
 
+  //load messages from local storage and display
   loadMessages = async (key) => {
     const messageItems = this;
     var result = await AsyncStorage.getItem(key);
@@ -213,6 +214,7 @@ class ChatScreen extends React.Component {
       // save to local storage
   }
 
+  //load settings from local storage and update state
   loadSettings = async (key) => {
     var result = await AsyncStorage.getItem(key+"settings")
     console.log("load settings from local storage:")
@@ -225,7 +227,58 @@ class ChatScreen extends React.Component {
 
     }
     else{
+      console.log("ERROR: settings are null")
+    }
+  }
 
+////////////////////
+//Message handling//
+////////////////////
+
+
+  //change name----UNTESTED
+  changeName = async (id, newName) => {
+    //change room name in the room list
+    var rooms = await AsyncStorage.getItem("rooms");
+    console.log("load rooms from local storage")
+
+    if(rooms != null){
+
+      var parsed = await JSON.parse(rooms);
+      var idx = -1
+      for (let i = 0; i < parsed.length; i++){
+        if (parsed[i].id == id){
+          idx = i;
+          break;
+        }
+      }
+
+      if(idx != -1){
+        var room = parsed[idx]
+        room.name = newName;
+        parsed[idx] = room;
+        AsyncStorage.setItem("rooms", JSON.stringify(parsed));
+      }
+      else{
+        console.log("room with that ID was not found")
+        //Make room with that id?
+      }
+    }
+    else{
+      console.log("rooms null");
+      //TODO: make rooms list?
+    }
+
+    //change room name in room settings
+    var settings = JSON.parse(await AsyncStorage.getItem(id+"settings"))
+    if(settings != null){
+      settings.title = newName;
+      AsyncStorage.setItem(id+"settings", JSON.stringify(settings))
+      console.log("rooms updated");
+    }
+    else{
+      console.log("room with that ID does not exist")
+      //TODO: make room with that ID?
     }
   }
 
@@ -257,6 +310,8 @@ class ChatScreen extends React.Component {
     try{
       //Decrypt
 
+      //TODO: check if sender is in group
+
       //take message type
       switch(messageObj.actiontype){
         //Regular message
@@ -267,10 +322,14 @@ class ChatScreen extends React.Component {
         }
         //name change
         case 2:{
+          this.changeName(messageObject.roomId, messageObject.newName)
+          console.log("Received name change message")
+          console.log("New name: " + messageObject.newName)
           break;
         }
         //User left room
         case 3:{
+          // this.updateMembers()
           break;
         }
         //User added to room
@@ -279,10 +338,12 @@ class ChatScreen extends React.Component {
         }
         //Backup Requested
         case 5:{
+          //TODO: create default message asking (permission) to send backup. May just be in settings
           break;
         }
-        //
+        //id collision fix?
         case 6:{
+
           break;
         }
         //Case not recognized (version not up to date or )
@@ -297,6 +358,7 @@ class ChatScreen extends React.Component {
 
 
   }
+
 
 
   render() {

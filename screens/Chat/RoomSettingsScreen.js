@@ -104,16 +104,10 @@ export default class RoomSettings extends Component {
   submitChange = async () => {
     var rooms = await AsyncStorage.getItem("rooms");
     console.log("load rooms from local storage")
-    // console.log(rooms);
 
     if(rooms != null){
 
       var parsed = await JSON.parse(rooms);
-      // console.log(parsed);
-      // console.log("parsed");
-      // console.log(this.state.id)
-
-
       var idx = -1
       for (let i = 0; i < parsed.length; i++){
         if (parsed[i].id == this.state.id){
@@ -122,30 +116,23 @@ export default class RoomSettings extends Component {
         }
       }
 
-      // console.log(idx)
       if(idx != -1){
         var room = parsed[idx]
-        // console.log(room)
-        // console.log(this.state.title)
         room.name = this.state.title;
-        // console.log(room.name)
         parsed[idx] = room;
-        // console.log(parsed[idx]);
-        // console.log(JSON.stringify(parsed))
 
         AsyncStorage.setItem("rooms", JSON.stringify(parsed));
       }
       else{
-        console.log("not found")
+        console.log("ERROR: room not found")
       }
     }
 
     else{
-      console.log("nothing in this else");
+      console.log("ERROR: rooms null");
     }
 
     console.log("rooms updated");
-
     AsyncStorage.setItem(this.state.id+"settings", JSON.stringify(this.state))
   }
 
