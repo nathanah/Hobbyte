@@ -25,7 +25,7 @@ async function createNewChatMessage(messages, room, username) {
   const roomId_ = room;
   const message_ = {
         actionType: 1,
-        from: username, 
+        from: username,
         users: username + "need to add other users here, alphabetical",
         content: messages[0].text,
         roomName: roomId_,
@@ -33,27 +33,27 @@ async function createNewChatMessage(messages, room, username) {
 
   };
 
-  var stringMessage = JSON.stringify(message_); 
-  var otherUsers = JSON.parse(room.id); 
-  // use this.user.name 
-  console.log("type  " +  otherUsers.typeof); 
+  var stringMessage = JSON.stringify(message_);
+  var otherUsers = JSON.parse(room.id);
+  // use this.user.name
+  console.log("type  " +  otherUsers.typeof);
   for (var i = 0; i < otherUsers.length -1; i++){
-    console.log("other users: " + otherUsers[i]); 
+    console.log("other users: " + otherUsers[i]);
     const package_ = {
-      to: otherUsers[i], 
+      to: otherUsers[i],
       payload: stringMessage,
     };
     console.log("package: " + JSON.stringify(package_));
     const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ }));
-    console.log(resp); 
+    console.log(resp);
   }
-  
+
 }
 
 function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
   // displays one message at a time on gifted chat and stores in AsyncStorage
 
-  // todo then match to addMessage: 
+  // todo then match to addMessage:
   var addMessage = {
     _id: fullPackage.id,
     text: incomingMessageItem.content,
@@ -89,7 +89,7 @@ function displayIncomingMessages(messagesFromQueue, currentObj){
   }
 }
 
-// todo need to fix this 
+// todo need to fix this
 async function getNewMessages(currentObj, room){
   // query messages in DynamoDB queue
   // need to update new query with correct filter of to field
@@ -128,7 +128,7 @@ class ChatScreen extends React.Component {
       appIsReady: false,
       title: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
-      username: username
+      username: "temp"
     }
   }
 
@@ -159,25 +159,14 @@ class ChatScreen extends React.Component {
       this._isMounted = true,
 
     this.setState({
-      messages: [] 
+      messages: []
     });
     this.loadMessages(this.state.roomid);
     this.loadSettings(this.state.roomid);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
      this.loadSettings(this.state.roomid);
     });
-    // need to locate sender's username to use in filter
-    this.subscription = API.graphql(
-      graphqlOperation(OnCreateMessageByRecipient, {to: "abby"}) // hardcoded for echo chamber
-      ).subscribe({
-      error: err => console.log("______________ERROR__________", err),
-      next: event => {
-          const newMessage = JSON.stringify(event.value.data, null, 2);
-          console.log("New Message: " + newMessage); 
-         this.onReceive(event.value.data);
-
-      }
-      });
+    this.loadUsername();
   }
 
 
@@ -210,6 +199,23 @@ class ChatScreen extends React.Component {
     }));
     // todo need to fix Async storage
     // AsyncStorage.setItem(this.state.roomid, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
+  }
+
+  loadUsername = async () => {
+    var username = await getAuthObject();
+    this.setState({"username": username})
+    console.log("user: "+this.state.username)
+    this.subscription = API.graphql(
+      graphqlOperation(OnCreateMessageByRecipient, {to: this.state.username}) 
+      ).subscribe({
+      error: err => console.log("______________ERROR__________", err),
+      next: event => {
+          const newMessage = JSON.stringify(event.value.data, null, 2);
+          console.log("New Message: " + newMessage);
+         this.onReceive(event.value.data);
+
+      }
+      });
   }
 
   loadMessages = async (key) => {
@@ -281,16 +287,16 @@ class ChatScreen extends React.Component {
 
   onReceive = ( messageObject) => {
 
-    
+
     try{
       //Decrypt
-      console.log("TODO: Implement decrypt"); 
+      console.log("TODO: Implement decrypt");
 
-      
+
     // parse incomingMessageItem payload and save into new variable
-    var incomingPackage = messageObject.onCreateMessageByRecipient; 
+    var incomingPackage = messageObject.onCreateMessageByRecipient;
     var parsedPayload = JSON.parse(incomingPackage.payload);
-    
+
       switch(parsedPayload.actionType){
         //Incoming text message
         case 1:{
@@ -299,22 +305,22 @@ class ChatScreen extends React.Component {
         }
         //name change
         case 2:{
-          console.log("TODO: Implement name change"); 
+          console.log("TODO: Implement name change");
           break;
         }
         //User left room
         case 3:{
-          console.log("TODO: Implement user left the room"); 
+          console.log("TODO: Implement user left the room");
           break;
         }
         //User added to room
         case 4:{
-          console.log("TODO: Implement User addeed to the room"); 
+          console.log("TODO: Implement User addeed to the room");
           break;
         }
         //Backup Requested
         case 5:{
-          console.log("TODO: Implement backup requested"); 
+          console.log("TODO: Implement backup requested");
           break;
         }
         //
