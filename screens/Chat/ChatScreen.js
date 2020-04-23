@@ -125,7 +125,7 @@ async function getNewMessages(currentObj, roomId){
 }
 
 let parsMembersString = (membersString) => {
-  console.log("membersString: ",membersString)
+  console.log("membersString: ",JSON.parse(membersString))
 } 
 
 
@@ -152,8 +152,6 @@ class ChatScreen extends React.Component {
       id: this.props.navigation.getParam('id'),
       members: parsMembersString(this.props.navigation.getParam('membersString')),
       username: "temp",
-    
-
     }
   }
 
