@@ -103,13 +103,15 @@ export default class CreateChatRoomScreen extends React.Component {
     this.members.sort();
 
     console.log("after member added: " + this.members);
-    this.membersString = JSON.stringify(this.members)
+    this.membersString = JSON.stringify(this.members);
+    var id = Date.now().toString();
     if(await this.roomDoesNotExist(newRooms,this.membersString)){
-      newRooms.push({id:this.membersString, name:this.state.roomName, createdAt: new Date().toDateString()});
+      var newRoom = {"id": id, "name": this.state.roomName, "members": this.membersString};
+      newRooms.push(newRoom);
       await this.storeRooms(this.state.roomsKey, JSON.stringify(newRooms));
-      await AsyncStorage.setItem(this.membersString+"settings", JSON.stringify({"title": this.state.roomName}))
+      await AsyncStorage.setItem(id+"settings", JSON.stringify({"title": this.state.roomName}))
       // navigate to room
-      this.props.navigation.navigate('ChatPage',{ "name": this.state.roomName, "id": this.membersString  });
+      this.props.navigation.navigate('ChatPage',{ "name": this.state.roomName, "id": id  });
     }
     else{
 
