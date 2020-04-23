@@ -99,7 +99,7 @@ export default class CreateChatRoomScreen extends React.Component {
       return item.trim();
     })
     console.log("members:" + this.members);
-
+    this.members.push(this.state.username)
     this.members.sort();
 
     console.log("after member added: " + this.members);

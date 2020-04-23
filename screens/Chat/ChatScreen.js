@@ -15,6 +15,38 @@ import {ActionType, Payload} from "../../src/payload"
 async function deleteMessageAfterRead(messageId) {
   return await API.graphql(graphqlOperation(deleteMessage, { input: { id: messageId }}))
 }
+
+async function sendMessage(payload) {
+
+  console.log("in send message")
+  roomMembers = payload.roomMembers;
+  console.log("roomMembers: ", roomMembers)
+  sender = payload.sender;
+
+  //Encrypt payload here
+
+  let payloadStr = JSON.stringify(payload);
+  for (const member of roomMembers){
+    console.log("sending message to: ", member, "\n\n")
+    if(member == sender) {
+      continue
+    }
+    const messageObj = {
+      to: member,
+      //from, sender,
+      payload: payloadStr,
+    };
+    
+    console.log("package: " + JSON.stringify(messageObj));
+    API.graphql(graphqlOperation(createMessage, { input: messageObj })).then(
+      console.log("AWS SUCess")
+    ).catch(
+      (error) => {
+        console.log("Error_____________________\n" ,error)
+      }
+    );   
+  }
+}
 async function getAuthObject() {
   // obtains userToken and parses it to access username
   var user = await AsyncStorage.getItem("userToken");
@@ -23,18 +55,21 @@ async function getAuthObject() {
   return username; // returns a promise
 }
 
-async function createNewChatMessage(messages, room, username) {
-  const message_ = new Payload(
-                              actionType=ActionType.TEXT_MESSAGE,
-                              roomId=this.id,
-                              roomName=this.title,
-                              roomMembers=['bpb', 'din','dsin'],
-                              from =this.username, 
-                              joiningMember=null,
-                              leavingMember=null,
-                              textContent=message[0].text,
-                              newRoomName=null
-                              ).get()
+function createNewChatMessage(room/*must be this.state*/) {
+  console.log("this.id: ",room.id)
+  const payload = new Payload(
+                      actionType=ActionType.TEXT_MESSAGE,
+                      roomId=room.id,
+                      roomName=room.title,
+                      roomMembers=room.members,
+                      from =room.username, 
+                      joiningMember=null,
+                      leavingMember=null,
+                      textContent="room.messages[0].text",
+                      newRoomName=null
+                      ).get()
+  console.log("in createNewChatMessage: ", payload )
+  sendMessage(payload)
 
   // ---Old version of message
   // const roomId_ = room;
@@ -48,20 +83,20 @@ async function createNewChatMessage(messages, room, username) {
 
   // };
 
-  let stringMessage = JSON.stringify(message_);
-  //var otherUsers = JSON.parse(room.id);
-  // use this.user.name
-  //console.log("type  " +  otherUsers.typeof);
-  for (var i = 0; i < otherUsers.length -1; i++){
-    console.log("other users: " + otherUsers[i]);
-    const package_ = {
-      to: otherUsers[i],
-      payload: stringMessage,
-    };
-    console.log("package: " + JSON.stringify(package_));
-    const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ }));
-    console.log(resp);
-  }
+  // let stringMessage = JSON.stringify(message_);
+  // //var otherUsers = JSON.parse(room.id);
+  // // use this.user.name
+  // //console.log("type  " +  otherUsers.typeof);
+  // for (var i = 0; i < otherUsers.length -1; i++){
+  //   console.log("other users: " + otherUsers[i]);
+  //   const package_ = {
+  //     to: otherUsers[i],
+  //     payload: stringMessage,
+  //   };
+  //   console.log("package: " + JSON.stringify(package_));
+  //   const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ }));
+  //   console.log(resp);
+  // }
 
 }
 
@@ -126,6 +161,7 @@ async function getNewMessages(currentObj, roomId){
 
 let parsMembersString = (membersString) => {
   console.log("membersString: ",JSON.parse(membersString))
+  return JSON.parse(membersString)
 } 
 
 
@@ -205,12 +241,11 @@ class ChatScreen extends React.Component {
     console.log("Room name:");
     console.log(room.name);
     console.log("username :");
-    console.log(this.state.username._55);
+    console.log(this.state.username);
 
     try{
       console.log ("sending message to AWS... ");
-
-      createNewChatMessage(messages, room, this.state.username._55);
+      createNewChatMessage(this.state);
 
       console.log("AWS store success!");
     }catch (err){
