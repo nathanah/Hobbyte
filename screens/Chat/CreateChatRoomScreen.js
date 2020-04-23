@@ -29,6 +29,7 @@ export default class CreateChatRoomScreen extends React.Component {
     super(props);
 
     this.loadRooms(this.roomsKey);
+    this.loadUsername();
     this.state = {
       username: this.props.navigation.getParam("username"),  //sorted into roomMembers
       roomsKey: this.props.navigation.getParam("roomsKey"),
@@ -107,6 +108,7 @@ export default class CreateChatRoomScreen extends React.Component {
     var id = Date.now().toString();
     if(await this.roomDoesNotExist(newRooms,this.membersString)){
       var newRoom = {"id": id, "name": this.state.roomName, "members": this.membersString};
+      console.log(newRoom)
       newRooms.push(newRoom);
       await this.storeRooms(this.state.roomsKey, JSON.stringify(newRooms));
       await AsyncStorage.setItem(id+"settings", JSON.stringify({"title": this.state.roomName}))
@@ -155,6 +157,14 @@ export default class CreateChatRoomScreen extends React.Component {
     )
     console.log(members + " does not exist yet");
     return true;
+  }
+
+  loadUsername = async () => {
+    var user = await AsyncStorage.getItem("userToken");
+    var userTokenParsed = JSON.parse(user);
+    var username = userTokenParsed.user.signInUserSession.accessToken.payload.username;
+    this.setState({"username": username})
+    console.log("user: "+this.state.username)
   }
 }
 
