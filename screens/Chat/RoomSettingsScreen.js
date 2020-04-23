@@ -12,9 +12,10 @@ export default class RoomSettings extends Component {
     const {navigation} = this.props;
     this.state = {
       id: this.props.navigation.getParam('id'),
-      title: "",
+      name: "",
       bubbleColor: "",
       textColor: "",
+      members: "",
     }
     this.loadSettings();
   }
@@ -28,7 +29,7 @@ export default class RoomSettings extends Component {
         <Text>Room Name</Text>
 
         <TextInput
-          placeholder={this.state.title}
+          placeholder={this.state.name}
           style={styles.formBox}
           underlineColorAndroid = {'transparent'}
           placeholderTextColor = "#000000"
@@ -37,8 +38,8 @@ export default class RoomSettings extends Component {
           keyboardType="default"
           autoCapitalize='none'
           autoCorrect={false}
-          value={this.state.title}
-          onChange ={event => this.setState({title:event.nativeEvent.text})}
+          value={this.state.name}
+          onChange ={event => this.setState({name:event.nativeEvent.text})}
           underlineColorAndroid = "transparent"
         />
 
@@ -83,9 +84,27 @@ export default class RoomSettings extends Component {
             <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
 
+
+        <FlatList>
+          keyExtractor={(item) => item.name}
+          data={this.state.members}
+          renderItem={this.renderMember}
+        </FlatList>
       </View>
 
     )
+  }
+  renderMember = ({ item }) => {
+    return (
+      <TouchableHighlight>
+
+        <View style={styles.list_item}>
+          <Text style={styles.list_item_text}>{item.toString()}</Text>
+          <Text>Hi</Text>
+        </View>
+
+        </TouchableHighlight>
+    );
   }
 
   loadSettings = async () => {
@@ -94,8 +113,9 @@ export default class RoomSettings extends Component {
     if(result != null){
       console.log("not null");
       var parsed = JSON.parse(result);
-      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor});
+      this.setState({name: parsed.name, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor, members: parsed.members});
     }
+    
     else{
 
     }
@@ -118,7 +138,7 @@ export default class RoomSettings extends Component {
 
       if(idx != -1){
         var room = parsed[idx]
-        room.name = this.state.title;
+        room.name = this.state.name;
         parsed[idx] = room;
 
         AsyncStorage.setItem("rooms", JSON.stringify(parsed));

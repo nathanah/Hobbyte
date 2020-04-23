@@ -23,42 +23,28 @@ async function getAuthObject() {
   return username; // returns a promise
 }
 
-async function createNewChatMessage(messages, room, username) {
+async function createNewChatMessage(messages, room, username, members) {
   const message_ = new Payload(
-                              actionType=ActionType.TEXT_MESSAGE,
-                              roomId=this.id,
-                              roomName=this.title,
-                              roomMembers=['bpb', 'din','dsin'],
-                              from =this.username, 
-                              joiningMember=null,
-                              leavingMember=null,
-                              textContent=message[0].text,
-                              newRoomName=null
+                              /*actionType=*/ActionType.TEXT_MESSAGE,
+                              /*roomId=*/room.id,
+                              /*roomName=*/room.name,
+                              /*roomMembers=*/members,
+                              /*from =*/username,
+                              /*joiningMember=*/null,
+                              /*leavingMember=*/null,
+                              /*textContent=*/messages[0].text,
+                              /*newRoomName=*/null
                               ).get()
 
-  // ---Old version of message
-  // const roomId_ = room;
-  // const message_ = {
-  //       actionType: 1,
-  //       from: username,
-  //       users: username + "need to add other users here, alphabetical",
-  //       content: messages[0].text,
-  //       roomName: roomId_,
-  //       when: messages[0].createdAt,
-
-  // };
 
   let stringMessage = JSON.stringify(message_);
-  //var otherUsers = JSON.parse(room.id);
-  // use this.user.name
-  //console.log("type  " +  otherUsers.typeof);
-  for (var i = 0; i < otherUsers.length -1; i++){
-    console.log("other users: " + otherUsers[i]);
+  for (var i = 0; i < members.length -1; i++){
+    console.log("other users: " + members[i]);
     const package_ = {
-      to: otherUsers[i],
+      to: members[i],
       payload: stringMessage,
     };
-    console.log("package: " + JSON.stringify(package_));
+    // console.log("package: " + JSON.stringify(package_));
     const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ }));
     console.log(resp);
   }
@@ -71,7 +57,7 @@ function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
   // todo then match to addMessage:
   var addMessage = {
     _id: fullPackage.id,
-    text: incomingMessageItem.content,
+    text: incomingMessageItem.textContent,
     user: {_id:2, name: incomingMessageItem.from}, // todo update with other user name
     createdAt: incomingMessageItem.when,
   };
@@ -109,7 +95,7 @@ function displayIncomingMessages(messagesFromQueue, currentObj){
 async function getNewMessages(currentObj, roomId){
   // query messages in DynamoDB queue
   // need to update new query with correct filter of to field
-  
+
   const roomFilter = {
     filter: {roomId: {contains: roomId}}
   };
@@ -143,8 +129,8 @@ class ChatScreen extends React.Component {
       typingText: null,
       isTyping: false,
       appIsReady: false,
-      
-      title: this.props.navigation.getParam('name'),
+
+      name: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
       username: "temp",
 
@@ -188,7 +174,7 @@ class ChatScreen extends React.Component {
     this.loadMessages(this.state.id);
     this.loadSettings(this.state.id);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-    this.loadSettings(this.state.id);
+      this.loadSettings(this.state.id);
     });
     this.loadUsername();
   }
@@ -200,18 +186,18 @@ class ChatScreen extends React.Component {
 
   onSend(messages = []) {
     console.log("send message:");
-    console.log(messages);
+    // console.log(messages);
     const room = this.user;
 
-    console.log("Room name:");
-    console.log(room.name);
-    console.log("username :");
-    console.log(this.state.username._55);
+    // console.log("Room name:");
+    // console.log(room.name);
+    // console.log("username :");
+    // console.log(this.state.username);
 
     try{
       console.log ("sending message to AWS... ");
 
-      createNewChatMessage(messages, room, this.state.username._55);
+      createNewChatMessage(messages, room, this.state.username, this.state.roomMembers);
 
       console.log("AWS store success!");
     }catch (err){
@@ -221,7 +207,6 @@ class ChatScreen extends React.Component {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-    console.log(this.state.id)
     AsyncStorage.setItem(this.state.id, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
 
   }
@@ -229,7 +214,7 @@ class ChatScreen extends React.Component {
   loadUsername = async () => {
     var username = await getAuthObject();
     this.setState({"username": username})
-    console.log("user: "+this.state.username)
+    // console.log("user: "+this.state.username)
     this.subscription = API.graphql(
       graphqlOperation(OnCreateMessageByRecipient, {to: this.state.username})
       ).subscribe({
@@ -252,7 +237,7 @@ class ChatScreen extends React.Component {
     const messageItems = this;
     var result = await AsyncStorage.getItem(key);
     console.log("load messages from local storage:")
-    console.log(result);
+    // console.log(result);
     if(result != null && result.length){
       console.log("not null");
       this.setState({messages: JSON.parse(result)});
@@ -282,9 +267,9 @@ class ChatScreen extends React.Component {
     if(result != null){
       console.log("not null");
       var parsed = JSON.parse(result)
-      console.log(parsed.title)
-      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor})
-      this.props.navigation.state.params.name = this.state.title;
+      // console.log(parsed.name)
+      this.setState({name: parsed.name, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor, roomMembers: parsed.members})
+      this.props.navigation.state.params.name = this.state.name;
 
     }
     else{
@@ -333,7 +318,7 @@ class ChatScreen extends React.Component {
     //change room name in room settings
     var settings = JSON.parse(await AsyncStorage.getItem(id+"settings"))
     if(settings != null){
-      settings.title = newName;
+      settings.name = newName;
       AsyncStorage.setItem(id+"settings", JSON.stringify(settings))
       console.log("rooms updated");
     }
@@ -379,7 +364,7 @@ class ChatScreen extends React.Component {
     var incomingPackage = messageObject.onCreateMessageByRecipient;
     var parsedPayload = JSON.parse(incomingPackage.payload);
 
-    
+    console.log(parsedPayload)
 
       switch(parsedPayload.actionType){
         //Incoming text message
