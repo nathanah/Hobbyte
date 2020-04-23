@@ -7,12 +7,14 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
 import {listMessages} from '../../src/graphql/queries';
-
+import {ActionType, Payload} from "../../src/payload"
 
 /*=====================================================*/
 // ASYNC FUNCTIONS
 /*=====================================================*/
-
+async function deleteMessageAfterRead(messageId) {
+  return await API.graphql(graphqlOperation(deleteMessage, { input: { id: messageId }}))
+}
 async function getAuthObject() {
   // obtains userToken and parses it to access username
   var user = await AsyncStorage.getItem("userToken");
@@ -22,21 +24,34 @@ async function getAuthObject() {
 }
 
 async function createNewChatMessage(messages, room, username) {
-  const roomId_ = room;
-  const message_ = {
-        actionType: 1,
-        from: username,
-        users: username + "need to add other users here, alphabetical",
-        content: messages[0].text,
-        roomName: roomId_,
-        when: messages[0].createdAt,
+  const message_ = new Payload(
+                              actionType=ActionType.TEXT_MESSAGE,
+                              roomId=this.id,
+                              roomName=this.title,
+                              roomMembers=['bpb', 'din','dsin'],
+                              from =this.username, 
+                              joiningMember=null,
+                              leavingMember=null,
+                              textContent=message[0].text,
+                              newRoomName=null
+                              ).get()
 
-  };
+  // ---Old version of message
+  // const roomId_ = room;
+  // const message_ = {
+  //       actionType: 1,
+  //       from: username,
+  //       users: username + "need to add other users here, alphabetical",
+  //       content: messages[0].text,
+  //       roomName: roomId_,
+  //       when: messages[0].createdAt,
 
-  var stringMessage = JSON.stringify(message_);
-  var otherUsers = JSON.parse(room.id);
+  // };
+
+  let stringMessage = JSON.stringify(message_);
+  //var otherUsers = JSON.parse(room.id);
   // use this.user.name
-  console.log("type  " +  otherUsers.typeof);
+  //console.log("type  " +  otherUsers.typeof);
   for (var i = 0; i < otherUsers.length -1; i++){
     console.log("other users: " + otherUsers[i]);
     const package_ = {
@@ -91,11 +106,12 @@ function displayIncomingMessages(messagesFromQueue, currentObj){
 }
 
 // todo need to fix this
-async function getNewMessages(currentObj, room){
+async function getNewMessages(currentObj, roomId){
   // query messages in DynamoDB queue
   // need to update new query with correct filter of to field
+  
   const roomFilter = {
-    filter: {roomId: {contains: room}}
+    filter: {roomId: {contains: roomId}}
   };
   console.log("loading messages from DynamoDB queue:");
 
@@ -127,9 +143,16 @@ class ChatScreen extends React.Component {
       typingText: null,
       isTyping: false,
       appIsReady: false,
+      
       title: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
-      username: "temp"
+      username: "temp",
+
+
+      roomName: null,
+      roomId: null,
+      roomMembers: []
+
     }
   }
 
@@ -165,7 +188,7 @@ class ChatScreen extends React.Component {
     this.loadMessages(this.state.id);
     this.loadSettings(this.state.id);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-     this.loadSettings(this.state.id);
+    this.loadSettings(this.state.id);
     });
     this.loadUsername();
   }
@@ -212,9 +235,13 @@ class ChatScreen extends React.Component {
       ).subscribe({
       error: err => console.log("______________ERROR__________", err),
       next: event => {
+
+          messageId = event.value.data.onCreateMessageByRecipient.id
+          let recpt = deleteMessageAfterRead(messageId)
+          // console.log("delete: ", recpt)
           const newMessage = JSON.stringify(event.value.data, null, 2);
           console.log("New Message: " + newMessage);
-         this.onReceive(event.value.data);
+          this.onReceive(event.value.data);
 
       }
       });
@@ -237,7 +264,7 @@ class ChatScreen extends React.Component {
 
 
     try{
-      getNewMessages(this, this.state.title);
+      getNewMessages(this, this.state.id);
     } catch (err){
       console.log(err);
     }
@@ -287,7 +314,7 @@ class ChatScreen extends React.Component {
     )
   }
 
-  onReceive = ( messageObject) => {
+  onReceive = (messageObject) => {
 
 
     try{
@@ -299,29 +326,31 @@ class ChatScreen extends React.Component {
     var incomingPackage = messageObject.onCreateMessageByRecipient;
     var parsedPayload = JSON.parse(incomingPackage.payload);
 
+    
+
       switch(parsedPayload.actionType){
         //Incoming text message
-        case 1:{
+        case ActionType.TEXT_MESSAGE:{
           displayOneMessage(incomingPackage, parsedPayload, this);
           break;
         }
         //name change
-        case 2:{
+        case ActionType.ROOM_NAME_CHANGE:{
           console.log("TODO: Implement name change");
           break;
         }
         //User left room
-        case 3:{
+        case ActionType.MEMBER_LEFT:{
           console.log("TODO: Implement user left the room");
           break;
         }
         //User added to room
-        case 4:{
+        case ActionType.MEMBER_JOINED:{
           console.log("TODO: Implement User addeed to the room");
           break;
         }
         //Backup Requested
-        case 5:{
+        case ActionType.BACKUP_REQUEST:{
           console.log("TODO: Implement backup requested");
           break;
         }
