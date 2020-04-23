@@ -92,7 +92,6 @@ export default class CreateChatRoomScreen extends React.Component {
   /*--------------------Async------------------------*/
 
   makeRoom = async () => {
-
     await this.loadRooms(this.state.roomsKey);
     var newRooms = this.state.rooms;
 
@@ -100,12 +99,13 @@ export default class CreateChatRoomScreen extends React.Component {
       return item.trim();
     })
     console.log("members:" + this.members);
-    this.members.push(this.state.username);
+
     this.members.sort();
 
     console.log("after member added: " + this.members);
     this.membersString = JSON.stringify(this.members);
     var id = Date.now().toString();
+
     if(await this.roomDoesNotExist(newRooms,this.membersString)){
       var newRoom = {"id": id, "name": this.state.roomName, "members": this.membersString};
       console.log(newRoom)
@@ -113,7 +113,9 @@ export default class CreateChatRoomScreen extends React.Component {
       await this.storeRooms(this.state.roomsKey, JSON.stringify(newRooms));
       await AsyncStorage.setItem(id+"settings", JSON.stringify({"title": this.state.roomName}))
       // navigate to room
-      this.props.navigation.navigate('ChatPage',{ "name": this.state.roomName, "id": id  });
+      this.props.navigation.navigate('ChatPage',{ "name": this.state.roomName, 
+                                                  "id": id,
+                                                  "membersString": this.membersString  });
     }
     else{
 

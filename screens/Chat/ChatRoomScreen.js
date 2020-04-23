@@ -71,7 +71,11 @@ export default class ChatRoom extends Component {
 
         <View style={styles.list_item}>
           <Text style={styles.list_item_text}>{item.name}</Text>
-          <Button title="Enter" color="#0064e1" onPress={() => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(), "id": item.id  }) } />
+          <Button title="Enter" color="#0064e1" onPress={
+            () => this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(),
+                                                              "id": item.id,
+                                                              "membersString": item.membersString  }) 
+            } />
         </View>
 
         </TouchableHighlight>
