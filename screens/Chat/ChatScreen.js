@@ -4,9 +4,10 @@ import {AsyncStorage} from "react-native";
 import {Icon} from 'react-native-elements';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
-import {createMessage} from '../../src/graphql/mutations';
+import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
 import {listMessages} from '../../src/graphql/queries';
+
 
 /*=====================================================*/
 // ASYNC FUNCTIONS
@@ -64,9 +65,17 @@ function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
   }));
 
   // todo make sure only new messages stored, check if message already stored
+  // console.log(currentObj.state.id)
   // AsyncStorage.setItem(currentObj.state.id, JSON.stringify(GiftedChat.append(currentObj.state.messages, [addMessage])));
 
   //todo call delete mutation
+  // var messageID = fullPackage.id;
+  // const messageID = {
+  //   filter: {id: {eq: fullPackage.id}}
+  // };
+  // const deleteresp = await API.graphql(graphqlOperation(deleteMessage, messageID ));
+  // console.log(messagesFromQueue);
+
 
 }
 
@@ -107,7 +116,7 @@ async function getNewMessages(currentObj, room){
 class ChatScreen extends React.Component {
   constructor(props) {
     super(props);
-    // var username = getAuthObject(); // get username from userToken
+    var username = getAuthObject(); // get username from userToken
     const {navigation} = this.props;
     this.state = {
       textColor: "",
@@ -189,17 +198,17 @@ class ChatScreen extends React.Component {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-    // todo need to fix Async storage
-    // AsyncStorage.setItem(this.state.roomid, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
+    console.log(this.state.id)
+    AsyncStorage.setItem(this.state.id, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
+
   }
 
   loadUsername = async () => {
     var username = await getAuthObject();
     this.setState({"username": username})
-    console.log("123user: "+this.state.username)
-    // need to locate sender's username to use in filter
+    console.log("user: "+this.state.username)
     this.subscription = API.graphql(
-      graphqlOperation(OnCreateMessageByRecipient, {to: this.state.username}) // hardcoded for echo chamber
+      graphqlOperation(OnCreateMessageByRecipient, {to: this.state.username})
       ).subscribe({
       error: err => console.log("______________ERROR__________", err),
       next: event => {
