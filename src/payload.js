@@ -9,17 +9,23 @@ export const ActionType = {
 }
 
 export class Payload{
-    constructor(actionType, roomId, roomName, roomMembers, sender, 
-                                              joiningMember=null,
-                                              leavingMember=null,
-                                              textContent=null,
-                                              newRoomName=null) {
+    constructor(actionType, 
+                roomId, 
+                roomName, 
+                roomMembers, 
+                sender,
+                created, 
+                joiningMember=null,
+                leavingMember=null,
+                textContent=null,
+                newRoomName=null) {
 
       this.actionType = actionType;
       this.roomId = roomId;
       this.roomName = roomName;
       this.roomMembers = roomMembers;
       this.sender = sender;
+      this.created = created;
       this.joiningMember = joiningMember;
       this.leavingMember = leavingMember;
       this.textContent = textContent;
@@ -69,6 +75,7 @@ export class Payload{
                 roomName: this.roomName,
                 roomMembers: this.roomMembers,
                 sender: this.sender,
+                created: this.created,
                 joiningMember: this.joiningMember,
                 leavingMember: this.leavingMember,
                 textContent: this.textContent,
