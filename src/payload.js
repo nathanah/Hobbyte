@@ -5,21 +5,27 @@ export const ActionType = {
     MEMBER_JOINED: 4,
     BACKUP_REQUEST: 5,
     MAX:5
-
+    
 }
 
 export class Payload{
-    constructor(actionType, roomId, roomName, roomMembers, from,
-                                              joiningMember=null,
-                                              leavingMember=null,
-                                              textContent=null,
-                                              newRoomName=null) {
+    constructor(actionType, 
+                roomId, 
+                roomName, 
+                roomMembers, 
+                sender,
+                created, 
+                joiningMember=null,
+                leavingMember=null,
+                textContent=null,
+                newRoomName=null) {
 
       this.actionType = actionType;
       this.roomId = roomId;
       this.roomName = roomName;
       this.roomMembers = roomMembers;
-      this.from = from;
+      this.sender = sender;
+      this.created = created;
       this.joiningMember = joiningMember;
       this.leavingMember = leavingMember;
       this.textContent = textContent;
@@ -59,7 +65,7 @@ export class Payload{
             }
         }
     }
-
+    
     get(){
         console.log("validatepayload: ", this.validPayload())
         if(this.validPayload()) {
@@ -68,7 +74,8 @@ export class Payload{
                 roomId: this.roomId,
                 roomName: this.roomName,
                 roomMembers: this.roomMembers,
-                from: this.from,
+                sender: this.sender,
+                created: this.created,
                 joiningMember: this.joiningMember,
                 leavingMember: this.leavingMember,
                 textContent: this.textContent,
@@ -84,7 +91,7 @@ export class Payload{
 //                        roomId=12234,
 //                         roomName="fun room",
 //                          roomMembers=['bpb', 'din','dsin'],
-//                           from ='john',
+//                           sender ='john', 
 //                            joiningMember=null,
 //                             leavingMember=null,
 //                             textContent="This is some text",
@@ -93,7 +100,7 @@ export class Payload{
 //                         roomId=12234,
 //                         roomName="fun room",
 //                         roomMembers=['bpb', 'din','dsin'],
-//                         from ='john',
+//                         sender ='john', 
 //                         joiningMember=null,
 //                         leavingMember=null,
 //                         textContent=null,
@@ -107,7 +114,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -116,7 +123,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -131,7 +138,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember=null,
 //          leavingMember="Sam",
 //          textContent=null,
@@ -140,7 +147,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -155,7 +162,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember="John",
 //          leavingMember="Sam",
 //          textContent=null,
@@ -164,7 +171,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -180,7 +187,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember="John",
 //          leavingMember="Sam",
 //          textContent=null,
@@ -192,7 +199,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        from ='john',
+//        sender ='john', 
 //         joiningMember="John",
 //          leavingMember="Sam",
 //          textContent=null,
