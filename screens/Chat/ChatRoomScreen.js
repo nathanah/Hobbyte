@@ -16,6 +16,7 @@ import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {ActionType, Payload} from '../../src/payload';
 // import PubSub from '@aws-amplify/pubsub';
+import {listMessages} from '../../src/graphql/queries';
 import awsconfig from '../../aws-exports';
 API.configure(awsconfig);
 
@@ -63,12 +64,25 @@ async function retrieveRooms(currentRooms){
   return roomItems;
 }
 
+async function storeIncomingMessage(messageObj, payload, room){
+  var roomObj = await AsyncStorage.getItem(payload.roomId);
+  var chatHistory = JSON.parse(roomObj); 
+  console.log("Chat History: " + JSON.stringify(chatHistory));
+  var message = {
+    _id: messageObj.id, 
+    text: payload.textContent, 
+    user: {
+      id: 2
+    }, 
+    createdAt: payload.created 
 
-function storeIncomingMessage(messageObj, payload ){
-  // find room 
-  // store message in room
-  // set flag on room list item to new message
-    // set room name to bold?
+  } 
+  chatHistory.unshift(message); // append to end... not working completely
+  
+  console.log("after append: "+ JSON.stringify(chatHistory)); 
+  chatHistory = JSON.stringify(chatHistory); 
+  await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
+
 }
 
 /*=====================================================*/
@@ -91,7 +105,8 @@ export default class ChatRoom extends Component {
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
     this.loadRooms(this.roomsKey); 
     });
-    this.loadUsername();   
+    this.loadUsername(); 
+    this.checkForNewMessages();   
   }
   
 ////////////////////
@@ -108,8 +123,9 @@ export default class ChatRoom extends Component {
       error: err => console.log("______________ERROR__________", err),
       next: event => {
 
-          messageId = event.value.data.onCreateMessageByRecipient.id
-          let recpt = deleteMessageAfterRead(messageId)
+          var messageId = event.value.data.onCreateMessageByRecipient.id;
+          // turn on after querying works
+          // let recpt = deleteMessageAfterRead(messageId)
           // console.log("delete: ", recpt)
           const newMessage = JSON.stringify(event.value.data, null, 2);
           console.log("New Message: " + newMessage);
@@ -118,6 +134,26 @@ export default class ChatRoom extends Component {
       }
       });
     }
+
+    
+    checkForNewMessages = async() => {
+      console.log("Querying for offline messages"); 
+      const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, {to: this.state.username} ));
+      console.log("Queried messages: " + JSON.stringify(messagesFromQueue));
+      var numberOfMessages = messagesFromQueue.data.listMessages.items.length;
+      
+      
+      // cycle through new messages and send through switch pipeline
+      for (var i = 0; i < numberOfMessages; i ++ ){
+        var item = messagesFromQueue.data.listMessages.items[i];
+        
+        var message = {
+          "onCreateMessageByRecipient": item,
+        };
+        console.log("item: "+ message); 
+        this.onReceive(message); 
+      } 
+    }; 
 
 ///////////////////
 //Sub room components//
@@ -265,20 +301,16 @@ export default class ChatRoom extends Component {
 
     // parse incomingMessageItem payload and save into new variable
     var messageObj = messageObject.onCreateMessageByRecipient;
-    console.log("message Obj: " + messageObj); 
-    // console.log("message Obj after parse: " + JSON.stringify(messageObj)); 
     var payload = messageObj.payload;
     
     payload = JSON.parse(payload);
      
-    console.log("payload " + payload);
-      console.log("action type" + payload.actionType);
+      console.log("action type:  " + payload.actionType);
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
           alert("Text message arrived"); 
           storeIncomingMessage(messageObj, payload, this); 
-          // displayOneMessage(messageObj, payload, this);
           break;
         }
         //name change
