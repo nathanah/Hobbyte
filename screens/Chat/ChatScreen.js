@@ -199,6 +199,8 @@ class ChatScreen extends React.Component {
   }
 
   onSend(messages = []) {
+    const publicKeys = await eThree.findUsers(roomMembers);
+    const encryptedText = await eThree.authEncrypt(messages, publicKeys);
     console.log("send message:");
     console.log(messages);
     const room = this.user;
@@ -211,7 +213,7 @@ class ChatScreen extends React.Component {
     try{
       console.log ("sending message to AWS... ");
 
-      createNewChatMessage(messages, room, this.state.username._55);
+      createNewChatMessage(encryptedText, room, this.state.username._55);
 
       console.log("AWS store success!");
     }catch (err){
@@ -318,7 +320,12 @@ class ChatScreen extends React.Component {
 
 
     try{
-      //Decrypt
+    /*
+    const publicKey = await eThree.findUsers(sender);
+
+    // Decrypt text and ensure it was written by sender
+    const decryptedText = await eThree.authDecrypt(encryptedText, publicKey);
+    */
       console.log("TODO: Implement decrypt");
 
 
