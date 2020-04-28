@@ -77,9 +77,9 @@ async function storeIncomingMessage(messageObj, payload, room){
     createdAt: payload.created 
 
   } 
-  chatHistory.unshift(message); // append to end... not working completely
-  
-  console.log("after append: "+ JSON.stringify(chatHistory)); 
+
+  chatHistory.push(message);
+  chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
   chatHistory = JSON.stringify(chatHistory); 
   await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
 
@@ -108,6 +108,11 @@ export default class ChatRoom extends Component {
     this.loadUsername(); 
     this.checkForNewMessages();   
   }
+  
+  componentWillUnmount() {
+    // this._isMounted = false; 
+    this.subscription.unsubscribe(); 
+}
   
 ////////////////////
 //Obtain Username //

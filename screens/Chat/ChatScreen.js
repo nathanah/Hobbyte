@@ -212,7 +212,8 @@ class ChatScreen extends React.Component {
 
 
   componentWillUnmount() {
-      this._isMounted = false
+      this._isMounted = false; 
+      this.subscription.unsubscribe(); 
   }
 
   onSend(messages = []) {
