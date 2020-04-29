@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
+import { EThree } from '@virgilsecurity/e3kit-native';
+import AsyncStorage from '@react-native-community/async-storage';
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
@@ -98,6 +100,8 @@ export default class PhoneNumberVerification extends React.Component {
         .then(() => {
           console.log('successful confirm sign in!');
           AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+          const eThree = await EThree.initialize(tokenCallback, { AsyncStorage });
+          await eThree.register();
           this.props.navigation.navigate('Main' );
         })
         .catch(err => {console.log('error confirming signing in!: ', err);

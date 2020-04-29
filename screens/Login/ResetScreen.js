@@ -73,6 +73,8 @@ export default class ResetScreen extends React.Component {
       console.log("Reset information input from user: ");
       console.log("email:" + this.state.email);
       console.log("phone:" + this.state.phone);
+      await eThree.rotatePrivateKey();
+
       this.props.navigation.navigate('SignIn');
     };
 }
