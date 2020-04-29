@@ -5,6 +5,7 @@
 }
 
 type Message {
+  from: String!
   id: ID!
   payload: String!
   to: String!
@@ -52,6 +53,7 @@ enum ModelSortDirection {
 }
 
 input CreateMessageInput {
+  from: String!
   id: ID
   payload: String!
   to: String!
@@ -110,6 +112,7 @@ input ModelIntInput {
 
 input ModelMessageConditionInput {
   and: [ModelMessageConditionInput]
+  from: ModelStringInput
   not: ModelMessageConditionInput
   or: [ModelMessageConditionInput]
   payload: ModelStringInput
@@ -118,6 +121,7 @@ input ModelMessageConditionInput {
 
 input ModelMessageFilterInput {
   and: [ModelMessageFilterInput]
+  from: ModelStringInput
   id: ModelIDInput
   not: ModelMessageFilterInput
   or: [ModelMessageFilterInput]
@@ -152,6 +156,7 @@ input ModelStringInput {
 }
 
 input UpdateMessageInput {
+  from: String
   id: ID!
   payload: String
   to: String

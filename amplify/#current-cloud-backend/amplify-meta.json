@@ -21,7 +21,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/auth/hobbytee966d8ece966d8ec-cloudformation-template.yml",
 				"logicalId": "authhobbytee966d8ece966d8ec"
 			},
-			"lastPushTimeStamp": "2020-04-16T02:09:05.852Z",
+			"lastPushTimeStamp": "2020-04-29T22:40:25.505Z",
 			"output": {
 				"CreatedSNSRole": "arn:aws:iam::230460721296:role/sns123439-hobbyte",
 				"AppClientSecret": "1ppd22o56qv9kg9s6nbit975v5cpcse6ehjdervkngl18vf8r4u0",
@@ -58,8 +58,8 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/amplify-hobbyte-hobbyte-123439-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"logicalId": "apihobbyte"
 			},
-			"lastPushTimeStamp": "2020-04-16T02:09:07.208Z",
-			"lastPushDirHash": "gvO0xDnyKbOqZ6ShtJxzignbo+M="
+			"lastPushTimeStamp": "2020-04-29T22:40:27.217Z",
+			"lastPushDirHash": "QnE4WgXnipV5wSelbL5U62ixEhc="
 		}
 	}
 }

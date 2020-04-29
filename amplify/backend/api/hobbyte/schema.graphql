@@ -1,5 +1,6 @@
 type Message @model {
     id: ID!
     to: String!
+    from: String!
     payload: String!
 }
