@@ -9,6 +9,7 @@ export const createMessage = /* GraphQL */ `
     createMessage(input: $input, condition: $condition) {
       id
       to
+      from
       payload
     }
   }
@@ -21,6 +22,7 @@ export const updateMessage = /* GraphQL */ `
     updateMessage(input: $input, condition: $condition) {
       id
       to
+      from
       payload
     }
   }
@@ -33,6 +35,7 @@ export const deleteMessage = /* GraphQL */ `
     deleteMessage(input: $input, condition: $condition) {
       id
       to
+      from
       payload
     }
   }
