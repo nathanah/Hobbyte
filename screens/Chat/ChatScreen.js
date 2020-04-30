@@ -36,6 +36,7 @@ async function sendMessage(payload) {
     console.log("other users: " + roomMembers[i]);
     const package_ = {
       to: roomMembers[i],
+      from: payload.sender,
       payload: payloadStr,
     };
     console.log("package: " + JSON.stringify(package_));
@@ -126,7 +127,7 @@ function displayIncomingMessages(messagesFromQueue, currentObj){
 async function getNewMessages(currentObj, roomId){
   // query messages in DynamoDB queue
   // need to update new query with correct filter of to field
-  
+
   const roomFilter = {
     filter: {roomId: {contains: roomId}}
   };
@@ -165,8 +166,8 @@ class ChatScreen extends React.Component {
       typingText: null,
       isTyping: false,
       appIsReady: false,
-      
-      title: this.props.navigation.getParam('name'),
+
+      name: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
       members: parsMembersString(this.props.navigation.getParam('membersString')),
       username: "temp",
@@ -287,9 +288,9 @@ class ChatScreen extends React.Component {
     if(result != null){
       console.log("not null");
       var parsed = JSON.parse(result)
-      console.log(parsed.title)
-      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor})
-      this.props.navigation.state.params.name = this.state.title;
+      console.log(parsed.name)
+      this.setState({name: parsed.name, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor})
+      this.props.navigation.state.params.name = this.state.name;
 
     }
     else{

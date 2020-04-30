@@ -72,7 +72,7 @@ async function storeIncomingMessage(messageObj, payload, room){
     _id: messageObj.id, 
     text: payload.textContent, 
     user: {
-      id: 2
+      id: 2,
     }, 
     createdAt: payload.created 
 
