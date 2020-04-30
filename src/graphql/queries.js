@@ -6,6 +6,7 @@ export const getMessage = /* GraphQL */ `
     getMessage(id: $id) {
       id
       to
+      from
       payload
     }
   }
@@ -20,6 +21,7 @@ export const listMessages = /* GraphQL */ `
       items {
         id
         to
+        from
         payload
       }
       nextToken
