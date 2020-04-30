@@ -52,7 +52,7 @@ export default class PhoneNumberVerification extends React.Component {
         onPress={this._loginAsync}
         activeOpacity = { .8 }>
                 <Text style={styles.buttonText}
-                  >Code</Text>
+                  >Submit</Text>
         </TouchableOpacity>
 
 

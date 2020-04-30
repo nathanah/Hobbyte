@@ -12,9 +12,10 @@ export default class RoomSettings extends Component {
     const {navigation} = this.props;
     this.state = {
       id: this.props.navigation.getParam('id'),
-      title: "",
+      name: "",
       bubbleColor: "",
       textColor: "",
+      members: "",
     }
     this.loadSettings();
   }
@@ -28,7 +29,7 @@ export default class RoomSettings extends Component {
         <Text>Room Name</Text>
 
         <TextInput
-          placeholder={this.state.title}
+          placeholder={this.state.name}
           style={styles.formBox}
           underlineColorAndroid = {'transparent'}
           placeholderTextColor = "#000000"
@@ -37,8 +38,8 @@ export default class RoomSettings extends Component {
           keyboardType="default"
           autoCapitalize='none'
           autoCorrect={false}
-          value={this.state.title}
-          onChange ={event => this.setState({title:event.nativeEvent.text})}
+          value={this.state.name}
+          onChange ={event => this.setState({name:event.nativeEvent.text})}
           underlineColorAndroid = "transparent"
         />
 
@@ -75,8 +76,35 @@ export default class RoomSettings extends Component {
           onChange ={event => this.setState({textColor:event.nativeEvent.text})}
           underlineColorAndroid = "transparent"
         />
+
+        <TouchableOpacity
+          style={styles.ButtonContainer}
+          activeOpacity = { .8 }
+          onPress={this.submitChange}>
+            <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+
+
+        <FlatList>
+          keyExtractor={(item) => item.name}
+          data={this.state.members}
+          renderItem={this.renderMember}
+        </FlatList>
       </View>
+
     )
+  }
+  renderMember = ({ item }) => {
+    return (
+      <TouchableHighlight>
+
+        <View style={styles.list_item}>
+          <Text style={styles.list_item_text}>{item.toString()}</Text>
+          <Text>Hi</Text>
+        </View>
+
+        </TouchableHighlight>
+    );
   }
 
   loadSettings = async () => {
@@ -85,8 +113,9 @@ export default class RoomSettings extends Component {
     if(result != null){
       console.log("not null");
       var parsed = JSON.parse(result);
-      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor});
+      this.setState({name: parsed.name, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor, members: parsed.members});
     }
+    
     else{
 
     }
@@ -95,16 +124,10 @@ export default class RoomSettings extends Component {
   submitChange = async () => {
     var rooms = await AsyncStorage.getItem("rooms");
     console.log("load rooms from local storage")
-    // console.log(rooms);
 
     if(rooms != null){
 
       var parsed = await JSON.parse(rooms);
-      // console.log(parsed);
-      // console.log("parsed");
-      // console.log(this.state.id)
-
-
       var idx = -1
       for (let i = 0; i < parsed.length; i++){
         if (parsed[i].id == this.state.id){
@@ -113,30 +136,23 @@ export default class RoomSettings extends Component {
         }
       }
 
-      // console.log(idx)
       if(idx != -1){
         var room = parsed[idx]
-        // console.log(room)
-        // console.log(this.state.title)
-        room.name = this.state.title;
-        // console.log(room.name)
+        room.name = this.state.name;
         parsed[idx] = room;
-        // console.log(parsed[idx]);
-        // console.log(JSON.stringify(parsed))
 
         AsyncStorage.setItem("rooms", JSON.stringify(parsed));
       }
       else{
-        console.log("not found")
+        console.log("ERROR: room not found")
       }
     }
 
     else{
-      console.log("nothing in this else");
+      console.log("ERROR: rooms null");
     }
 
     console.log("rooms updated");
-
     AsyncStorage.setItem(this.state.id+"settings", JSON.stringify(this.state))
   }
 
