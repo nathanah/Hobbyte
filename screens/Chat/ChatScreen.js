@@ -27,9 +27,9 @@ async function createNewChatMessage(messages, room, username) {
   const message_ = new Payload(
                               actionType=ActionType.TEXT_MESSAGE,
                               roomId=this.id,
-                              roomName=this.title,
+                              roomName=this.name,
                               roomMembers=['bpb', 'din','dsin'],
-                              from =this.username, 
+                              from =this.username,
                               joiningMember=null,
                               leavingMember=null,
                               textContent=message[0].text,
@@ -83,7 +83,7 @@ function displayOneMessage(fullPackage, incomingMessageItem, currentObj){
   // console.log(currentObj.state.id)
   // AsyncStorage.setItem(currentObj.state.id, JSON.stringify(GiftedChat.append(currentObj.state.messages, [addMessage])));
 
-  //todo call delete mutation 
+  //todo call delete mutation
   // var messageID = fullPackage.id;
   // const messageID = {
   //   filter: {id: {eq: fullPackage.id}}
@@ -109,7 +109,7 @@ function displayIncomingMessages(messagesFromQueue, currentObj){
 async function getNewMessages(currentObj, roomId){
   // query messages in DynamoDB queue
   // need to update new query with correct filter of to field
-  
+
   const roomFilter = {
     filter: {roomId: {contains: roomId}}
   };
@@ -143,8 +143,8 @@ class ChatScreen extends React.Component {
       typingText: null,
       isTyping: false,
       appIsReady: false,
-      
-      title: this.props.navigation.getParam('name'),
+
+      name: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
       username: "temp",
 
@@ -223,7 +223,7 @@ class ChatScreen extends React.Component {
     }));
     console.log(this.state.id)
     AsyncStorage.setItem(this.state.id, JSON.stringify(GiftedChat.append(this.state.messages, messages)));
- 
+
   }
 
   loadUsername = async () => {
@@ -231,7 +231,7 @@ class ChatScreen extends React.Component {
     this.setState({"username": username})
     console.log("user: "+this.state.username)
     this.subscription = API.graphql(
-      graphqlOperation(OnCreateMessageByRecipient, {to: this.state.username}) 
+      graphqlOperation(OnCreateMessageByRecipient, {to: this.state.username})
       ).subscribe({
       error: err => console.log("______________ERROR__________", err),
       next: event => {
@@ -280,9 +280,9 @@ class ChatScreen extends React.Component {
     if(result != null){
       console.log("not null");
       var parsed = JSON.parse(result)
-      console.log(parsed.title)
-      this.setState({title: parsed.title, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor})
-      this.props.navigation.state.params.name = this.state.title;
+      console.log(parsed.name)
+      this.setState({name: parsed.name, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor})
+      this.props.navigation.state.params.name = this.state.name;
 
     }
     else{
@@ -326,7 +326,7 @@ class ChatScreen extends React.Component {
     var incomingPackage = messageObject.onCreateMessageByRecipient;
     var parsedPayload = JSON.parse(incomingPackage.payload);
 
-    
+
 
       switch(parsedPayload.actionType){
         //Incoming text message
