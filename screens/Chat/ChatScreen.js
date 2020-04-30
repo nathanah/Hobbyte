@@ -36,7 +36,7 @@ async function sendMessage(payload) {
     console.log("other users: " + roomMembers[i]);
     const package_ = {
       to: roomMembers[i],
-      from: payload.sender,
+      from: sender,
       payload: payloadStr,
     };
     console.log("package: " + JSON.stringify(package_));
@@ -83,6 +83,7 @@ function createNewChatMessage(room, messages /*must be this.state*/) {
 function displayOneMessage(messageObj, payload, room){
   // displays one message at a time on gifted chat and stores in AsyncStorage
   let from = payload.sender;
+  console.log("From:   " + messageObj.from);
   var addMessage = {
     _id: messageObj.id,
     text: payload.textContent,

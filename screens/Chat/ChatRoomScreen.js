@@ -64,8 +64,8 @@ async function retrieveRooms(currentRooms){
   return roomItems;
 }
 
-async function storeIncomingMessage(messageObj, payload, room){
-  var roomObj = await AsyncStorage.getItem(payload.roomId);
+async function storeIncomingMessage(messageObj, payload, room, roomObj){
+ 
   var chatHistory = JSON.parse(roomObj); 
   console.log("Chat History: " + JSON.stringify(chatHistory));
   var message = {
@@ -78,11 +78,14 @@ async function storeIncomingMessage(messageObj, payload, room){
 
   } 
 
-  chatHistory.push(message);
-  chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
-  chatHistory = JSON.stringify(chatHistory); 
-  await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
-
+  if (chatHistory != null){
+    chatHistory.push(message);
+    chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
+    chatHistory = JSON.stringify(chatHistory); 
+    await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
+  
+  }
+ 
 }
 
 /*=====================================================*/
@@ -130,8 +133,8 @@ export default class ChatRoom extends Component {
 
           var messageId = event.value.data.onCreateMessageByRecipient.id;
           // turn on after querying works
-          // let recpt = deleteMessageAfterRead(messageId)
-          // console.log("delete: ", recpt)
+          let recpt = deleteMessageAfterRead(messageId)
+          console.log("delete: ", recpt)
           const newMessage = JSON.stringify(event.value.data, null, 2);
           console.log("New Message: " + newMessage);
           this.onReceive(event.value.data);
@@ -298,7 +301,7 @@ export default class ChatRoom extends Component {
 // Return Functions  //
 //////////////////////////
   
-  onReceive = (messageObject) => {
+  onReceive = async(messageObject) => {
     try{
       //Decrypt
       console.log("TODO: Implement decrypt");
@@ -309,13 +312,13 @@ export default class ChatRoom extends Component {
     var payload = messageObj.payload;
     
     payload = JSON.parse(payload);
-     
+    var roomObj = await AsyncStorage.getItem(payload.roomId);
+    
       console.log("action type:  " + payload.actionType);
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
-          alert("Text message arrived"); 
-          storeIncomingMessage(messageObj, payload, this); 
+          storeIncomingMessage(messageObj, payload, this, roomObj); 
           break;
         }
         //name change
