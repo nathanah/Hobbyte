@@ -5,6 +5,8 @@ import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import { EThree } from '@virgilsecurity/e3kit-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import io from "socket.io-client";
+
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
@@ -100,7 +102,10 @@ export default class PhoneNumberVerification extends React.Component {
         .then(() => {
           console.log('successful confirm sign in!');
           AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-          const eThree = await EThree.initialize(tokenCallback, { AsyncStorage });
+          this.socket = io("https:/192.168.0.20:3000")
+          while(socket.connected){
+            const eThree = await EThree.initialize(tokenCallback, { AsyncStorage });
+          }     
           await eThree.register();
           this.props.navigation.navigate('Main' );
         })
