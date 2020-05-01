@@ -83,8 +83,8 @@ async function storeIncomingMessage(messageObj, payload, room, roomObj){
     chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
     chatHistory = JSON.stringify(chatHistory);
     await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
-    //Turn on after querying works
-    //API.graphql(graphqlOperation(deleteMessage, { input: { id: messageObj.id }}))
+    //delete message from db after queried
+    API.graphql(graphqlOperation(deleteMessage, { input: { id: messageObj.id }}));
   }
 
 }
@@ -151,7 +151,7 @@ export default class ChatRoom extends Component {
 
     checkForNewMessages = async() => {
       console.log("Querying for offline messages to: " + this.state.username);
-      const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, {to: this.state.username} ));
+      const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, {filter: {to:{eq: this.state.username}}} ));
       console.log("Queried messages: " + JSON.stringify(messagesFromQueue));
       var numberOfMessages = messagesFromQueue.data.listMessages.items.length;
 
