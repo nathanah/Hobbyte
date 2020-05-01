@@ -31,23 +31,25 @@ async function sendMessage(payload) {
   //Encrypt payload here
 
   let payloadStr = JSON.stringify(payload);
-  
-  for (var i = 0; i < roomMembers.length -1; i++){
-    console.log("other users: " + roomMembers[i]);
-    const package_ = {
-      to: roomMembers[i],
-      from: sender,
-      payload: payloadStr,
-    };
-    console.log("package: " + JSON.stringify(package_));
-    const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
-          console.log("AWS Success - Create Message")
-        ).catch(
-          (error) => {
-            console.log("Error_____________________\n" ,error)
-          }
-        );   
-    console.log(resp);
+
+  for (var i = 0; i < roomMembers.length ; i++){
+    // if(roomMembers[i] != this.state.username){
+      console.log("other users: " + roomMembers[i]);
+      const package_ = {
+        to: roomMembers[i],
+        from: sender,
+        payload: payloadStr,
+      };
+      console.log("package: " + JSON.stringify(package_));
+      const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
+            console.log("AWS Success - Create Message")
+          ).catch(
+            (error) => {
+              console.log("Error_____________________\n" ,error)
+            }
+          );
+      console.log(resp);
+    // }
   }
 
 }
@@ -62,13 +64,13 @@ async function getAuthObject() {
 
 function createNewChatMessage(room, messages /*must be this.state*/) {
   const messageText = messages[0].text; // messages is latest message
-  const date = new Date(); 
+  const date = new Date();
   const payload = new Payload(
                       actionType=ActionType.TEXT_MESSAGE,
                       roomId=room.id,
-                      roomName=room.title,
+                      roomName=room.name,
                       roomMembers=room.members,
-                      from =room.username, 
+                      from =room.username,
                       created = date,
                       joiningMember=null,
                       leavingMember=null,
@@ -76,7 +78,7 @@ function createNewChatMessage(room, messages /*must be this.state*/) {
                       newRoomName=null
                       ).get()
   console.log("in createNewChatMessage: ", payload );
-  console.log("created payload"); 
+  console.log("created payload");
   sendMessage(payload);
 }
 
@@ -97,7 +99,7 @@ function displayOneMessage(messageObj, payload, room){
   room.setState(previousState => ({
     messages: GiftedChat.append(previousState.messages, [addMessage]),
   }));
-  
+
   // todo this is not working, printing previous and duplicate messages
   // console.log(currentObj.state.id)
   // AsyncStorage.setItem(room.state.id, JSON.stringify(GiftedChat.append(room.state.messages, [addMessage])));
@@ -144,9 +146,9 @@ async function getNewMessages(currentObj, roomId){
 }
 
 let parsMembersString = (membersString) => {
-  console.log("membersString: ",JSON.parse(membersString))
-  return JSON.parse(membersString)
-} 
+  console.log("membersString: ",membersString)
+  return membersString
+}
 
 
 /*=====================================================*/
@@ -214,8 +216,8 @@ class ChatScreen extends React.Component {
 
 
   componentWillUnmount() {
-      this._isMounted = false; 
-      this.subscription.unsubscribe(); 
+      this._isMounted = false;
+      this.subscription.unsubscribe();
   }
 
   onSend(messages = []) {
@@ -340,7 +342,7 @@ class ChatScreen extends React.Component {
     //change room name in room settings
     var settings = JSON.parse(await AsyncStorage.getItem(id+"settings"))
     if(settings != null){
-      settings.title = newName;
+      settings.name = newName;
       AsyncStorage.setItem(id+"settings", JSON.stringify(settings))
       console.log("rooms updated");
     }
@@ -382,13 +384,13 @@ class ChatScreen extends React.Component {
 
     // parse incomingMessageItem payload and save into new variable
     var messageObj = messageObject.onCreateMessageByRecipient;
-    console.log("message Obj: " + messageObj); 
-    // console.log("message Obj after parse: " + JSON.stringify(messageObj)); 
+    console.log("message Obj: " + JSON.stringify(messageObj));
+    // console.log("message Obj after parse: " + JSON.stringify(messageObj));
     var payload = messageObj.payload;
-    
+
     payload = JSON.parse(payload);
-     
-    console.log("payload " + payload);
+
+    console.log("payload: " + JSON.stringify(payload));
       console.log("action type" + payload.actionType);
       switch(payload.actionType){
         //Incoming text message
