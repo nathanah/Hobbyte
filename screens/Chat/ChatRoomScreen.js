@@ -64,8 +64,8 @@ async function retrieveRooms(currentRooms){
   return roomItems;
 }
 
-async function storeIncomingMessage(messageObj, payload, room, roomObj){
- 
+async function storeIncomingMessage(messageObj, payload, room){
+  var roomObj = await AsyncStorage.getItem(payload.roomId);
   var chatHistory = JSON.parse(roomObj); 
   console.log("Chat History: " + JSON.stringify(chatHistory));
   var message = {
@@ -77,13 +77,23 @@ async function storeIncomingMessage(messageObj, payload, room, roomObj){
     createdAt: payload.created 
 
   } 
-
-  if (chatHistory != null){
+  
+  if (message != null ){
     chatHistory.push(message);
     chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
     chatHistory = JSON.stringify(chatHistory); 
+    var rooms = room.rooms; 
+    for (var i = 0; i < room.state.rooms.length; i++){
+        var roomItem = room.state.rooms[i];
+      if (roomItem.id == payload.roomId){
+        room.state.rooms[i].unreadCount++; 
+        await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
+      }
+    }
+   
+  } else  {
+    chatHistory = [message]; 
     await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
-  
   }
  
 }
@@ -174,7 +184,7 @@ export default class ChatRoom extends Component {
       <TouchableHighlight>
 
         <View style={styles.list_item}>
-          <Text style={styles.list_item_text}>{item.name}</Text>
+          <Text style={styles.list_item_text}>[{item.unreadCount}]     {item.name}</Text>
           <Button title="Enter" color="#0064e1" onPress={
             () => {
               console.log( "membersString: ", item.membersString )
@@ -312,13 +322,14 @@ export default class ChatRoom extends Component {
     var payload = messageObj.payload;
     
     payload = JSON.parse(payload);
-    var roomObj = await AsyncStorage.getItem(payload.roomId);
+   
     
       console.log("action type:  " + payload.actionType);
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
-          storeIncomingMessage(messageObj, payload, this, roomObj); 
+          storeIncomingMessage(messageObj, payload, this); 
+          this.render(); // not sure if this is working to refresh unread count
           break;
         }
         //name change

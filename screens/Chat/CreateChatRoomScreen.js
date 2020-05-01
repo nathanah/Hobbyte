@@ -107,7 +107,7 @@ export default class CreateChatRoomScreen extends React.Component {
     var id = Date.now().toString();
 
     if(await this.roomDoesNotExist(newRooms,this.membersString)){
-      var newRoom = {"id": id, "name": this.state.roomName, "members": this.membersString};
+      var newRoom = {"id": id, "name": this.state.roomName, "members": this.membersString, "unreadCount": 0};
       console.log(newRoom)
       newRooms.push(newRoom);
       await this.storeRooms(this.state.roomsKey, JSON.stringify(newRooms));
