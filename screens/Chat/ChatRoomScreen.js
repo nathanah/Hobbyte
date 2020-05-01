@@ -83,7 +83,8 @@ async function storeIncomingMessage(messageObj, payload, room, roomObj){
     chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
     chatHistory = JSON.stringify(chatHistory);
     await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
-
+    //Turn on after querying works
+    //API.graphql(graphqlOperation(deleteMessage, { input: { id: messageObj.id }}))
   }
 
 }

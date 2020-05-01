@@ -147,7 +147,7 @@ async function getNewMessages(currentObj, roomId){
 
 let parsMembersString = (membersString) => {
   console.log("membersString: ",membersString)
-  return membersString
+  return JSON.parse(membersString);
 }
 
 
