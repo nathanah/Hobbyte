@@ -33,7 +33,7 @@ async function sendMessage(payload) {
   let payloadStr = JSON.stringify(payload);
 
   for (var i = 0; i < roomMembers.length ; i++){
-    // if(roomMembers[i] != this.state.username){
+    if(roomMembers[i] != sender){
       console.log("other users: " + roomMembers[i]);
       const package_ = {
         to: roomMembers[i],
@@ -49,7 +49,7 @@ async function sendMessage(payload) {
             }
           );
       console.log(resp);
-    // }
+    }
   }
 
 }
