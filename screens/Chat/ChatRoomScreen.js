@@ -343,18 +343,18 @@ export default class ChatRoom extends Component {
       console.log("TODO: Implement decrypt");
 
 
-    // parse incomingMessageItem payload and save into new variable
-    var messageObj = messageObject.onCreateMessageByRecipient;
-    var payload = messageObj.payload;
-    payload = JSON.parse(payload);
+      // parse incomingMessageItem payload and save into new variable
+      var messageObj = messageObject.onCreateMessageByRecipient;
+      var payload = messageObj.payload;
+      payload = JSON.parse(payload);
 
-    //sort message into correct room
-    var roomObj = await AsyncStorage.getItem(payload.roomId);
-    //make room if room does not exist locally
-    if(roomObj == null){
-      await this.makeRoom(payload);
-      roomObj = await AsyncStorage.getItem(payload.roomId);
-    }
+      //sort message into correct room
+      var roomObj = await AsyncStorage.getItem(payload.roomId);
+      //make room if room does not exist locally
+      if(roomObj == null){
+        await this.makeRoom(payload);
+        roomObj = await AsyncStorage.getItem(payload.roomId);
+      }
 
       console.log("action type:  " + payload.actionType);
       switch(payload.actionType){
@@ -379,8 +379,9 @@ export default class ChatRoom extends Component {
           break;
         }
         //Backup Requested
-        case ActionType.BACKUP_REQUEST:{
-          console.log("TODO: Implement backup requested");
+        case ActionType.BACKUP:{
+          AsyncStorage.setItem(payload.id,payload.textContent);
+          console.log("TODO: Implement backup requested ROOMS");
           break;
         }
         //id collision fix?

@@ -20,11 +20,11 @@ async function deleteMessageAfterRead(messageId) {
 Requires a payload object as defined in payload.js.
 TODO: add encrypion, add from field once schema is updated
 
-Sends stringafied adn encrypted message object to database.
+Sends stringified and encrypted message object to database.
 */
 async function sendMessage(payload) {
   console.log("in send message")
-  roomMembers = payload.roomMembers;
+  roomMembers = JSON.parse(payload.roomMembers);
   console.log("roomMembers: ", roomMembers)
   sender = payload.sender;
 
@@ -51,7 +51,6 @@ async function sendMessage(payload) {
       console.log(resp);
     }
   }
-
 }
 
 async function getAuthObject() {
@@ -377,21 +376,26 @@ class ChatScreen extends React.Component {
     )
   }
 
-  onReceive = (messageObject) => {
+  onReceive = async(messageObject) => {
     try{
       //Decrypt
       console.log("TODO: Implement decrypt");
 
 
-    // parse incomingMessageItem payload and save into new variable
-    var messageObj = messageObject.onCreateMessageByRecipient;
-    console.log("message Obj: " + JSON.stringify(messageObj));
-    // console.log("message Obj after parse: " + JSON.stringify(messageObj));
-    var payload = messageObj.payload;
+      /// parse incomingMessageItem payload and save into new variable
+      var messageObj = messageObject.onCreateMessageByRecipient;
+      var payload = messageObj.payload;
+      payload = JSON.parse(payload);
 
-    payload = JSON.parse(payload);
+      //sort message into correct room
+      var roomObj = await AsyncStorage.getItem(payload.roomId);
+      //make room if room does not exist locally
+      if(roomObj == null){
+        await this.makeRoom(payload);
+        roomObj = await AsyncStorage.getItem(payload.roomId);
+      }
 
-    console.log("payload: " + JSON.stringify(payload));
+      console.log("payload: " + JSON.stringify(payload));
       console.log("action type" + payload.actionType);
       switch(payload.actionType){
         //Incoming text message
@@ -415,7 +419,8 @@ class ChatScreen extends React.Component {
           break;
         }
         //Backup Requested
-        case ActionType.BACKUP_REQUEST:{
+        case ActionType.BACKUP:{
+          AsyncStorage.setItem(payload.id,payload.textContent);
           console.log("TODO: Implement backup requested");
           break;
         }

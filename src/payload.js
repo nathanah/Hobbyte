@@ -3,18 +3,18 @@ export const ActionType = {
     ROOM_NAME_CHANGE: 2,
     MEMBER_LEFT: 3,
     MEMBER_JOINED: 4,
-    BACKUP_REQUEST: 5,
+    BACKUP: 5,
     MAX:5
-    
+
 }
 
 export class Payload{
-    constructor(actionType, 
-                roomId, 
-                roomName, 
-                roomMembers, 
+    constructor(actionType,
+                roomId,
+                roomName,
+                roomMembers,
                 sender,
-                created, 
+                created,
                 joiningMember=null,
                 leavingMember=null,
                 textContent=null,
@@ -57,7 +57,7 @@ export class Payload{
                 }
                 return true;
             }
-            case ActionType.BACKUP_REQUEST: {
+            case ActionType.BACKUP: {
                 return true;
             }
             default: {
@@ -65,7 +65,7 @@ export class Payload{
             }
         }
     }
-    
+
     get(){
         console.log("validatepayload: ", this.validPayload())
         if(this.validPayload()) {
@@ -91,7 +91,7 @@ export class Payload{
 //                        roomId=12234,
 //                         roomName="fun room",
 //                          roomMembers=['bpb', 'din','dsin'],
-//                           sender ='john', 
+//                           sender ='john',
 //                            joiningMember=null,
 //                             leavingMember=null,
 //                             textContent="This is some text",
@@ -100,7 +100,7 @@ export class Payload{
 //                         roomId=12234,
 //                         roomName="fun room",
 //                         roomMembers=['bpb', 'din','dsin'],
-//                         sender ='john', 
+//                         sender ='john',
 //                         joiningMember=null,
 //                         leavingMember=null,
 //                         textContent=null,
@@ -114,7 +114,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -123,7 +123,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -138,7 +138,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember=null,
 //          leavingMember="Sam",
 //          textContent=null,
@@ -147,7 +147,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -162,7 +162,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember="John",
 //          leavingMember="Sam",
 //          textContent=null,
@@ -171,7 +171,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember=null,
 //          leavingMember=null,
 //          textContent=null,
@@ -187,7 +187,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember="John",
 //          leavingMember="Sam",
 //          textContent=null,
@@ -199,7 +199,7 @@ export class Payload{
 //     roomId=12234,
 //      roomName="fun room",
 //       roomMembers=['bpb', 'din','dsin'],
-//        sender ='john', 
+//        sender ='john',
 //         joiningMember="John",
 //          leavingMember="Sam",
 //          textContent=null,

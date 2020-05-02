@@ -111,7 +111,7 @@ export default class CreateChatRoomScreen extends React.Component {
       console.log(newRoom)
       newRooms.unshift(newRoom);
       await this.storeRooms(this.state.roomsKey, JSON.stringify(newRooms));
-      await AsyncStorage.setItem(id+"settings", JSON.stringify({"name": this.state.roomName, "members": this.membersString}))
+      await AsyncStorage.setItem(id+"settings", JSON.stringify({"name": this.state.roomName, "members": this.members}))
       // navigate to room
       this.props.navigation.navigate('ChatPage',{ "name": this.state.roomName,
                                                   "id": id,
@@ -146,11 +146,11 @@ export default class CreateChatRoomScreen extends React.Component {
     roomList.forEach( room => {
 
       // check for existing room with members
-      console.log("other room with members:" + room.id)
+      console.log("other room with members:" + room.members)
       console.log("vs")
       console.log("new room: " + members)
 
-      if(room.id == members){ // room found
+      if(room.members == members){ // room found
         console.log(members + " exists already");
         this.props.navigation.navigate('ChatPage',{ "name": room.name, "id": this.membersString  })
         return false;
