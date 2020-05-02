@@ -87,6 +87,38 @@ async function storeIncomingMessage(messageObj, payload, room, roomObj){
 
 }
 
+async function settingsChange(payload){
+  AsyncStorage.setItem(payload.roomId+"settings",payload.textContent);
+
+  var rooms = await AsyncStorage.getItem("rooms");
+
+  if(rooms != null){
+    var parsed = await JSON.parse(rooms);
+    var idx = -1
+    for (let i = 0; i < parsed.length; i++){
+      if (parsed[i].id == payload.roomId){
+        idx = i;
+        break;
+      }
+    }
+
+    if(idx != -1){
+      var newRoom = parsed[idx]
+      newRoom.name = JSON.parse(payload.textContent).name;
+      parsed[idx] = newoom;
+
+      AsyncStorage.setItem("rooms", JSON.stringify(parsed));
+    }
+    else{
+      console.log("ERROR: room not found");
+    }
+  }
+  else{
+    console.log("ERROR: rooms null");
+  }
+
+}
+
 /*=====================================================*/
 // Chat Room List Component
 /*=====================================================*/
@@ -180,7 +212,7 @@ export default class ChatRoom extends Component {
           <Text style={styles.list_item_text}>{item.name}</Text>
           <Button title="Enter" color="#0064e1" onPress={
             () => {
-              console.log( "membersString: ", item.membersString )
+              // console.log( "membersString: ", item.membersString )
               this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(),
                                                               "id": item.id,
                                                               "membersString": item.members  }
@@ -355,31 +387,23 @@ export default class ChatRoom extends Component {
       }
 
       console.log("action type:  " + payload.actionType);
+      console.log(payload);
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
           storeIncomingMessage(messageObj, payload, this, roomObj);
           break;
         }
-        //name change
-        case ActionType.ROOM_NAME_CHANGE:{
-          console.log("TODO: Implement name change");
-          break;
-        }
-        //User left room
-        case ActionType.MEMBER_LEFT:{
-          console.log("TODO: Implement user left the room");
-          break;
-        }
-        //User added to room
-        case ActionType.MEMBER_JOINED:{
-          console.log("TODO: Implement User addeed to the room");
+        //settings change
+        case ActionType.SETTINGS_CHANGE:{
+          await settingsChange(payload);
+          this.loadRooms(this.roomsKey);
+          console.log("TODO: Implement settings change");
           break;
         }
         //Backup Requested
         case ActionType.BACKUP:{
           AsyncStorage.setItem(payload.roomId,payload.textContent);
-          console.log("TODO: Implement backup requested ROOMS");
           break;
         }
         //id collision fix?

@@ -2,7 +2,7 @@ export const ActionType = {
     TEXT_MESSAGE: 1,
     SETTINGS_CHANGE: 2,
     BACKUP: 3
-    
+
 }
 
 export class Payload{
@@ -11,11 +11,7 @@ export class Payload{
                 roomName,
                 roomMembers,
                 sender,
-                created,
-                joiningMember=null,
-                leavingMember=null,
-                textContent=null,
-                newRoomName=null) {
+                created) {
 
       this.actionType = actionType;
       this.roomId = roomId;
@@ -36,10 +32,7 @@ export class Payload{
                 }
                 return true;
             }
-            case ActionType.ROOM_NAME_CHANGE: {
-                if (this.newRoomName === null){
-                    return false;
-                }
+            case ActionType.SETTINGS_CHANGE: {
                 return true;
             }
             case ActionType.MEMBER_LEFT: {

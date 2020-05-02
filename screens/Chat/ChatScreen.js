@@ -114,6 +114,38 @@ function displayOneMessage(messageObj, payload, room){
 
 }
 
+async function settingsChange(payload){
+  AsyncStorage.setItem(payload.roomId+"settings",payload.textContent);
+
+  var rooms = await AsyncStorage.getItem("rooms");
+
+  if(rooms != null){
+    var parsed = await JSON.parse(rooms);
+    var idx = -1
+    for (let i = 0; i < parsed.length; i++){
+      if (parsed[i].id == payload.roomId){
+        idx = i;
+        break;
+      }
+    }
+
+    if(idx != -1){
+      var newRoom = parsed[idx]
+      newRoom.name = JSON.parse(payload.textContent).name;
+      parsed[idx] = newoom;
+
+      AsyncStorage.setItem("rooms", JSON.stringify(parsed));
+    }
+    else{
+      console.log("ERROR: room not found");
+    }
+  }
+  else{
+    console.log("ERROR: rooms null");
+  }
+
+}
+
 function displayIncomingMessages(messagesFromQueue, currentObj){
   // Function: Takes AWS object returned from DynamoDB and adds it to Gifted Chat display
 
@@ -403,15 +435,16 @@ class ChatScreen extends React.Component {
           displayOneMessage(messageObj, payload, this);
           break;
         }
-        //name change
+        //settings change
         case ActionType.SETTINGS_CHANGE:{
+          await settingsChange(payload);
+          this.loadSettings(this.state.id);
           console.log("TODO: Implement settings change");
           break;
         }
         //Backup Requested
         case ActionType.BACKUP:{
-          AsyncStorage.setItem(payload.id,payload.textContent);
-          console.log("TODO: Implement backup requested");
+          AsyncStorage.setItem(payload.roomId,payload.textContent);
           break;
         }
         //id collision fix?

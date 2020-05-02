@@ -191,6 +191,7 @@ export default class RoomSettings extends Component {
 
     console.log("rooms updated");
     AsyncStorage.setItem(this.state.id+"settings", JSON.stringify(this.state))
+    this.sendSettingsChange(this.state);
   }
 
   ///////////////
@@ -229,6 +230,27 @@ export default class RoomSettings extends Component {
                         joiningMember=null,
                         leavingMember=null,
                         textContent= backup,
+                        newRoomName=null
+                        ).get()
+    sendMessage(payload);
+  }
+
+  sendSettingsChange = async (room) => {
+    console.log("Sending Settings Change");
+    console.log("To: " + room.members)
+    var settings = await AsyncStorage.getItem(this.state.id+"settings");
+    const date = new Date();
+    var user = await getAuthObject();
+    const payload = new Payload(
+                        actionType=ActionType.SETTINGS_CHANGE,
+                        roomId=room.id,
+                        roomName=room.name,
+                        roomMembers=room.members,
+                        from = user,
+                        created = date,
+                        joiningMember=null,
+                        leavingMember=null,
+                        textContent= settings,
                         newRoomName=null
                         ).get()
     sendMessage(payload);
