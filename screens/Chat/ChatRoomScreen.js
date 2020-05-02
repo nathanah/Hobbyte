@@ -88,8 +88,6 @@ async function storeIncomingMessage(messageObj, payload, room){
       if (roomItem.id == payload.roomId){
         rooms[i].unreadCount++; 
         await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store incoming message success")}).catch(fail => {console.log("fail")});
-        // roomItem = JSON.stringify(roomItem); 
-        // room.setState({"room": room.state.rooms} ); 
         await AsyncStorage.setItem("rooms", JSON.stringify(rooms));
         return; 
         
@@ -192,7 +190,6 @@ export default class ChatRoom extends Component {
 
 
   renderRoom = ({ item }) => {
-    console.log("item... " + item.unreadCount); 
     return (
       <TouchableHighlight>
 
@@ -229,7 +226,6 @@ export default class ChatRoom extends Component {
 
 
   loadRooms = async (key) => {
-    console.log("in load rooms"); 
     var result = await AsyncStorage.getItem(key);
     if(result != null && result.length){
       this.setState({rooms: JSON.parse(result)});
@@ -247,7 +243,7 @@ export default class ChatRoom extends Component {
   };
 
   makeRoom = async (payload) => {
-    console.log("Makeing New Room");
+    console.log("Making New Room");
     console.log(payload);
     var newRooms = await AsyncStorage.getItem(this.roomsKey);
     newRooms = JSON.parse(newRooms);
