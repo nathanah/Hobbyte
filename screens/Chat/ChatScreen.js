@@ -280,7 +280,18 @@ class ChatScreen extends React.Component {
       console.log(err);
     }
 
-
+    var rooms = await AsyncStorage.getItem("rooms");
+    console.log("rooms... " + JSON.stringify(rooms));
+    rooms = JSON.parse(rooms); 
+    for (var i = 0; i < rooms.length; i++){
+      var roomItem = rooms[i];
+      if (roomItem.id == key){
+        rooms[i].unreadCount = 0; 
+        console.log("about to zero out unread"); 
+        console.log("unread count " + rooms[i].unreadCount + rooms[i].name); 
+        await AsyncStorage.setItem("rooms", JSON.stringify(rooms));
+    }
+  }
       // map to gifted chat and display
       // save to local storage
   }

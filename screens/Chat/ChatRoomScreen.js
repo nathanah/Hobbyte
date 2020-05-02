@@ -67,7 +67,7 @@ async function retrieveRooms(currentRooms){
 async function storeIncomingMessage(messageObj, payload, room){
   var roomObj = await AsyncStorage.getItem(payload.roomId);
   var chatHistory = JSON.parse(roomObj); 
-  console.log("Chat History: " + JSON.stringify(chatHistory));
+  console.log("Chat History: " + chatHistory);
   var message = {
     _id: messageObj.id,
     text: payload.textContent,
@@ -82,19 +82,21 @@ async function storeIncomingMessage(messageObj, payload, room){
     chatHistory.push(message);
     chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
     chatHistory = JSON.stringify(chatHistory); 
-    var rooms = room.rooms; 
-    for (var i = 0; i < room.state.rooms.length; i++){
-        var roomItem = room.state.rooms[i];
+    var rooms = room.state.rooms; 
+    for (var i = 0; i < rooms.length; i++){
+        var roomItem = rooms[i];
       if (roomItem.id == payload.roomId){
-        room.state.rooms[i].unreadCount++; 
-        await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
+        rooms[i].unreadCount++; 
+        await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store incoming message success")}).catch(fail => {console.log("fail")});
+        // roomItem = JSON.stringify(roomItem); 
+        // room.setState({"room": room.state.rooms} ); 
+        await AsyncStorage.setItem("rooms", JSON.stringify(rooms));
+        return; 
+        
       }
     }
    
-  } else  {
-    chatHistory = [message]; 
-    await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
-  }
+  } 
 
 }
 
@@ -162,6 +164,13 @@ export default class ChatRoom extends Component {
       console.log("Querying for offline messages to: " + this.state.username);
       const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, {filter: {to:{eq: this.state.username}}} ));
       console.log("Queried messages: " + JSON.stringify(messagesFromQueue));
+      const nextToken = messagesFromQueue.data.listMessages.nextToken; 
+      console.log("Next Token:" + nextToken); 
+      while (nextToken != null){
+        const moreMessages = await API.graphql(graphqlOperation(listMessages), nextToken );
+        console.log("More messages: " + moreMessages); 
+        messagesFromQueue.concat(moreMessages); 
+      }
       var numberOfMessages = messagesFromQueue.data.listMessages.items.length;
 
 
@@ -183,12 +192,12 @@ export default class ChatRoom extends Component {
 
 
   renderRoom = ({ item }) => {
-
+    console.log("item... " + item.unreadCount); 
     return (
       <TouchableHighlight>
 
         <View style={styles.list_item}>
-          <Text style={styles.list_item_text}>[{item.unreadCount}]     {item.name}</Text>
+          <Text style={styles.list_item_text}>{item.unreadCount}     {item.name}</Text>
           <Button title="Enter" color="#0064e1" onPress={
             () => {
               console.log( "membersString: ", item.membersString )
@@ -220,6 +229,7 @@ export default class ChatRoom extends Component {
 
 
   loadRooms = async (key) => {
+    console.log("in load rooms"); 
     var result = await AsyncStorage.getItem(key);
     if(result != null && result.length){
       this.setState({rooms: JSON.parse(result)});
@@ -369,7 +379,8 @@ export default class ChatRoom extends Component {
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
-          storeIncomingMessage(messageObj, payload, this, roomObj);
+          await storeIncomingMessage(messageObj, payload, this); 
+          this.loadRooms("rooms"); 
           break;
         }
         //name change
