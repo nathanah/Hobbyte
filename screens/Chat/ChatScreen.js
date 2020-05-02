@@ -404,18 +404,8 @@ class ChatScreen extends React.Component {
           break;
         }
         //name change
-        case ActionType.ROOM_NAME_CHANGE:{
-          console.log("TODO: Implement name change");
-          break;
-        }
-        //User left room
-        case ActionType.MEMBER_LEFT:{
-          console.log("TODO: Implement user left the room");
-          break;
-        }
-        //User added to room
-        case ActionType.MEMBER_JOINED:{
-          console.log("TODO: Implement User addeed to the room");
+        case ActionType.SETTINGS_CHANGE:{
+          console.log("TODO: Implement settings change");
           break;
         }
         //Backup Requested

@@ -9,7 +9,7 @@ import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 //Should make into global function and merge with copy in ChatScreen
 async function sendMessage(payload) {
   console.log("in send message")
-  roomMembers = JSON.parse(payload.roomMembers);
+  roomMembers = payload.roomMembers;
   console.log("roomMembers: ", roomMembers)
   sender = payload.sender;
 

@@ -83,8 +83,6 @@ async function storeIncomingMessage(messageObj, payload, room, roomObj){
     chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
     chatHistory = JSON.stringify(chatHistory);
     await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
-    //delete message from db after queried
-    API.graphql(graphqlOperation(deleteMessage, { input: { id: messageObj.id }}));
   }
 
 }
@@ -380,7 +378,7 @@ export default class ChatRoom extends Component {
         }
         //Backup Requested
         case ActionType.BACKUP:{
-          AsyncStorage.setItem(payload.id,payload.textContent);
+          AsyncStorage.setItem(payload.roomId,payload.textContent);
           console.log("TODO: Implement backup requested ROOMS");
           break;
         }
@@ -393,6 +391,9 @@ export default class ChatRoom extends Component {
         default:
           console.log("Message id not recognized");
       }
+
+      //delete message from db after queried
+      deleteMessageAfterRead(messageObj.id);
     }
     catch(err){
       console.log("message receive error: " + err)

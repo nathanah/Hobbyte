@@ -1,11 +1,8 @@
 export const ActionType = {
     TEXT_MESSAGE: 1,
-    ROOM_NAME_CHANGE: 2,
-    MEMBER_LEFT: 3,
-    MEMBER_JOINED: 4,
-    BACKUP: 5,
-    MAX:5
-
+    SETTINGS_CHANGE: 2,
+    BACKUP: 3
+    
 }
 
 export class Payload{
