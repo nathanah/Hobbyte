@@ -111,7 +111,7 @@ export default class CreateChatRoomScreen extends React.Component {
       console.log(newRoom)
       newRooms.unshift(newRoom);
       await this.storeRooms(this.state.roomsKey, JSON.stringify(newRooms));
-      await AsyncStorage.setItem(this.membersString+"settings", JSON.stringify({"name": this.state.roomName, "members": this.membersString}))
+      await AsyncStorage.setItem(id+"settings", JSON.stringify({"name": this.state.roomName, "members": this.membersString}))
       // navigate to room
       this.props.navigation.navigate('ChatPage',{ "name": this.state.roomName,
                                                   "id": id,
