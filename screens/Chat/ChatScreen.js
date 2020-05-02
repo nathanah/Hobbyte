@@ -209,7 +209,8 @@ class ChatScreen extends React.Component {
     this.loadMessages(this.state.id);
     this.loadSettings(this.state.id);
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-    this.loadSettings(this.state.id);
+      this.loadSettings(this.state.id);
+      this.loadMessages(this.state.id);
     });
     this.loadUsername();
   }
