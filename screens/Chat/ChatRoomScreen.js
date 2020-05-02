@@ -22,7 +22,7 @@ API.configure(awsconfig);
 
 
 /*=====================================================*/
-// Async Functions 
+// Async Functions
 /*=====================================================*/
 async function deleteMessageAfterRead(messageId) {
   return await API.graphql(graphqlOperation(deleteMessage, { input: { id: messageId }}))
@@ -38,7 +38,7 @@ async function getAuthObject() {
 
 
 // todo add subscriber to onCreateMessage(filter)
-// todo remove this function 
+// todo remove this function
 async function retrieveRooms(currentRooms){
   const resp = await API.graphql(graphqlOperation(listRooms));
   console.log("retrieved rooms");
@@ -64,24 +64,28 @@ async function retrieveRooms(currentRooms){
   return roomItems;
 }
 
-async function storeIncomingMessage(messageObj, payload, room){
-  var roomObj = await AsyncStorage.getItem(payload.roomId);
-  var chatHistory = JSON.parse(roomObj); 
+async function storeIncomingMessage(messageObj, payload, room, roomObj){
+
+  var chatHistory = JSON.parse(roomObj);
   console.log("Chat History: " + JSON.stringify(chatHistory));
   var message = {
-    _id: messageObj.id, 
-    text: payload.textContent, 
+    _id: messageObj.id,
+    text: payload.textContent,
     user: {
       id: 2,
-    }, 
-    createdAt: payload.created 
+    },
+    createdAt: payload.created
 
-  } 
+  }
 
-  chatHistory.push(message);
-  chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
-  chatHistory = JSON.stringify(chatHistory); 
-  await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
+  if (chatHistory != null){
+    chatHistory.push(message);
+    chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
+    chatHistory = JSON.stringify(chatHistory);
+    await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
+    //delete message from db after queried
+    API.graphql(graphqlOperation(deleteMessage, { input: { id: messageObj.id }}));
+  }
 
 }
 
@@ -103,17 +107,21 @@ export default class ChatRoom extends Component {
 
   componentDidMount(){
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-    this.loadRooms(this.roomsKey); 
+      this.loadRooms(this.roomsKey);
     });
-    this.loadUsername(); 
-    this.checkForNewMessages();   
+    this.asyncMountFunctions();
   }
-  
+
+  asyncMountFunctions = async () => {
+    await this.loadUsername();
+    this.checkForNewMessages();
+  }
+
   componentWillUnmount() {
-    // this._isMounted = false; 
-    this.subscription.unsubscribe(); 
+    // this._isMounted = false;
+    this.subscription.unsubscribe();
 }
-  
+
 ////////////////////
 //Obtain Username //
 ////////////////////
@@ -130,8 +138,8 @@ export default class ChatRoom extends Component {
 
           var messageId = event.value.data.onCreateMessageByRecipient.id;
           // turn on after querying works
-          // let recpt = deleteMessageAfterRead(messageId)
-          // console.log("delete: ", recpt)
+          let recpt = deleteMessageAfterRead(messageId)
+          console.log("delete: ", recpt)
           const newMessage = JSON.stringify(event.value.data, null, 2);
           console.log("New Message: " + newMessage);
           this.onReceive(event.value.data);
@@ -140,25 +148,25 @@ export default class ChatRoom extends Component {
       });
     }
 
-    
+
     checkForNewMessages = async() => {
-      console.log("Querying for offline messages"); 
-      const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, {to: this.state.username} ));
+      console.log("Querying for offline messages to: " + this.state.username);
+      const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, {filter: {to:{eq: this.state.username}}} ));
       console.log("Queried messages: " + JSON.stringify(messagesFromQueue));
       var numberOfMessages = messagesFromQueue.data.listMessages.items.length;
-      
-      
+
+
       // cycle through new messages and send through switch pipeline
       for (var i = 0; i < numberOfMessages; i ++ ){
         var item = messagesFromQueue.data.listMessages.items[i];
-        
+
         var message = {
           "onCreateMessageByRecipient": item,
         };
-        console.log("item: "+ message); 
-        this.onReceive(message); 
-      } 
-    }; 
+        console.log("new message: "+ JSON.stringify(message));
+        await this.onReceive(message);
+      }
+    };
 
 ///////////////////
 //Sub room components//
@@ -178,7 +186,7 @@ export default class ChatRoom extends Component {
               this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(),
                                                               "id": item.id,
                                                               "membersString": item.members  }
-                                                              ) 
+                                                              )
             }
             } />
         </View>
@@ -201,7 +209,7 @@ export default class ChatRoom extends Component {
     );
   }
 
-  
+
   loadRooms = async (key) => {
     var result = await AsyncStorage.getItem(key);
     if(result != null && result.length){
@@ -218,6 +226,37 @@ export default class ChatRoom extends Component {
     console.log(stringified);
     await this.loadRooms(key);
   };
+
+  makeRoom = async (payload) => {
+    console.log("Makeing New Room");
+    console.log(payload);
+    var newRooms = await AsyncStorage.getItem(this.roomsKey);
+    newRooms = JSON.parse(newRooms);
+
+    //parse payload
+    var members = payload.roomMembers;
+    var id = payload.roomId;
+    var name = payload.roomName;
+
+
+    if(await this.roomDoesNotExist(newRooms, members)){
+      var newRoom = {"id": id, "name": name, "members": members};
+      console.log(newRoom)
+      newRooms.unshift(newRoom);
+      await this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
+      await AsyncStorage.setItem(id, "[]");
+      await AsyncStorage.setItem(this.membersString+"settings", JSON.stringify({"name": name, "members": members}));
+      this.loadRooms();
+    }
+    else{
+
+    }
+  }
+
+  //TODO: check if chat with same members exists. If so, send id update message.
+  roomDoesNotExist = async (newRooms, members) => {
+    return true;
+  }
 
   populate = async() => {
 
@@ -297,8 +336,8 @@ export default class ChatRoom extends Component {
 //////////////////////////
 // Return Functions  //
 //////////////////////////
-  
-  onReceive = (messageObject) => {
+
+  onReceive = async(messageObject) => {
     try{
       //Decrypt
       console.log("TODO: Implement decrypt");
@@ -307,15 +346,21 @@ export default class ChatRoom extends Component {
     // parse incomingMessageItem payload and save into new variable
     var messageObj = messageObject.onCreateMessageByRecipient;
     var payload = messageObj.payload;
-    
     payload = JSON.parse(payload);
-     
+
+    //sort message into correct room
+    var roomObj = await AsyncStorage.getItem(payload.roomId);
+    //make room if room does not exist locally
+    if(roomObj == null){
+      await this.makeRoom(payload);
+      roomObj = await AsyncStorage.getItem(payload.roomId);
+    }
+
       console.log("action type:  " + payload.actionType);
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
-          alert("Text message arrived"); 
-          storeIncomingMessage(messageObj, payload, this); 
+          storeIncomingMessage(messageObj, payload, this, roomObj);
           break;
         }
         //name change
