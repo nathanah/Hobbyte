@@ -20,11 +20,11 @@ async function deleteMessageAfterRead(messageId) {
 Requires a payload object as defined in payload.js.
 TODO: add encrypion, add from field once schema is updated
 
-Sends stringafied adn encrypted message object to database.
+Sends stringified and encrypted message object to database.
 */
 async function sendMessage(payload) {
   console.log("in send message")
-  roomMembers = payload.roomMembers;
+  roomMembers = JSON.parse(payload.roomMembers);
   console.log("roomMembers: ", roomMembers)
   sender = payload.sender;
 
@@ -51,7 +51,6 @@ async function sendMessage(payload) {
       console.log(resp);
     }
   }
-
 }
 
 async function getAuthObject() {
@@ -112,6 +111,38 @@ function displayOneMessage(messageObj, payload, room){
   // const deleteresp = await API.graphql(graphqlOperation(deleteMessage, messageID ));
   // console.log(messagesFromQueue);
 
+
+}
+
+async function settingsChange(payload){
+  AsyncStorage.setItem(payload.roomId+"settings",payload.textContent);
+
+  var rooms = await AsyncStorage.getItem("rooms");
+
+  if(rooms != null){
+    var parsed = await JSON.parse(rooms);
+    var idx = -1
+    for (let i = 0; i < parsed.length; i++){
+      if (parsed[i].id == payload.roomId){
+        idx = i;
+        break;
+      }
+    }
+
+    if(idx != -1){
+      var newRoom = parsed[idx]
+      newRoom.name = JSON.parse(payload.textContent).name;
+      parsed[idx] = newoom;
+
+      AsyncStorage.setItem("rooms", JSON.stringify(parsed));
+    }
+    else{
+      console.log("ERROR: room not found");
+    }
+  }
+  else{
+    console.log("ERROR: rooms null");
+  }
 
 }
 
@@ -385,21 +416,26 @@ class ChatScreen extends React.Component {
     )
   }
 
-  onReceive = (messageObject) => {
+  onReceive = async(messageObject) => {
     try{
       //Decrypt
       console.log("TODO: Implement decrypt");
 
 
-    // parse incomingMessageItem payload and save into new variable
-    var messageObj = messageObject.onCreateMessageByRecipient;
-    console.log("message Obj: " + JSON.stringify(messageObj));
-    // console.log("message Obj after parse: " + JSON.stringify(messageObj));
-    var payload = messageObj.payload;
+      /// parse incomingMessageItem payload and save into new variable
+      var messageObj = messageObject.onCreateMessageByRecipient;
+      var payload = messageObj.payload;
+      payload = JSON.parse(payload);
 
-    payload = JSON.parse(payload);
+      //sort message into correct room
+      var roomObj = await AsyncStorage.getItem(payload.roomId);
+      //make room if room does not exist locally
+      if(roomObj == null){
+        await this.makeRoom(payload);
+        roomObj = await AsyncStorage.getItem(payload.roomId);
+      }
 
-    console.log("payload: " + JSON.stringify(payload));
+      console.log("payload: " + JSON.stringify(payload));
       console.log("action type" + payload.actionType);
       switch(payload.actionType){
         //Incoming text message
@@ -407,24 +443,16 @@ class ChatScreen extends React.Component {
           displayOneMessage(messageObj, payload, this);
           break;
         }
-        //name change
-        case ActionType.ROOM_NAME_CHANGE:{
-          console.log("TODO: Implement name change");
-          break;
-        }
-        //User left room
-        case ActionType.MEMBER_LEFT:{
-          console.log("TODO: Implement user left the room");
-          break;
-        }
-        //User added to room
-        case ActionType.MEMBER_JOINED:{
-          console.log("TODO: Implement User addeed to the room");
+        //settings change
+        case ActionType.SETTINGS_CHANGE:{
+          await settingsChange(payload);
+          this.loadSettings(this.state.id);
+          console.log("TODO: Implement settings change");
           break;
         }
         //Backup Requested
-        case ActionType.BACKUP_REQUEST:{
-          console.log("TODO: Implement backup requested");
+        case ActionType.BACKUP:{
+          AsyncStorage.setItem(payload.roomId,payload.textContent);
           break;
         }
         //id collision fix?

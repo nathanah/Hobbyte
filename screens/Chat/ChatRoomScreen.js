@@ -95,6 +95,41 @@ async function storeIncomingMessage(messageObj, payload, room){
     }
    
   } 
+    chatHistory = JSON.stringify(chatHistory);
+    await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store success")}).catch(fail => {console.log("fail")});
+  }
+
+
+
+async function settingsChange(payload){
+  AsyncStorage.setItem(payload.roomId+"settings",payload.textContent);
+
+  var rooms = await AsyncStorage.getItem("rooms");
+
+  if(rooms != null){
+    var parsed = await JSON.parse(rooms);
+    var idx = -1
+    for (let i = 0; i < parsed.length; i++){
+      if (parsed[i].id == payload.roomId){
+        idx = i;
+        break;
+      }
+    }
+
+    if(idx != -1){
+      var newRoom = parsed[idx]
+      newRoom.name = JSON.parse(payload.textContent).name;
+      parsed[idx] = newoom;
+
+      AsyncStorage.setItem("rooms", JSON.stringify(parsed));
+    }
+    else{
+      console.log("ERROR: room not found");
+    }
+  }
+  else{
+    console.log("ERROR: rooms null");
+  }
 
 }
 
@@ -197,7 +232,7 @@ export default class ChatRoom extends Component {
           <Text style={styles.list_item_text}>{item.unreadCount}     {item.name}</Text>
           <Button title="Enter" color="#0064e1" onPress={
             () => {
-              console.log( "membersString: ", item.membersString )
+              // console.log( "membersString: ", item.membersString )
               this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(),
                                                               "id": item.id,
                                                               "membersString": item.members  }
@@ -358,20 +393,21 @@ export default class ChatRoom extends Component {
       console.log("TODO: Implement decrypt");
 
 
-    // parse incomingMessageItem payload and save into new variable
-    var messageObj = messageObject.onCreateMessageByRecipient;
-    var payload = messageObj.payload;
-    payload = JSON.parse(payload);
+      // parse incomingMessageItem payload and save into new variable
+      var messageObj = messageObject.onCreateMessageByRecipient;
+      var payload = messageObj.payload;
+      payload = JSON.parse(payload);
 
-    //sort message into correct room
-    var roomObj = await AsyncStorage.getItem(payload.roomId);
-    //make room if room does not exist locally
-    if(roomObj == null){
-      await this.makeRoom(payload);
-      roomObj = await AsyncStorage.getItem(payload.roomId);
-    }
+      //sort message into correct room
+      var roomObj = await AsyncStorage.getItem(payload.roomId);
+      //make room if room does not exist locally
+      if(roomObj == null){
+        await this.makeRoom(payload);
+        roomObj = await AsyncStorage.getItem(payload.roomId);
+      }
 
       console.log("action type:  " + payload.actionType);
+      console.log(payload);
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
@@ -379,24 +415,16 @@ export default class ChatRoom extends Component {
           this.loadRooms("rooms"); 
           break;
         }
-        //name change
-        case ActionType.ROOM_NAME_CHANGE:{
-          console.log("TODO: Implement name change");
-          break;
-        }
-        //User left room
-        case ActionType.MEMBER_LEFT:{
-          console.log("TODO: Implement user left the room");
-          break;
-        }
-        //User added to room
-        case ActionType.MEMBER_JOINED:{
-          console.log("TODO: Implement User addeed to the room");
+        //settings change
+        case ActionType.SETTINGS_CHANGE:{
+          await settingsChange(payload);
+          this.loadRooms(this.roomsKey);
+          console.log("TODO: Implement settings change");
           break;
         }
         //Backup Requested
-        case ActionType.BACKUP_REQUEST:{
-          console.log("TODO: Implement backup requested");
+        case ActionType.BACKUP:{
+          AsyncStorage.setItem(payload.roomId,payload.textContent);
           break;
         }
         //id collision fix?
@@ -408,6 +436,9 @@ export default class ChatRoom extends Component {
         default:
           console.log("Message id not recognized");
       }
+
+      //delete message from db after queried
+      deleteMessageAfterRead(messageObj.id);
     }
     catch(err){
       console.log("message receive error: " + err)

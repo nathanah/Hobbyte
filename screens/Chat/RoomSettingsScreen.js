@@ -2,7 +2,49 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage, TouchableHighlight} from "react-native";
 import {styles} from '../../styles/styles'
+import {ActionType, Payload} from '../../src/payload';
+import API, { graphqlOperation } from '@aws-amplify/api';
+import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 
+//Should make into global function and merge with copy in ChatScreen
+async function sendMessage(payload) {
+  console.log("in send message")
+  roomMembers = payload.roomMembers;
+  console.log("roomMembers: ", roomMembers)
+  sender = payload.sender;
+
+  //Encrypt payload here
+
+  let payloadStr = JSON.stringify(payload);
+
+  for (var i = 0; i < roomMembers.length ; i++){
+    if(roomMembers[i] != sender){
+      console.log("other users: " + roomMembers[i]);
+      const package_ = {
+        to: roomMembers[i],
+        from: sender,
+        payload: payloadStr,
+      };
+      console.log("package: " + JSON.stringify(package_));
+      const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
+            console.log("AWS Success - Create Message")
+          ).catch(
+            (error) => {
+              console.log("Error_____________________\n" ,error)
+            }
+          );
+      console.log(resp);
+    }
+  }
+}
+
+async function getAuthObject() {
+  // obtains userToken and parses it to access username
+  var user = await AsyncStorage.getItem("userToken");
+  var userTokenParsed = JSON.parse(user);
+  var username = userTokenParsed.user.signInUserSession.accessToken.payload.username;
+  return username; // returns a promise
+}
 
 export default class RoomSettings extends Component {
   constructor(props) {
@@ -13,6 +55,7 @@ export default class RoomSettings extends Component {
     this.state = {
       id: this.props.navigation.getParam('id'),
       name: "",
+      members: "",
       bubbleColor: "",
       textColor: "",
     }
@@ -83,10 +126,21 @@ export default class RoomSettings extends Component {
             <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.ButtonContainer}
+          activeOpacity = { .8 }
+          onPress={this.confirmBackup}>
+            <Text style={styles.buttonText}>Send Backup</Text>
+        </TouchableOpacity>
+
       </View>
 
     )
   }
+
+  //////////////////////
+  // Settings Changes //
+  //////////////////////
 
   loadSettings = async () => {
     var result = await AsyncStorage.getItem(this.state.id+"settings");
@@ -94,7 +148,7 @@ export default class RoomSettings extends Component {
     if(result != null){
       console.log("not null");
       var parsed = JSON.parse(result);
-      this.setState({name: parsed.name, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor});
+      this.setState({name: parsed.name, members: parsed.members, bubbleColor: parsed.bubbleColor, textColor: parsed.textColor});
     }
     else{
 
@@ -137,7 +191,72 @@ export default class RoomSettings extends Component {
 
     console.log("rooms updated");
     AsyncStorage.setItem(this.state.id+"settings", JSON.stringify(this.state))
+    this.sendSettingsChange(this.state);
   }
+
+  ///////////////
+  // Messaging //
+  ///////////////
+
+  confirmBackup = async () => {
+    Alert.alert(
+      'Confirm Backup',
+      'Are you sure you want to send a backup? This will override the message history of all other users.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => this.sendBackup(this.state) },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  sendBackup = async (room) => {
+    console.log("Sending Backup");
+    console.log("To: " + room.members)
+    var backup = await AsyncStorage.getItem(this.state.id);
+    const date = new Date();
+    var user = await getAuthObject();
+    const payload = new Payload(
+                        actionType=ActionType.BACKUP,
+                        roomId=room.id,
+                        roomName=room.name,
+                        roomMembers=room.members,
+                        from = user,
+                        created = date,
+                        joiningMember=null,
+                        leavingMember=null,
+                        textContent= backup,
+                        newRoomName=null
+                        ).get()
+    sendMessage(payload);
+  }
+
+  sendSettingsChange = async (room) => {
+    console.log("Sending Settings Change");
+    console.log("To: " + room.members)
+    var settings = await AsyncStorage.getItem(this.state.id+"settings");
+    const date = new Date();
+    var user = await getAuthObject();
+    const payload = new Payload(
+                        actionType=ActionType.SETTINGS_CHANGE,
+                        roomId=room.id,
+                        roomName=room.name,
+                        roomMembers=room.members,
+                        from = user,
+                        created = date,
+                        joiningMember=null,
+                        leavingMember=null,
+                        textContent= settings,
+                        newRoomName=null
+                        ).get()
+    sendMessage(payload);
+  }
+
+
 
 
 }

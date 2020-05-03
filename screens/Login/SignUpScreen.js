@@ -7,7 +7,8 @@ import {
   Text,
   View,
   Switch,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -104,6 +105,7 @@ export default class SignUpScreen extends React.Component{
   render(){
     return(
   <SafeAreaView style={{ backgroundColor: "#728C69",flex: 1 }}>
+    <ScrollView>
     <Formik
       initialValues={{
         username:'',
@@ -170,7 +172,6 @@ export default class SignUpScreen extends React.Component{
             ref = {(input) => {this.passwordInput = input;}}
             value={this.state.password}
             onChange={event => this.setState({password: event.nativeEvent.text })}
-            onSubmitEditing = {() => {this.passwordConfirmInput.focus();}}
             underlineColorAndroid = "transparent"
           />
 
@@ -213,6 +214,7 @@ export default class SignUpScreen extends React.Component{
         </React.Fragment>
       )}
     </Formik>
+    </ScrollView>
   </SafeAreaView>
   )
 }
