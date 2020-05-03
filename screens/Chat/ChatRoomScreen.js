@@ -76,9 +76,11 @@ async function storeIncomingMessage(messageObj, payload, room){
     },
     createdAt: payload.created
 
-  } 
+  } ;
+  // message = JSON.stringify(message); 
+  console.log("message to be added:"     + JSON.stringify(message)); 
   
-  if (message != null ){
+  if (chatHistory != null ){
     chatHistory.push(message);
     chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
     chatHistory = JSON.stringify(chatHistory); 
@@ -162,7 +164,7 @@ export default class ChatRoom extends Component {
   }
 
   componentWillUnmount() {
-    // this._isMounted = false;
+    this._isMounted = false;
     this.subscription.unsubscribe();
 }
 
@@ -194,22 +196,28 @@ export default class ChatRoom extends Component {
 
 
     checkForNewMessages = async() => {
+
+      
       console.log("Querying for offline messages to: " + this.state.username);
       const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, {filter: {to:{eq: this.state.username}}} ));
       console.log("Queried messages: " + JSON.stringify(messagesFromQueue));
+
+      var allMessages = messagesFromQueue.data.listMessages.items; 
       const nextToken = messagesFromQueue.data.listMessages.nextToken; 
-      console.log("Next Token:" + nextToken); 
+      
       while (nextToken != null){
         const moreMessages = await API.graphql(graphqlOperation(listMessages), nextToken );
-        console.log("More messages: " + moreMessages); 
-        messagesFromQueue.concat(moreMessages); 
+        console.log("More messages: " + JSON.stringify(moreMessages)); 
+        nextToken = moreMessages.data.listMessages.nextToken; 
+        var moreMessagesArray = moreMessages.data.listMessages.items; 
+        allMessages.concat(moreMessagesArray); 
       }
-      var numberOfMessages = messagesFromQueue.data.listMessages.items.length;
+      var numberOfMessages = allMessages.length;
 
 
       // cycle through new messages and send through switch pipeline
       for (var i = 0; i < numberOfMessages; i ++ ){
-        var item = messagesFromQueue.data.listMessages.items[i];
+        var item = allMessages[i];
 
         var message = {
           "onCreateMessageByRecipient": item,

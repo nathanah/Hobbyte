@@ -26,18 +26,18 @@ async function sendMessage(payload) {
   console.log("in send message")
   roomMembers = JSON.parse(payload.roomMembers);
   console.log("roomMembers: ", roomMembers)
-  sender = payload.sender;
+  console.log("from: "  + payload.sender); 
 
   //Encrypt payload here
 
   let payloadStr = JSON.stringify(payload);
 
   for (var i = 0; i < roomMembers.length ; i++){
-    if(roomMembers[i] != sender){
+    if(roomMembers[i] != payload.sender){
       console.log("other users: " + roomMembers[i]);
       const package_ = {
         to: roomMembers[i],
-        from: sender,
+        from: payload.sender,
         payload: payloadStr,
       };
       console.log("package: " + JSON.stringify(package_));
