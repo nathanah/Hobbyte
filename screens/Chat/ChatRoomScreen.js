@@ -68,11 +68,14 @@ async function storeIncomingMessage(messageObj, payload, room){
   var roomObj = await AsyncStorage.getItem(payload.roomId);
   var chatHistory = JSON.parse(roomObj); 
   console.log("Chat History: " + chatHistory);
+  console.log("from:" + messageObj);
+  alert("storing");
   var message = {
     _id: messageObj.id,
     text: payload.textContent,
     user: {
       id: 2,
+      name: messageObj.from,
     },
     createdAt: payload.created
 
@@ -81,8 +84,14 @@ async function storeIncomingMessage(messageObj, payload, room){
   console.log("message to be added:"     + JSON.stringify(message)); 
   
   if (chatHistory != null ){
-    chatHistory.push(message);
-    chatHistory = chatHistory.sort((a,b)=> b.createdAt - a.createdAt);
+    chatHistory.unshift(message);
+    console.log("Chat history string " + JSON.stringify(chatHistory))
+    // const sortedchatHistory = chatHistory.slice().sort((a,b)=> b.createdAt - a.createdAt);
+    const sortedchatHistory = chatHistory; 
+    console.log("Printing rooms..."); 
+    for (var j = 0; j < sortedchatHistory.length; j++){
+      console.log("room - " + JSON.stringify(sortedchatHistory[j].createdAt)); 
+    }
     chatHistory = JSON.stringify(chatHistory); 
     var rooms = room.state.rooms; 
     for (var i = 0; i < rooms.length; i++){

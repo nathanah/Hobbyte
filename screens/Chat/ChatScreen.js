@@ -83,6 +83,7 @@ function createNewChatMessage(room, messages /*must be this.state*/) {
 
 function displayOneMessage(messageObj, payload, room){
   // displays one message at a time on gifted chat and stores in AsyncStorage
+  alert("displaying");
   let from = payload.sender;
   console.log("From:   " + messageObj.from);
   var addMessage = {
@@ -100,9 +101,10 @@ function displayOneMessage(messageObj, payload, room){
   }));
 
   // todo this is not working, printing previous and duplicate messages
-  // console.log(currentObj.state.id)
+  // console.log("roomid??" + room.state.id );
+  console.log ("storing new messages in async" + room.state.messages); 
   // AsyncStorage.setItem(room.state.id, JSON.stringify(GiftedChat.append(room.state.messages, [addMessage])));
-
+  // AsyncStorage.setItem(payload.roomId, room.state.messages).then(successMessage =>{console.log("Async store incoming message success")}).catch(fail => {console.log("fail")});
   //todo call delete mutation
   // var messageID = fullPackage.id;
   // const messageID = {
@@ -165,7 +167,7 @@ async function getNewMessages(currentObj, roomId){
   const roomFilter = {
     filter: {roomId: {contains: roomId}}
   };
-  console.log("loading messages from DynamoDB queue:");
+  // console.log("loading messages from DynamoDB queue:");
 
   // load messages in waiting in DynamoDB queue
   // const messagesFromQueue = await API.graphql(graphqlOperation(listMessages, roomFilter ));
@@ -292,11 +294,12 @@ class ChatScreen extends React.Component {
   loadMessages = async (key) => {
     const messageItems = this;
     var result = await AsyncStorage.getItem(key);
-    console.log("load messages from local storage:")
-    console.log(result);
+    console.log("load messages from local storage:" + result); 
     if(result != null && result.length){
+      result = JSON.parse(result); 
+      // result.sort((a,b) => b.createdAt - a.createdAt); 
       console.log("not null");
-      this.setState({messages: JSON.parse(result)});
+      this.setState({messages: result});
     }
     else{
       this.setState({
@@ -440,7 +443,9 @@ class ChatScreen extends React.Component {
       switch(payload.actionType){
         //Incoming text message
         case ActionType.TEXT_MESSAGE:{
-          displayOneMessage(messageObj, payload, this);
+          if (payload.roomId == this.state.id){
+            displayOneMessage(messageObj, payload, this);
+          }
           break;
         }
         //settings change
