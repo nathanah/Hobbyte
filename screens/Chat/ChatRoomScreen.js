@@ -69,7 +69,7 @@ async function storeIncomingMessage(messageObj, payload, room){
   var chatHistory = JSON.parse(roomObj); 
   console.log("Chat History: " + chatHistory);
   console.log("from:" + messageObj);
-  alert("storing");
+  // alert("storing");
   var message = {
     _id: messageObj.id,
     text: payload.textContent,

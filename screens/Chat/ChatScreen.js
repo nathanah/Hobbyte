@@ -83,7 +83,7 @@ function createNewChatMessage(room, messages /*must be this.state*/) {
 
 function displayOneMessage(messageObj, payload, room){
   // displays one message at a time on gifted chat and stores in AsyncStorage
-  alert("displaying");
+  // alert("displaying");
   let from = payload.sender;
   console.log("From:   " + messageObj.from);
   var addMessage = {
