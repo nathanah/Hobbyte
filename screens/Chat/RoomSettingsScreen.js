@@ -5,7 +5,7 @@ import {View,
         TextInput,
         ActivityIndicator,
         Button,
-        FlatList,
+        // FlatList,
         TouchableOpacity,
         Alert ,
         AsyncStorage,
@@ -132,7 +132,7 @@ export default class RoomSettings extends Component {
 
 
           ListFooterComponent= {
-            <View style={styles.add_user}>
+            <View style={styles.user_footer}>
               <TextInput
                 placeholder={"Add New User"}
                 style={styles.add_user}

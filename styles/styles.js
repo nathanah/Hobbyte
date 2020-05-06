@@ -61,37 +61,36 @@ const styles = StyleSheet.create({
 
 
     },
-    formBox:{
-        height: 45,
+    user_footer:{
+        flexDirection: 'row',
         backgroundColor: '#F0F0F0',
-        marginBottom: 15,
-        paddingHorizontal: 20,
+        height: 45,
+        marginLeft: 10,
+        marginRight:50,
+        marginBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         borderBottomColor: '#000000',
         borderBottomWidth: 1
     },
     add_user: {
-      paddingHorizontal: 10,
-      height: 45,
-      fontSize: 20,
-      backgroundColor: '#F0F0F0',
+      paddingTop: 10,
       marginLeft: 10,
-      marginRight:50,
-      marginBottom: 15,
-      flexDirection: 'row',
-      justifyContent: 'space-between'
+      paddingHorizontal: 10,
+      fontSize: 20,
+      marginBottom: 10,
     },
     add_user_button: {
       height: 45,
-      backgroundColor: '#F0F0F0',
       marginLeft: 10,
-      marginBottom: 15,
+      marginBottom: 10,
       flexDirection: 'row',
       justifyContent: 'flex-end'
     },
     add_user_text: {
       paddingLeft: 10,
       paddingRight: 10,
-      paddingTop:10,
+      paddingTop: 10,
       fontSize: 20,
       color:'#FFF',
       backgroundColor:'#db8a75',
