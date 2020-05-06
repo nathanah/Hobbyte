@@ -24,6 +24,9 @@ import ResetScreen              from '../screens/Login/ResetScreen';
 import TwoFactorScreen          from "../screens/Login/TwoFactorScreen";
 import SignUpScreen             from "../screens/Login/SignUpScreen";
 import PhoneNumberVerification  from "../screens/Login/PhoneNumberVerification";
+import PasswordResetForm        from "../screens/Login/PasswordResetForm"
+import PasswordResetRejection   from "../screens/Login/PasswordResetRejection"
+
 import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
 import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 
@@ -85,6 +88,8 @@ const RootStack = createStackNavigator({
   Reset: ResetScreen,
   TFS: TwoFactorScreen,
   PNV: PhoneNumberVerification,
+  PRF: PasswordResetForm,
+  PRR: PasswordResetRejection,
   PhoneReset: PhoneResetScreen,
   PRS: PasswordResetScreen,
 

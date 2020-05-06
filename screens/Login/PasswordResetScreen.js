@@ -58,13 +58,18 @@ export default class PasswordResetScreen extends React.Component {
     _submitAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Reset information input from user: ");
-      console.log("Username:" + this.state.username);
-      Auth.forgotPassword(this.state.username).then(() => {
-         console.log("Fogot password initiated")
-      }
-      )
-      //this.props.navigation.navigate('SignIn');
+      console.log("currentUserInfo", await Auth.currentUserInfo())
+      Auth.forgotPassword(this.state.username).then(
+        ()=> {
+          console.log("init password reset.. going to PRF")
+          this.props.navigation.navigate('PRF', {authType: "password_reset", username: this.state.username})
+        }
+     ).catch(
+       (err)=>{
+         console.log("PRS ERROR: ", err)
+         this.props.navigation.navigate('PRR')
+       }
+     )
     };
 }
 
