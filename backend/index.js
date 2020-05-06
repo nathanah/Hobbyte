@@ -1,22 +1,30 @@
-const express = require("express");
-const { generateVirgilJwt } = require('./api/virgilToken');
+'use strict';
+const express = require('express');
 const app = express();
-const cors = require('cors');
-const server = require("http").createServer(app);
-const io = require("socket.io").listen(server);
-const port = 3000;
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const interval = 1000;
 
-app.use(express.json());
-
-
+/*
 io.on("connection", socket => {
-  console.log("a user has connected.");
-  app.get('/virgil-jwt', requireAuthHeader, generateVirgilJwt);
-  app.use(express.static('./public/'));
-  module.exports = app;
+  
+    console.log("Hello! Connected to server")
+    console
+  
 });
 
+server.listen(port, () => console.log("server running on port:" + port)); 
 
+*/
 
-server.listen(port, () => console.log("server running on port:" + port));
+io.on('connect', function(socket){
+  console.log('someone connected from: ' + socket.handshake.address);
+  socket.on('pass data to server', function(info){
+    console.log('console log: send data to anybody', info);
+    io.emit('io emit: send data to anybody', info);
+  });
+});
 
+http.listen(3000, function(){
+    console.log('listening on *:3000');
+});

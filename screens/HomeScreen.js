@@ -23,8 +23,7 @@ import {
 
 import { MonoText } from '../components/StyledText';
 import {Auth} from 'aws-amplify';
-import { EThree } from '@virgilsecurity/e3kit-native';
-import AsyncStorage from '@react-native-community/async-storage';
+//import { EThree } from '@virgilsecurity/e3kit-native';
 
 
 
@@ -72,7 +71,7 @@ export default class HomeScreen extends React.Component {
     .then(() => {
       console.log("Signed Out");
       AsyncStorage.clear();
-      await eThree.cleanup();
+      //await eThree.cleanup();
 
       this.props.navigation.navigate('SignIn'); // not redirecting for some reason
     })

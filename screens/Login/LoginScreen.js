@@ -3,11 +3,19 @@ import React, { Component } from 'react';
 import {View, Text, TouchableOpacity, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
 import {Auth} from 'aws-amplify';
 import {styles} from '../../styles/styles'
+import io from "socket.io-client";
 
 /*=====================================================*/
 /*            Login Screen                              */
 /*=====================================================*/
 export default class LoginScreen extends React.Component {
+
+  componentDidMount() {
+  
+    this.socket = io("http://192.168.0.19:3000")
+    console.log("hello Server")
+  }
+
   state = {
     username: '',
     password: '',

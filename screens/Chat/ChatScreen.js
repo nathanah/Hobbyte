@@ -26,7 +26,7 @@ async function sendMessage(payload) {
   roomMembers = payload.roomMembers;
   console.log("roomMembers: ", roomMembers)
   //Look up public keys of all room members in room
-  const publicKeys = await eThree.findUsers(roomMembers);
+  //const publicKeys = await eThree.findUsers(roomMembers);
 
   
   sender = payload.sender;
@@ -34,7 +34,7 @@ async function sendMessage(payload) {
   let payloadStr = JSON.stringify(payload);
   //encrypt the stringified payload. The sender signs with with their private key.
   //The reciepient's public key is used to encrypt the data.
-  const encryptedText = await eThree.authEncrypt(payloadStr, publicKeys);
+  //const encryptedText = await eThree.authEncrypt(payloadStr, publicKeys);
 
 
 
@@ -42,7 +42,7 @@ async function sendMessage(payload) {
     console.log("other users: " + roomMembers[i]);
     const package_ = {
       to: roomMembers[i],
-      payload: encryptedText,
+      payload: payloadStr,
     };
     console.log("package: " + JSON.stringify(package_));
     const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
@@ -384,11 +384,11 @@ class ChatScreen extends React.Component {
     console.log("message Obj: " + messageObj);
     // console.log("message Obj after parse: " + JSON.stringify(messageObj));
     
-    const publicKey = await eThree.findUsers(messageObj.from);
+    //const publicKey = await eThree.findUsers(messageObj.from);
 
-    const decrypted_payload = await eThree.authDecrypt(messageObj.payload, publicKey);
+    //const decrypted_payload = await eThree.authDecrypt(messageObj.payload, publicKey);
     
-    payload = JSON.parse(decrypted_payload);
+    payload = JSON.parse(messageObj.payload);
 
     
 

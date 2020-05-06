@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
-import { EThree } from '@virgilsecurity/e3kit-native';
-import AsyncStorage from '@react-native-community/async-storage';
+//import { EThree } from '@virgilsecurity/e3kit-native';
 import io from "socket.io-client";
 
 /*=====================================================*/
@@ -12,7 +11,34 @@ import io from "socket.io-client";
 /*=====================================================*/
 export default class PhoneNumberVerification extends React.Component {
 
+  componentDidMount() {
+    'use strict';
+const socket = require('socket.io-client')('http://192.168.0.23:3000');
+var info = {};
 
+socket.on('connect', function () {
+  console.log('connected to server');
+  info.username = 'viswaas'
+ 
+  console.log('username: ' + info.username);
+  socket.emit('pass data to server', info);
+
+});
+
+/*
+    this.socket = io('http://192.168.0.23:3000', {
+      body: JSON.stringify({
+        username: this.state.username
+    })
+    })
+    
+    E3kit.EThree.initialize(this._getVirgilToken)
+				.then(e3kit => {
+					showMessage('e3kit ready for identity: ' + e3kit.identity);
+					return e3kit.register();
+        });
+    */
+  }
   state = {
 
     verificationCode: '',
@@ -71,6 +97,21 @@ export default class PhoneNumberVerification extends React.Component {
   }
 
   /*--------------------Async------------------------*/
+  /*
+  _getVirgilToken = async() => {
+    const response = await fetch('http://192.168.0.19:3000/virgil-jwt', {
+      body: JSON.stringify({
+        username: this.state.username
+    })
+    })
+    if (!response.ok) {
+        throw new Error(`Error code: ${response.status} \nMessage: ${response.statusText}`);
+    }
+
+    // If request was successful we return Promise which will resolve with token string.
+    //return response.json().then(data => data.virgilToken);
+}
+*/
     _loginAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
@@ -102,11 +143,10 @@ export default class PhoneNumberVerification extends React.Component {
         .then(() => {
           console.log('successful confirm sign in!');
           AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-          this.socket = io("https:/192.168.0.20:3000")
-          while(socket.connected){
-            const eThree = await EThree.initialize(tokenCallback, { AsyncStorage });
-          }     
-          await eThree.register();
+          //while(socket.connected){
+           // console.log('Hello Server! Time for tokens!')
+          //}     
+          //await eThree.register();
           this.props.navigation.navigate('Main' );
         })
         .catch(err => {console.log('error confirming signing in!: ', err);
