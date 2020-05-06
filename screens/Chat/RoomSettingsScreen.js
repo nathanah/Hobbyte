@@ -22,7 +22,7 @@ async function sendMessage(payload) {
   console.log("in send message")
   roomMembers = payload.roomMembers;
   console.log("roomMembers: ", roomMembers)
-  sender = payload.sender;
+  var sender = payload.sender;
 
   //Encrypt payload here
 
