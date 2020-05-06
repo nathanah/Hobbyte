@@ -60,7 +60,76 @@ const styles = StyleSheet.create({
       alignItems: 'center',
 
 
-      }
+    },
+    formBox:{
+        height: 45,
+        backgroundColor: '#F0F0F0',
+        marginBottom: 15,
+        paddingHorizontal: 20,
+        borderBottomColor: '#000000',
+        borderBottomWidth: 1
+    },
+    add_user: {
+      paddingHorizontal: 10,
+      height: 45,
+      fontSize: 20,
+      backgroundColor: '#F0F0F0',
+      marginLeft: 10,
+      marginRight:50,
+      marginBottom: 15,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    },
+    add_user_button: {
+      height: 45,
+      backgroundColor: '#F0F0F0',
+      marginLeft: 10,
+      marginBottom: 15,
+      flexDirection: 'row',
+      justifyContent: 'flex-end'
+    },
+    add_user_text: {
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingTop:10,
+      fontSize: 20,
+      color:'#FFF',
+      backgroundColor:'#db8a75',
+    },
+    list_user: {
+      height: 45,
+      backgroundColor: '#F0F0F0',
+      marginLeft: 10,
+      marginRight:50,
+      marginBottom: 15,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    },
+    rowBack: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
+    delete: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        width: 75,
+        backgroundColor: 'red',
+        color: '#FFF',
+        bottom: 0,
+        top: 0,
+        right: 0,
+        marginBottom: 15,
+        marginRight:50,
+    },
+    list_user_text: {
+      marginLeft: 20,
+      marginTop:10,
+      fontSize: 20,
+    }
 
   })
 

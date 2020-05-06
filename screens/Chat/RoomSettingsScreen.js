@@ -1,6 +1,17 @@
 
 import React, { Component } from 'react';
-import { View, Text, TextInput, ActivityIndicator, Button, FlatList, TouchableOpacity, Alert , AsyncStorage, TouchableHighlight} from "react-native";
+import {View,
+        Text,
+        TextInput,
+        ActivityIndicator,
+        Button,
+        FlatList,
+        TouchableOpacity,
+        Alert ,
+        AsyncStorage,
+        TouchableHighlight,
+        ScrollView} from "react-native";
+import { SwipeListView } from 'react-native-swipe-list-view';
 import {styles} from '../../styles/styles'
 import {ActionType, Payload} from '../../src/payload';
 import API, { graphqlOperation } from '@aws-amplify/api';
@@ -55,7 +66,7 @@ export default class RoomSettings extends Component {
     this.state = {
       id: this.props.navigation.getParam('id'),
       name: "",
-      members: "",
+      members: [],
       bubbleColor: "",
       textColor: "",
     }
@@ -63,10 +74,31 @@ export default class RoomSettings extends Component {
   }
 
 
+  renderItem = ({item}) => {
+    return(
+      <View style={styles.list_user}>
+        <Text style={styles.list_user_text}>{item.toString()}</Text>
+      </View>
+    )
+  }
+
+  renderDeleteRoom = ({item}) => {
+    return (
+      <View style={styles.rowBack}>
+            <TouchableOpacity
+              style={styles.delete}
+              onPress={() =>this.removeMember(item.toString())}
+            >
+                <Text>Delete</Text>
+            </TouchableOpacity>
+        </View>
+    );
+  }
+
 
   render(){
     return(
-      <View style={{ flex: 1, /*alignItems: 'center'/*, justifyContent: 'center'*/ }}>
+      <ScrollView style={{ flex: 1, /*alignItems: 'center'/*, justifyContent: 'center'*/ }}>
 
         <Text>Room Name</Text>
 
@@ -83,6 +115,45 @@ export default class RoomSettings extends Component {
           value={this.state.name}
           onChange ={event => this.setState({name:event.nativeEvent.text})}
           underlineColorAndroid = "transparent"
+        />
+
+        <Text>Room Members</Text>
+        <SwipeListView
+          data={this.state.members}
+          renderItem={this.renderItem}
+          renderHiddenItem={this.renderDeleteRoom}
+          keyExtractor={(item)=>item.toString()}
+          leftOpenValue={0}
+          rightOpenValue={-75}
+          ListEmptyComponent = {<View style={styles.user}>
+            <Text style={styles.list_user_text}>{"No Current Conversations"}</Text>
+            </View>}
+
+
+
+          ListFooterComponent= {
+            <View style={styles.add_user}>
+              <TextInput
+                placeholder={"Add New User"}
+                style={styles.add_user}
+                underlineColorAndroid = {'transparent'}
+                placeholderTextColor = "#000000"
+                returnKeyType = "done"
+                onSubmitEditing = {() => {this.addMember();}}
+                keyboardType="default"
+                autoCapitalize='none'
+                autoCorrect={false}
+                value={this.newMember}
+                onChange ={event => this.newMember = event.nativeEvent.text}
+                underlineColorAndroid = "transparent"
+              />
+              <TouchableOpacity
+              style={styles.add_user_button}
+              activeOpacity = { .8 }
+              onPress={() => {this.addMember();}}>
+                <Text style={styles.add_user_text}>Add User</Text>
+              </TouchableOpacity>
+            </View>}
         />
 
         <Text>Bubble Color</Text>
@@ -133,7 +204,7 @@ export default class RoomSettings extends Component {
             <Text style={styles.buttonText}>Send Backup</Text>
         </TouchableOpacity>
 
-      </View>
+      </ScrollView>
 
     )
   }
@@ -141,6 +212,30 @@ export default class RoomSettings extends Component {
   //////////////////////
   // Settings Changes //
   //////////////////////
+
+  removeMember = async (remove) => {
+    console.log(remove)
+    var newMembers = this.state.members;
+    newMembers = newMembers.filter(function( member ) {
+      return member.toString() !== remove;
+    });
+    await this.setState({members: newMembers});
+
+    this.submitChange();
+  }
+
+  addMember = async (newMember) => {
+    //TODO: add input verification
+    if(newMember !== ""){
+      var newMembers = this.state.members;
+      newMembers.push(this.newMember);
+      newMembers.sort();
+      await this.setState({members: newMembers});
+      this.newMember = "";
+
+      this.submitChange();
+    }
+  }
 
   loadSettings = async () => {
     var result = await AsyncStorage.getItem(this.state.id+"settings");
@@ -159,6 +254,15 @@ export default class RoomSettings extends Component {
     var rooms = await AsyncStorage.getItem("rooms");
     console.log("load rooms from local storage")
 
+    // //convert members from string to array
+    // var tempMembers = this.state.members;
+    // var members = tempMembers.split(",").map(function(item) {
+    //   return item.trim();
+    // });
+    // members.sort();
+    // await this.setState({members: members});
+
+    //change room name in "rooms"
     if(rooms != null){
 
       var parsed = await JSON.parse(rooms);
@@ -193,6 +297,8 @@ export default class RoomSettings extends Component {
     AsyncStorage.setItem(this.state.id+"settings", JSON.stringify(this.state))
     this.sendSettingsChange(this.state);
   }
+
+
 
   ///////////////
   // Messaging //
