@@ -126,7 +126,7 @@ export default class RoomSettings extends Component {
           leftOpenValue={0}
           rightOpenValue={-75}
           ListEmptyComponent = {<View style={styles.user}>
-            <Text style={styles.list_user_text}>{"No Current Conversations"}</Text>
+            <Text style={styles.list_user_text}>{"How is nobody in this room?"}</Text>
             </View>}
 
 
