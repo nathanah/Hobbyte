@@ -310,13 +310,17 @@ export default class ChatRoom extends Component {
     var name = payload.roomName;
 
 
+    console.log(id);
+    console.log(members);
+
+
     if(await this.roomDoesNotExist(newRooms, members)){
       var newRoom = {"id": id, "name": name, "members": members};
       console.log(newRoom)
       newRooms.unshift(newRoom);
       await this.storeRooms(this.roomsKey, JSON.stringify(newRooms));
       await AsyncStorage.setItem(id, "[]");
-      await AsyncStorage.setItem(this.membersString+"settings", JSON.stringify({"name": name, "members": members}));
+      await AsyncStorage.setItem(id+"settings", JSON.stringify({"name": name, "members": members}));
       this.loadRooms();
     }
     else{
