@@ -21,10 +21,11 @@ io.on('connect', function(socket){
   console.log('someone connected from: ' + socket.handshake.address);
   socket.on('pass data to server', function(info){
     console.log('console log: send data to anybody', info);
+    socket.emit ('dataFromServer', 'Hi this is from server!'); 
     io.emit('io emit: send data to anybody', info);
   });
 });
 
-http.listen(3000, function(){
-    console.log('listening on *:3000');
+http.listen(3006, function(){
+    console.log('listening on *:3006');
 });

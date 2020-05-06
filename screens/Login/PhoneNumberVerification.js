@@ -12,14 +12,19 @@ async function setUpSocket(username) {
     'use strict';
   const socket = require('socket.io-client')('http://10.1.10.190:3006');
   var info = {  };
+  var response = {};
   console.log("attempting to connect socket..."); 
   socket.on('connect', function () {
   console.log('connected to server');
   info.username = username;
  
   console.log('username: ' + info.username);
-  socket.emit('pass data to server', info);
-
+  socket.emit('pass data to server',info); 
+  
+  // Listener
+  socket.on('dataFromServer', message => {
+    console.log("Message from Server:" + message); 
+  })
 });
 }
 /*=====================================================*/
@@ -119,54 +124,56 @@ export default class PhoneNumberVerification extends React.Component {
 }
 */
     _loginAsync = async () => {
+      alert("just testing socket");
+      setUpSocket(this.state.user.username); 
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Login information input from user: ");
-      console.log("code:" + this.state.verificationCode);
-      console.log("Passed from login: ", this.state.user.username)
-      console.log("Verification type: ", this.state.authType)
+      // console.log("Login information input from user: ");
+      // console.log("code:" + this.state.verificationCode);
+      // console.log("Passed from login: ", this.state.user.username)
+      // console.log("Verification type: ", this.state.authType)
 
-      if(this.state.authType == 'signup') {
-        Auth.confirmSignUp(this.state.username, this.state.verificationCode)
-        .then(() => {
-            console.log('successful confirm sign up!')
-            AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+      // if(this.state.authType == 'signup') {
+      //   Auth.confirmSignUp(this.state.username, this.state.verificationCode)
+      //   .then(() => {
+      //       console.log('successful confirm sign up!')
+      //       AsyncStorage.setItem("userToken",JSON.stringify(Auth))
 
-            setUpSocket(this.state.user.username); 
+      //       setUpSocket(this.state.user.username); 
 
-             // TODO uncomment out when virgil is set up.
-            alert("Sign in successful.. need to remove this alert when virgil done"); 
-            // this.props.navigation.navigate('Home', Auth.user);
-          })
-        .catch(err => {console.log('error confirming signing up!: ', err);
-                alert('error confirming signing up!: '+ err.message);});
-      } else if(this.state.authType == 'signin') {
+      //        // TODO uncomment out when virgil is set up.
+      //       alert("Sign in successful.. need to remove this alert when virgil done"); 
+      //       // this.props.navigation.navigate('Home', Auth.user);
+      //     })
+      //   .catch(err => {console.log('error confirming signing up!: ', err);
+      //           alert('error confirming signing up!: '+ err.message);});
+      // } else if(this.state.authType == 'signin') {
 
-        // remove from final version
-        // if (this.state.verificationCode==1111){
-        //   console.log('Debug code entered - redirecting to main');
-        //   this.props.navigation.navigate('Main', Auth.user);
-        // }
+      //   // remove from final version
+      //   // if (this.state.verificationCode==1111){
+      //   //   console.log('Debug code entered - redirecting to main');
+      //   //   this.props.navigation.navigate('Main', Auth.user);
+      //   // }
 
 
-        // need to comment back in when texting works in AWS
-        Auth.confirmSignIn(this.state.user, this.state.verificationCode)
-        .then(() => {
-          console.log('successful confirm sign in!');
-          AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-          //while(socket.connected){
-           // console.log('Hello Server! Time for tokens!')
-          //}     
-          //await eThree.register();
-          setUpSocket(this.state.user.username);
+      //   // need to comment back in when texting works in AWS
+      //   Auth.confirmSignIn(this.state.user, this.state.verificationCode)
+      //   .then(() => {
+      //     console.log('successful confirm sign in!');
+      //     AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+      //     //while(socket.connected){
+      //      // console.log('Hello Server! Time for tokens!')
+      //     //}     
+      //     //await eThree.register();
+      //     setUpSocket(this.state.user.username);
 
-          // TODO uncomment out when virgil is set up.
-          alert("redirect to main");  
-          // this.props.navigation.navigate('Main' );
-        })
-        .catch(err => {console.log('error confirming signing in!: ', err);
-                alert('error confirming signing in!: '+err.message);});
-      }
+      //     // TODO uncomment out when virgil is set up.
+      //     alert("redirect to main");  
+      //     // this.props.navigation.navigate('Main' );
+      //   })
+      //   .catch(err => {console.log('error confirming signing in!: ', err);
+      //           alert('error confirming signing in!: '+err.message);});
+      // }
     };
 
     _resetAsync = async () => {
