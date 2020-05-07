@@ -24,6 +24,9 @@ import ResetScreen              from '../screens/Login/ResetScreen';
 import TwoFactorScreen          from "../screens/Login/TwoFactorScreen";
 import SignUpScreen             from "../screens/Login/SignUpScreen";
 import PhoneNumberVerification  from "../screens/Login/PhoneNumberVerification";
+import PasswordResetForm        from "../screens/Login/PasswordResetForm"
+import PasswordResetRejection   from "../screens/Login/PasswordResetRejection"
+
 import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
 import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 
@@ -72,6 +75,8 @@ const bottomTabNavigator = createBottomTabNavigator(
 
 /*---------------------Navigation Stack -----------------------------*/
 //Define different pages
+
+
 const RootStack = createStackNavigator({
   AuthLoading: AuthLoadingScreen,
   //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
@@ -120,6 +125,20 @@ const RootStack = createStackNavigator({
   },
   PRS: {
     screen: PasswordResetScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PRF: {
+    screen: PasswordResetForm,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PRR: {
+    screen: PasswordResetRejection,
     navigationOptions:{
       headerLeft: null,
       headerShown: false,

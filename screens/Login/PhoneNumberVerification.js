@@ -13,9 +13,11 @@ export default class PhoneNumberVerification extends React.Component {
 
     verificationCode: '',
     username: this.props.navigation.getParam('username','none'),
-    authType: this.props.navigation.getParam('authType', 'none'),
-    user: this.props.navigation.getParam('user', 'none')
+    // authType: this.props.navigation.getParam('authType', 'none'),
+    user: this.props.navigation.getParam('user', 'none'),
   };
+
+
 
   render() {
     return (
@@ -27,7 +29,7 @@ export default class PhoneNumberVerification extends React.Component {
             style={styles.logo}
             source={require('../../assets/images/white_logo_notext.png')}
             />
-          <Text style={styles.header}>Verify Phone Number</Text>
+          <Text style={styles.header}>Enter Verification Code</Text>
           <TextInput
             placeholder="Code"
             style={styles.formBox}
@@ -62,7 +64,6 @@ export default class PhoneNumberVerification extends React.Component {
 
       </KeyboardAvoidingView>
       </View>
-
     );
   }
 
@@ -75,7 +76,8 @@ export default class PhoneNumberVerification extends React.Component {
       console.log("Passed form login: ", this.state.username)
       console.log("Varification type: ", this.state.authType)
 
-      if(this.state.authType == 'signup') {
+      if(this.props.navigation.getParam('authType', 'none') == 'signup') {
+        console.log("------------This is signup-----------------")
         Auth.confirmSignUp(this.state.username, this.state.verificationCode)
         .then(() => {
             console.log('successful confirm sign up!')
@@ -84,8 +86,8 @@ export default class PhoneNumberVerification extends React.Component {
           })
         .catch(err => {console.log('error confirming signing up!: ', err);
                 alert('error confirming signing up!: '+ err.message);});
-      } else if(this.state.authType == 'signin') {
-
+      } else if(this.props.navigation.getParam('authType', 'none') == 'signin') {
+        console.log("------------This is signin-----------------")
         // remove from final version
         // if (this.state.verificationCode==1111){
         //   console.log('Debug code entered - redirecting to main');
@@ -102,6 +104,20 @@ export default class PhoneNumberVerification extends React.Component {
         })
         .catch(err => {console.log('error confirming signing in!: ', err);
                 alert('error confirming signing in!: '+err.message);});
+      } else if(this.props.navigation.getParam('authType', 'none') == 'email_verification') {
+
+        console.log("------------This is email_verification-----------------")
+        console.log("In email verification")
+        Auth.verifyCurrentUserAttributeSubmit('email',this.state.verificationCode).then(
+            ()=>{
+              console.log("email verification success! ")
+              this.props.navigation.navigate('Main')
+            }
+        ).catch((err)=>{
+            console.log("email verification error: ", err)
+        })
+      } else if(this.state.authType == 'password_reset') {
+
       }
     };
 
