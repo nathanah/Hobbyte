@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
+const {width:WIDTH} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container:{
@@ -7,27 +8,53 @@ const styles = StyleSheet.create({
 
     formBox:{
         height: 45,
-        backgroundColor: '#F0F0F0',
+        backgroundColor: '#19b7bf',
+        borderRadius: 25,
+        fontSize: 16,
+        paddingLeft: 45,
+        backgroundColor: 'rgba(0,0,0,0.35)',
+        color: 'rgba(255,255,255,0.7)',
+        marginHorizontal: 25,
         marginBottom: 15,
         paddingHorizontal: 20,
-        borderBottomColor: '#000000',
-        borderBottomWidth: 1
+        fontFamily:'space-mono',
+
 
     },
+    btnEye:{
+      position: 'absolute',
+      top: 10,
+      right:37,
 
+    },
+    sidebuttoncontainer:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+    },
     //backgroundVideo: {
     //  ...StyleSheet.absoluteFillObject,
     //},
     ButtonContainer:{
 
         padding: 10,
+        paddingBottom: 45,
 
     },
-
+    backgroundContainer:{
+      flex:1,
+      width:null,
+      height:null,
+      justifyContent: 'center',
+      alignItems:'center',
+    },
     resetContainer:{
-
+      backgroundColor: 'green',
+      width: '50%',
+      height: 50,
       paddingVertical: 5,
-      backgroundColor: '#728C69',
+      backgroundColor: '#19b7bf',
+      borderRadius: 25,
   },
   header:{
     paddingBottom: 25,
@@ -37,20 +64,41 @@ const styles = StyleSheet.create({
         textAlign:'center',
         color:'#FFF',
         fontWeight: "600",
+        fontFamily:'space-mono',
+
         backgroundColor:'#db8a75',
         // borderRadius:20,
         // borderWidth: 1,
-        padding:10
+        padding:10,
+        borderRadius: 25,
+        fontSize: 16,
+        marginHorizontal: 85,
+        marginBottom: 15,
+        paddingHorizontal: 20,
+        fontFamily:'space-mono',
 
 
     },
+    inputIcon:{
+      position: 'absolute',
+      top: 10,
+      left:37,
 
+    },
     title:{
       paddingTop:20,
-      textAlign:'center',
-      color:'#000'
-    },
+      fontSize:15,
 
+      textAlign:'center',
+      color:'#FFF'
+    },
+    texts:{
+
+      fontSize:15,
+      fontFamily:'space-mono',
+
+      color:'#FFF'
+    },
     logo: {
       alignSelf: 'center',
       height: 200,

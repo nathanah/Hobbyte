@@ -79,20 +79,59 @@ const RootStack = createStackNavigator({
     screen: LoginScreen,
     navigationOptions:{
       headerLeft: null,
+      headerShown: false,
+
     }
   } ,
-  SignUp: SignUpScreen,
-  Reset: ResetScreen,
-  TFS: TwoFactorScreen,
-  PNV: PhoneNumberVerification,
-  PhoneReset: PhoneResetScreen,
-  PRS: PasswordResetScreen,
+  SignUp: {
+    screen: SignUpScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  Reset: {
+    screen: ResetScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  TFS: {
+    screen: TwoFactorScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PNV: {
+    screen: PhoneNumberVerification,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PhoneReset: {
+    screen: PhoneResetScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PRS: {
+    screen: PasswordResetScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
 
   Home: {
     screen: bottomTabNavigator,
     navigationOptions:{
       headerLeft: null,
       gesturesEnabled: false,
+      headerShown: false,
     }
   } ,
   Main: {
@@ -100,14 +139,44 @@ const RootStack = createStackNavigator({
     navigationOptions:{
       headerLeft: null,
       gesturesEnabled: false,
+      headerShown: false,
+
     }
   } ,
 
+  ChatPage: {
+    screen: ChatScreen,
+    navigationOptions:{
+      headerLeft: null,
 
-  ChatPage: ChatScreen,
-  ChatRoom: ChatRoom,
-  makeRoom: CreateChatRoom,
-  RoomSettings: RoomSettings,
+      gesturesEnabled: false,
+    }
+  },
+  ChatRoom: {
+    screen: ChatRoom,
+    navigationOptions:{
+      headerLeft: null,
+
+      gesturesEnabled: false,
+    }
+  },
+  makeRoom: {
+    screen: CreateChatRoom,
+    navigationOptions:{
+      headerLeft: null,
+
+      gesturesEnabled: false,
+    }
+  },
+  RoomSettings: {
+    screen: RoomSettings,
+    navigationOptions:{
+      headerLeft: null,
+
+      gesturesEnabled: false,
+    }
+  },
+  
 },
 {
   initialRouteName: 'AuthLoading',

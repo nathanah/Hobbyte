@@ -19,13 +19,13 @@ export default class PhoneNumberVerification extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#728C69", flex: 1}}>
+      <View style={{backgroundColor: "#19b7bf", flex: 1}}>
           <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
           <Image
             style={styles.logo}
-            source={require('../../assets/images/islands100black.png')}
+            source={require('../../assets/images/white_logo_notext.png')}
             />
           <Text style={styles.header}>Verify Phone Number</Text>
           <TextInput
