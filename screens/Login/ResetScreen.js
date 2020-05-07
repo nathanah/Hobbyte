@@ -18,7 +18,7 @@ export default class ResetScreen extends React.Component {
     return (
       <View style={{backgroundColor: "#728C69", flex: 1}}>
          <ScrollView keyboardShouldPersistTaps='never'>
-          <KeyboardAvoidingView behavior="padding" style={styles.container}>
+          <KeyboardAvoidingView behavior="height" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
             source={require('../../assets/images/islands100black.png')}	 

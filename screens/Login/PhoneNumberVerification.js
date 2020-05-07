@@ -22,7 +22,7 @@ export default class PhoneNumberVerification extends React.Component {
   render() {
     return (
       <View style={{backgroundColor: "#19b7bf", flex: 1}}>
-          <KeyboardAvoidingView behavior="padding" style={styles.container}>
+          <KeyboardAvoidingView behavior="height" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
           <Image

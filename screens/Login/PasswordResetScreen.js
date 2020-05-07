@@ -17,7 +17,7 @@ export default class PasswordResetScreen extends React.Component {
     return (
       <View style={{backgroundColor: "#19b7bf", flex: 1}}>
          <ScrollView keyboardShouldPersistTaps='never'>
-          <KeyboardAvoidingView behavior="padding" style={styles.container}>
+          <KeyboardAvoidingView behavior="height" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
             source={require('../../assets/images/white_logo_notext.png')}	 
