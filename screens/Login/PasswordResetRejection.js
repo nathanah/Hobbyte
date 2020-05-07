@@ -33,6 +33,8 @@ export default class PasswordResetRejection extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <KeyboardAvoidingView behavior="height" style={styles.container}>
+          <ScrollView keyboardShouldPersistTaps='never'>
         <Text>
             You either entered an invalid username or you never verified your email!!!
             If you never verified your account is mine now!! Hahahaha...
@@ -50,6 +52,8 @@ export default class PasswordResetRejection extends React.Component {
           title="Create New Account"
           onPress={() => this.props.navigation.navigate('SignUp')}
         />
+        </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     );
   }

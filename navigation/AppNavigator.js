@@ -148,17 +148,13 @@ const RootStack = createStackNavigator({
   Home: {
     screen: bottomTabNavigator,
     navigationOptions:{
-      headerLeft: null,
       gesturesEnabled: false,
-      headerShown: false,
     }
   } ,
   Main: {
     screen: bottomTabNavigator,
     navigationOptions:{
-      headerLeft: null,
       gesturesEnabled: false,
-      headerShown: false,
 
     }
   } ,
@@ -166,7 +162,6 @@ const RootStack = createStackNavigator({
   ChatPage: {
     screen: ChatScreen,
     navigationOptions:{
-      headerLeft: null,
 
       gesturesEnabled: false,
     }
@@ -174,7 +169,6 @@ const RootStack = createStackNavigator({
   ChatRoom: {
     screen: ChatRoom,
     navigationOptions:{
-      headerLeft: null,
 
       gesturesEnabled: false,
     }
@@ -182,7 +176,6 @@ const RootStack = createStackNavigator({
   makeRoom: {
     screen: CreateChatRoom,
     navigationOptions:{
-      headerLeft: null,
 
       gesturesEnabled: false,
     }
@@ -190,7 +183,6 @@ const RootStack = createStackNavigator({
   RoomSettings: {
     screen: RoomSettings,
     navigationOptions:{
-      headerLeft: null,
 
       gesturesEnabled: false,
     }
