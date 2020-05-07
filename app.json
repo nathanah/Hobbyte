@@ -24,7 +24,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.Hobbyte.Sanctuary"
     },
     "description": "Echo Chamber version 4.9.2020"
   }
