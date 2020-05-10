@@ -10,7 +10,7 @@ import io from "socket.io-client";
 async function setUpSocket(username) {
   console.log("username now: " + username); 
     'use strict';
-  const socket = require('socket.io-client')('http://10.1.10.190:3006');
+  const socket = require('socket.io-client')('http://192.168.0.19:3006');
   var info = {  };
   var response = {};
   console.log("attempting to connect socket..."); 
@@ -23,6 +23,7 @@ async function setUpSocket(username) {
   
   // Listener
   socket.on('dataFromServer', message => {
+    return message.json().then(data=>data.VirgilToken)
     console.log("Message from Server:" + message); 
   })
 });
