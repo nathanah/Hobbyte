@@ -12,11 +12,13 @@ async function getJwtGenerator() {
   await initCrypto();
 
   const virgilCrypto = new VirgilCrypto();
-  // initialize JWT generator with App ID and App Key ID found in .env file
+
+  // initialize JWT generator with App ID and App Key ID found in .env file. 
+  //appId, apiKeyId and apiKey is already stored locally in .env in Hobbyte directory.
+
   return new JwtGenerator({
     appId: process.env.APP_ID,
     apiKeyId: process.env.APP_KEY_ID,
-    // import your App Key that you got in Virgil Dashboard from string.
     apiKey: virgilCrypto.importPrivateKey(process.env.APP_KEY),
     // initialize accessTokenSigner that signs users JWTs
     accessTokenSigner: new VirgilAccessTokenSigner(virgilCrypto),
@@ -39,7 +41,7 @@ io.on('connect', function(socket){
     
     //token.json({ virgilToken: virgilJwtToken.toString() });     Convert the token into JSON object
    
-    socket.emit ('dataFromServer', token);     //Parse the token to user.
+    //socket.emit ('dataFromServer', token);     //Parse the token to user.
     io.emit('io emit: send data to anybody', info);
   });
 });
