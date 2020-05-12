@@ -36,6 +36,7 @@ import HomeScreen               from "../screens/HomeScreen";
 
 import AttributeReset           from "../screens/AttributeReset";
 import ChangePasswordForm       from "../screens/ChangePasswordForm"
+import ChangeEmailForm          from "../screens/ChangeEmailForm"
 //Chat Screens
 import ChatRoom                 from "../screens/Chat/ChatRoomScreen";
 import ChatScreen               from "../screens/Chat/ChatScreen";
@@ -127,6 +128,13 @@ const RootStack = createStackNavigator({
   },
   ChangePasswordForm: {
     screen: ChangePasswordForm,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  ChangeEmailForm: {
+    screen: ChangeEmailForm,
     navigationOptions:{
       headerLeft: null,
       headerShown: false,

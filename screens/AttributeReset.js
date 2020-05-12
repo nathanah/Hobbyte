@@ -36,11 +36,11 @@ export default class AttributeReset extends React.Component {
         <Text>Welcome To Sanctuary</Text>
         <Button
           title="Reset Password"
-          onPress={() => this.resetPassword()}
+          onPress={() => this.changePassword()}
         />
         <Button
           title="Reset Email Adress"
-          onPress={() => this.props.navigation.navigate('Main')}
+          onPress={() => this.changeEmail()}
         />
         <Button
           title="Reset Phone Number"
@@ -56,7 +56,7 @@ export default class AttributeReset extends React.Component {
 
 
   /*--------------------Async------------------------*/
-  resetPassword = () => {
+  changePassword = () => {
     Auth.verifyCurrentUserAttribute("phone_number").then(
       this.props.navigation.navigate("ChangePasswordForm")
     ).catch(
@@ -67,7 +67,11 @@ export default class AttributeReset extends React.Component {
     )
   }
 
-}
+  changeEmail = () => {
+    this.props.navigation.navigate("ChangeEmailForm")
+  }
+
+};
 
 
 AttributeReset.navigationOptions = {

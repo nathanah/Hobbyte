@@ -10,9 +10,9 @@ export default class ChangePasswordForm extends React.Component {
 
 
   state = {
-    verificationCode: '',
-    oldPassword:'',
-    newPassword:'',
+    newEmail: '',
+    emailVerificationCode:'',
+    phoneVerificationCode:''
     //username: this.props.navigation.getParam('username','none'),
   };
 
@@ -37,43 +37,42 @@ export default class ChangePasswordForm extends React.Component {
             onSubmitEditing = {() => {this.passwordInput.focus();}}
             autoCapitalize='none'
             autoCorrect={false}
-            value={this.state.verificationCode}
-            onChange ={event => this.setState({verificationCode:event.nativeEvent.text})}
-            underlineColorAndroid = "transparent"
-          />
-          
-            <TextInput
-            placeholder="old password"
-            style={styles.formBox}
-            placeholderTextColor = "#000000"
-            returnKeyType = "go"
-            secureTextEntry
-            autoFocus={true}
-            onSubmitEditing = {this._passwordResetAsync}
-            autoCapitalize='none'
-            autoCorrect={false}
-            value={this.state.oldPassword}
-            onChange ={event => this.setState({oldPassword:event.nativeEvent.text})}
+            value={this.state.phoneVerificationCode}
+            onChange ={event => this.setState({phoneVerificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
           <TextInput
-            placeholder="new password"
+            placeholder="Email Code"
             style={styles.formBox}
             placeholderTextColor = "#000000"
             returnKeyType = "go"
-            secureTextEntry
+            keyboardType="phone-pad"
             autoFocus={true}
-            onSubmitEditing = {this.changePassword}
+            onSubmitEditing = {() => {this.passwordInput.focus();}}
             autoCapitalize='none'
             autoCorrect={false}
-            value={this.state.newPassword}
-            onChange ={event => this.setState({newPassword:event.nativeEvent.text})}
+            value={this.state.emailVerificationCode}
+            onChange ={event => this.setState({emailVerificationCode:event.nativeEvent.text})}
+            underlineColorAndroid = "transparent"
+          />
+          
+          <TextInput
+            placeholder="new email"
+            style={styles.formBox}
+            placeholderTextColor = "#000000"
+            returnKeyType = "go"
+            autoFocus={true}
+            onSubmitEditing = {this.changeEmail}
+            autoCapitalize='none'
+            autoCorrect={false}
+            value={this.state.newEmail}
+            onChange ={event => this.setState({newEmail:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
 
 
         <TouchableOpacity style={styles.ButtonContainer}
-        onPress={this.changePassword}
+        onPress={this.changeEmail}
         activeOpacity = { .8 }>
                 <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
@@ -86,36 +85,36 @@ export default class ChangePasswordForm extends React.Component {
   }
 
   /*--------------------Async------------------------*/
-    changePassword = () => {
+    changeEmail = () => {
         console.log(this.state)
-        console.log("--------------This is password reset form--------------------------")
-        Auth.verifyCurrentUserAttributeSubmit("phone_number",this.state.verificationCode).then(
-            ()=>{
-                Auth.currentAuthenticatedUser().then(
-                    (user) => {
-                        Auth.changePassword(user, this.state.oldPassword, this.state.newPassword).then(
+        console.log("--------------This is email reset form--------------------------")
+        Auth.currentAuthenticatedUser().then(
+            (user)=>{
+                Auth.updateUserAttributes(user, {'email':this.state.newEmail}).then(
+                    ()=>{
+                        Auth.verifyCurrentUserAttribute(user, 'email').then(
                             ()=>{
-                                console.log("password change success! going to main...")
-                                this.props.navigation.navigate('Main')
+                                console.log("changeEmail scuess!! Going to verify emial")
+                                this.props.navigation.navigate('PNV',{authType: "email_verification"});     
                             }
                         ).catch(
                             (err)=>{
-                                console.log("error in changePassword. could not changePassword")
-                                console.log("error: ", err)
+                                console.log("error in changeEmail: could not verifyCurrentUserAttribute: email")
+                                console.log('error: ', err)
                             }
                         )
                     }
                 ).catch(
-                    (err) => {
-                        console.log("error in changePassword. Could not get currentAuthenticatedUser")
-                        console.log("error: ", err)
+                    (err)=>{
+                        console.log("error in changeEmail: could not updateUserAttribute: email")
+                        console.log('error: ', err)
                     }
-                )
+                )  
             }
         ).catch(
-            (err)=>{
-                console.log("error in changePassword. could not verifyCurrentUserAttributeSubmit")
-                console.log("error: ", err)
+            (err) => {
+                console.log("error in changeEmail: could not get currentAuthenticatedUser")
+                console.log('error: ', err)
             }
         )
     }
