@@ -10,22 +10,32 @@ import io from "socket.io-client";
 async function setUpSocket(username) {
   console.log("username now: " + username); 
     'use strict';
-  const socket = require('socket.io-client')('http://192.168.0.19:3006');
+  const socket = require('socket.io-client')('http://10.1.10.190:3006');
   var info = {  };
-  var response = {};
+  var response ={
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: info.username
+        })
+    };
   console.log("attempting to connect socket..."); 
   socket.on('connect', function () {
   console.log('connected to server');
   info.username = username;
  
   console.log('username: ' + info.username);
-  socket.emit('pass data to server',info); 
+  socket.emit('pass data to server',info, response); 
   
   // Listener
   socket.on('dataFromServer', message => {
-    return message.json().then(data=>data.VirgilToken)
-    console.log("Message from Server:" + message); 
+    console.log("Message from Server:" + JSON.stringify(message)); 
+    // return message.json().then(data=>data.VirgilToken);
+  
   })
+
 });
 }
 /*=====================================================*/
