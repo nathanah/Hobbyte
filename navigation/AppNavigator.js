@@ -24,7 +24,7 @@ import ResetScreen              from '../screens/Login/ResetScreen';
 import TwoFactorScreen          from "../screens/Login/TwoFactorScreen";
 import SignUpScreen             from "../screens/Login/SignUpScreen";
 import PhoneNumberVerification  from "../screens/Login/PhoneNumberVerification";
-import PasswordResetForm        from "../screens/Login/PasswordResetForm"
+import PasswordRecoverForm        from "../screens/Login/PasswordRecoverForm"
 import PasswordResetRejection   from "../screens/Login/PasswordResetRejection"
 
 import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
@@ -34,6 +34,8 @@ import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 import MainScreen               from "../screens/MainScreen";
 import HomeScreen               from "../screens/HomeScreen";
 
+import AttributeReset           from "../screens/AttributeReset";
+import ChangePasswordForm       from "../screens/ChangePasswordForm"
 //Chat Screens
 import ChatRoom                 from "../screens/Chat/ChatRoomScreen";
 import ChatScreen               from "../screens/Chat/ChatScreen";
@@ -116,6 +118,20 @@ const RootStack = createStackNavigator({
       headerShown: false,
     }
   },
+  AR: {
+    screen: AttributeReset,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  ChangePasswordForm: {
+    screen: ChangePasswordForm,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
   PhoneReset: {
     screen: PhoneResetScreen,
     navigationOptions:{
@@ -131,7 +147,7 @@ const RootStack = createStackNavigator({
     }
   },
   PRF: {
-    screen: PasswordResetForm,
+    screen: PasswordRecoverForm,
     navigationOptions:{
       headerLeft: null,
       headerShown: false,

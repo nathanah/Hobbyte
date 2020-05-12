@@ -6,7 +6,7 @@ import {styles} from '../../styles/styles'
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
-export default class PasswordResetForm extends React.Component {
+export default class PasswordRecoverForm extends React.Component {
 
 
   state = {

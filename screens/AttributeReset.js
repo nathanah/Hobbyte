@@ -29,92 +29,48 @@ import {Auth} from 'aws-amplify';
 /*=====================================================*/
 /*            Home Screen                              */
 /*=====================================================*/
-export default class HomeScreen extends React.Component {
+export default class AttributeReset extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Welcome To Sanctuary</Text>
         <Button
-          title="Go to Details... again"
-          onPress={() => this.props.navigation.navigate('Home')}
+          title="Reset Password"
+          onPress={() => this.resetPassword()}
         />
         <Button
-          title="Sign out"
-          onPress={this._signOutAsync}
-        />
-
-
-
-       <Button
-          title="Go back to main screen"
+          title="Reset Email Adress"
           onPress={() => this.props.navigation.navigate('Main')}
         />
         <Button
-          title="Go to conversation chat room page"
-          onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
+          title="Reset Phone Number"
+          onPress={() => this.props.navigation.navigate('Main')}
         />
         <Button
-          title="Clear Rooms"
-          onPress={() => AsyncStorage.removeItem("rooms")}
+          title="Return to Home Page"
+          onPress={() => this.props.navigation.navigate('Main')}
         />
-        <Button
-          title="Authenticate email"
-          onPress={
-            ()=>{
-              Auth.verifyCurrentUserAttribute('email').then(()=>{
-                console.log("email verification worked")
-                this.props.navigation.navigate('PNV',{authType: "email_verification"});
-              }).catch(
-                (err)=>{console.log("email verificatino error: ", err)
-              })
-            } 
-        }
-        />
-
-
-        <Button
-          title="Reset User Information"
-          onPress={
-            this._resetAttributes
-        }
-        />    
       </View>
     );
   }
 
 
   /*--------------------Async------------------------*/
-  _signOutAsync = async () => {
-    // TODO - clear Async storage
-    // await AsyncStorage.clear();
-    Auth.signOut()
-    .then(() => {
-      console.log("Signed Out");
-      AsyncStorage.clear();
-      this.props.navigation.navigate('SignIn'); // not redirecting for some reason
-    })
-    .catch(err => console.log('error confirming signing in!: ', err));
-  };
-
-
-  _resetAttributes = async ()=> {
-    Auth.currentAuthenticatedUser().then(
-      (user) => {
-        console.log(user)
-        Auth.userAttributes(user).then(
-          (attribures) => {
-            console.log(attribures)
-          }
-        ).catch(err=>console.log(err))
-        this.props.navigation.navigate('AR');
+  resetPassword = () => {
+    Auth.verifyCurrentUserAttribute("phone_number").then(
+      this.props.navigation.navigate("ChangePasswordForm")
+    ).catch(
+      (err)=>{
+        console.log("error in AttribureReset: resetPassword: could not verifyCurrentUserAttribute: phone number")
+        console.log("error: ", err)
       }
-    ).catch(err=>console.log(err));
-    
-  } 
+    )
+  }
+
 }
 
 
-HomeScreen.navigationOptions = {
+AttributeReset.navigationOptions = {
   header: null,
 };
 
