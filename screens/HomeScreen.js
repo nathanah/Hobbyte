@@ -42,9 +42,6 @@ export default class HomeScreen extends React.Component {
           title="Sign out"
           onPress={this._signOutAsync}
         />
-
-
-
        <Button
           title="Go back to main screen"
           onPress={() => this.props.navigation.navigate('Main')}
@@ -63,7 +60,7 @@ export default class HomeScreen extends React.Component {
             ()=>{
               Auth.verifyCurrentUserAttribute('email').then(()=>{
                 console.log("email verification worked")
-                this.props.navigation.navigate('PNV',{authType: "email_verification"});
+                this.props.navigation.navigate('PNV',{authType: "email"});
               }).catch(
                 (err)=>{console.log("email verificatino error: ", err)
               })

@@ -40,11 +40,11 @@ export default class AttributeReset extends React.Component {
         />
         <Button
           title="Reset Email Adress"
-          onPress={() => this.changeEmail()}
+          onPress={() => this.changeAttribure('email')}
         />
         <Button
           title="Reset Phone Number"
-          onPress={() => this.props.navigation.navigate('Main')}
+          onPress={() => this.changeAttribure('phone_number')}
         />
         <Button
           title="Return to Home Page"
@@ -67,13 +67,37 @@ export default class AttributeReset extends React.Component {
     )
   }
 
-  changeEmail = () => {
-    this.props.navigation.navigate("ChangeEmailForm")
+  changeAttribure = (attribute) => {
+    let next = {}
+    next['attribute'] = attribute
+
+    Auth.verifyCurrentUserAttribute('email').then(
+      ()=>{
+        Auth.verifyCurrentUserAttribute('phone_number').then(
+
+          ()=>{
+            this.props.navigation.navigate("ChangeEmailForm", next)
+          }
+          
+        ).catch(
+          (err)=>{
+            console.log("error in AttributeReset verifyCurrentUserAttribute(phone_number): ", attribute)
+            console.log("ERROR: ", err)
+            alert("ERROR: " + err["message"])
+            this.props.navigation.navigate('Main'); 
+          }
+        )
+      }
+    ).catch(
+      (err)=>{
+        console.log("error in AttributeReset verifyCurrentUserAttribute(email): ", attribute)
+        console.log("ERROR: ", err)
+        alert("ERROR: " + err["message"])
+        this.props.navigation.navigate('Main'); 
+      }
+    )
   }
-
 };
-
-
 AttributeReset.navigationOptions = {
   header: null,
 };

@@ -75,6 +75,7 @@ export default class PhoneNumberVerification extends React.Component {
       console.log("code:" + this.state.verificationCode);
       console.log("Passed form login: ", this.state.username)
       console.log("Varification type: ", this.state.authType)
+      console.log("this is AuthType: ", this.props.navigation.getParam('authType'))
 
       if(this.props.navigation.getParam('authType', 'none') == 'signup') {
         console.log("------------This is signup-----------------")
@@ -104,20 +105,20 @@ export default class PhoneNumberVerification extends React.Component {
         })
         .catch(err => {console.log('error confirming signing in!: ', err);
                 alert('error confirming signing in!: '+err.message);});
-      } else if(this.props.navigation.getParam('authType', 'none') == 'email_verification') {
 
-        console.log("------------This is email_verification-----------------")
-        console.log("In email verification")
-        Auth.verifyCurrentUserAttributeSubmit('email',this.state.verificationCode).then(
+      } else if(this.props.navigation.getParam('authType', 'none') == 'email' ||
+                     this.props.navigation.getParam('authType', 'none') == 'phone_number') {
+
+        console.log("------------This is attribute verification-----------------")
+        let attribute = this.props.navigation.getParam('authType', 'none')
+        Auth.verifyCurrentUserAttributeSubmit(attribute, this.state.verificationCode).then(
             ()=>{
-              console.log("email verification success! ")
+              console.log(attribute, " verification success! ")
               this.props.navigation.navigate('Main')
             }
         ).catch((err)=>{
-            console.log("email verification error: ", err)
+            console.log(attribute, " verification error: ", err)
         })
-      } else if(this.state.authType == 'password_reset') {
-
       }
     };
 
