@@ -12,15 +12,6 @@ async function setUpSocket(username) {
     'use strict';
   const socket = require('socket.io-client')('http://10.1.10.190:3006');
   var info = {  };
-  var response ={
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: info.username
-        })
-    };
   console.log("attempting to connect socket..."); 
   socket.on('connect', function () {
   console.log('connected to server');
