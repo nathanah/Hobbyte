@@ -3,10 +3,16 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
-//import { EThree } from '@virgilsecurity/e3kit-native';
+import { EThree } from '@virgilsecurity/e3kit-native'; // uses react-native-keychain but throwing error
 import io from "socket.io-client";
 
-
+async function sendToEkit(token){
+  EThree.initialize(token)
+    .then(e3kit => {
+      showMessage('e3kit ready for identity: ' + e3kit.identity);
+      return e3kit.register();
+    });
+}
 async function setUpSocket(username) {
   console.log("username now: " + username); 
     'use strict';
@@ -18,13 +24,12 @@ async function setUpSocket(username) {
   info.username = username;
  
   console.log('username: ' + info.username);
-  socket.emit('pass data to server',info, response); 
+  socket.emit('pass data to server',info); 
   
   // Listener
   socket.on('dataFromServer', message => {
     console.log("Message from Server:" + JSON.stringify(message)); 
-    // return message.json().then(data=>data.VirgilToken);
-  
+    sendToEkit(message); 
   })
 
 });
