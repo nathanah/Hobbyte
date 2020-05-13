@@ -133,7 +133,7 @@ export default class ChangePasswordForm extends React.Component {
                                 console.log("error in changeEmail: could not get currentAuthenticatedUser")
                                 console.log('error: ', err)
                                 alert("ERROR: " + err["message"])
-                                this.props.navigation.navigate('Main'); 
+                                                                                this.props.navigation.navigate('Main'); 
 
                             }
                         )
