@@ -67,35 +67,42 @@ export default class AttributeReset extends React.Component {
     )
   }
 
+  handelChangeError = (err, callingFunction, attribute, nextPage) => {
+    console.log("ERROR in, ", callingFunction, ": ", attribute)
+    console.log('error: ', err)
+    alert("ERROR: " + err["message"])
+    return false
+  }
+
+  verifyCurrentUserAttribute(attribute) {
+        Auth.verifyCurrentUserAttribute(attribute)
+        .then(
+            ()=>{
+                console.log("changeEmail scuess!! Going to verify emial")    
+                return true
+            }
+        )
+        .catch(
+            (err) => {
+                this.handelChangeError(err, 
+                    "verifyCurrentUserAttribute", 
+                    attribute)
+            }
+        )  
+    }
+
   changeAttribure = (attribute) => {
     let next = {}
     next['attribute'] = attribute
+    console.log("going to change: ", attribute)
 
-    Auth.verifyCurrentUserAttribute('email').then(
-      ()=>{
-        Auth.verifyCurrentUserAttribute('phone_number').then(
-
-          ()=>{
-            this.props.navigation.navigate("ChangeEmailForm", next)
-          }
-          
-        ).catch(
-          (err)=>{
-            console.log("error in AttributeReset verifyCurrentUserAttribute(phone_number): ", attribute)
-            console.log("ERROR: ", err)
-            alert("ERROR: " + err["message"])
-            this.props.navigation.navigate('Main'); 
-          }
-        )
-      }
-    ).catch(
-      (err)=>{
-        console.log("error in AttributeReset verifyCurrentUserAttribute(email): ", attribute)
-        console.log("ERROR: ", err)
-        alert("ERROR: " + err["message"])
-        this.props.navigation.navigate('Main'); 
-      }
-    )
+    let recp;
+    recp = this.verifyCurrentUserAttribute('email')
+    if(!recp) return;
+    recp = this.verifyCurrentUserAttribute('phone_number')
+    if(!recp) return;
+    this.props.navigation.navigate("ChangeEmailForm", next)
+    
   }
 };
 AttributeReset.navigationOptions = {

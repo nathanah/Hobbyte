@@ -6,11 +6,12 @@ import {styles} from '../styles/styles'
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
+
 export default class ChangePasswordForm extends React.Component {
 
 
   state = {
-    newAttribute: '',
+    newAttributeValue: '',
     emailVerificationCode:'',
     phoneVerificationCode:''
     //username: this.props.navigation.getParam('username','none'),
@@ -65,8 +66,10 @@ export default class ChangePasswordForm extends React.Component {
             onSubmitEditing = {this.changeAttribute}
             autoCapitalize='none'
             autoCorrect={false}
-            value={this.state.newAttribute}
-            onChange ={event => this.setState({newAttribute:event.nativeEvent.text})}
+            value={this.state.newAttributeValue}
+            onChange ={event => this.setState({newAttributeValue: '',
+                                               emailVerificationCode:'',
+                                               phoneVerificationCode:''})}
             underlineColorAndroid = "transparent"
           />
 
@@ -85,80 +88,113 @@ export default class ChangePasswordForm extends React.Component {
   }
 
   /*--------------------Async------------------------*/
-  
-  changeAttribute = () => {
-        console.log(this.state)
-        console.log("--------------This is email reset form--------------------------")
-        let attribute = this.props.navigation.getParam('attribute', 'none');
-        var attributeUpdate = {}
-        attributeUpdate[attribute] = this.state.newAttribute
-        console.log("attributeUpdate: ", attributeUpdate)
-        Auth.verifyCurrentUserAttributeSubmit('email',this.state.emailVerificationCode).then(
+
+  verifyCurrentUserAttributeSubmit = (attribute, verificationCode) => {
+    Auth.verifyCurrentUserAttributeSubmit('email',verificationCode)
+        .then(
             ()=>{
-                Auth.verifyCurrentUserAttributeSubmit('phone_number',this.state.phoneVerificationCode).then(
-                    ()=>{
-                        
-
-
-
-                        Auth.currentAuthenticatedUser().then(
-                            (user)=>{
-                                Auth.updateUserAttributes(user, attributeUpdate).then(
-                                    ()=>{     
-                                        Auth.verifyCurrentUserAttribute(attribute).then(
-                                            ()=>{
-                                                console.log("changeEmail scuess!! Going to verify emial")
-                                                this.props.navigation.navigate('PNV',{authType: attribute});     
-                                            }
-                                        ).catch(
-                                            (err)=>{
-                                                console.log("error in changeEmail: could not verifyCurrentUserAttribute: ", attribute)
-                                                console.log('error: ', err)
-                                                alert("ERROR: " + err["message"])
-                                                this.props.navigation.navigate('Main'); 
-                                            }
-                                        )
-                                    }
-                                ).catch(
-                                    (err)=>{
-                                        console.log("error in changeEmail: could not updateUserAttribute: ", attribute)
-                                        console.log('error: ', err)
-                                        alert("ERROR: " + err["message"])
-                                        this.props.navigation.navigate('Main'); 
-                                    }
-                                )  
-                            }
-                        ).catch(
-                            (err) => {
-                                console.log("error in changeEmail: could not get currentAuthenticatedUser")
-                                console.log('error: ', err)
-                                alert("ERROR: " + err["message"])
-                                                                                this.props.navigation.navigate('Main'); 
-
-                            }
-                        )
-
-
-
-        
-                    }
-                ).catch(
-                    (err)=>{
-                        console.log("error in changeEmail: could not verifyCurrentUserAttributeSubmit(phone_number): ", attribute)
-                        console.log('error: ', err)
-                        alert("ERROR: " + err["message"])
-                        this.props.navigation.navigate('Main'); 
-                    }
-                )
-            }
-        ).catch(
-            (err)=>{
-                console.log("error in changeEmail: could not verifyCurrentUserAttributeSubmit(email): ", attribute)
-                console.log('error: ', err)
-                alert("ERROR: " + err["message"])
-                this.props.navigation.navigate('Main'); 
+                console.log(attribute, " verification SUCCESS!")
+                return true
             }
         )
+        .catch(
+            (err) => {
+                this.handelChangeError(err, 
+                    "verifyCurrentUserAttributeSubmit", 
+                    attribute)
+            }
+        )
+    }
 
+    handelChangeError = (err, callingFunction, attribute, nextPage) => {
+        console.log("ERROR in, ", callingFunction, ": ", attribute)
+        console.log('error: ', err)
+        alert("ERROR: " + err["message"])
+        // this.setState({newAttributeValue: '',
+        //                emailVerificationCode:'',
+        //                phoneVerificationCode:''
+        //             })
+        return false;
+    }
+
+
+    currentAuthenticatedUser(){
+        Auth.currentAuthenticatedUser()
+            .then(
+                (user)=>{
+                    return user;
+                }
+            )
+            .catch(
+                (err) => {
+                    this.handelChangeError(err, 
+                        "currentAuthenticatedUser", 
+                        attribute)
+                }
+            )
+    }
+
+    updateUserAttributes(user, attribute) {
+        var attributeUpdate = {}
+        attributeUpdate[attribute] = this.state.newAttributeValue
+        Auth.updateUserAttributes(user, attributeUpdate)
+        .then(
+            () => {
+                console.log("Attribute Updeate SUCESS")
+                return true
+            }
+        )
+        .catch(
+            (err) => {
+                this.handelChangeError(err, 
+                    "updateUserAttributes", 
+                    attribute)
+            }
+        )
+    }
+    verifyCurrentUserAttribute(attribute) {
+        Auth.verifyCurrentUserAttribute(attribute)
+        .then(
+            ()=>{
+                console.log("changeEmail scuess!! Going to verify emial") 
+                return true   
+            }
+        )
+        .catch(
+            (err) => {
+                this.handelChangeError(err, 
+                    "verifyCurrentUserAttribute", 
+                    attribute)
+            }
+        )  
+    }
+
+
+
+  changeAttribute = () => {
+        let attribute = this.props.navigation.getParam('attribute', 'none');
+        console.log(this.state)
+        console.log("--------------This is changeAttribute reset form--------------------------")
+        console.log("___________________we are changing ", attribute, "______________________")
+        
+        
+        // console.log("attributeUpdate: ", attributeUpdate)
+        if(this.state.emailVerificationCode == '' ||
+            this.state.phoneVerificationCode == '') {
+                alert('Verification codes cannot be empty!')
+                return;
+            }
+        let recp;
+        recp = this.verifyCurrentUserAttributeSubmit('email', this.state.emailVerificationCode)
+        if(!recp) return;
+        recp = this.verifyCurrentUserAttributeSubmit('phone_number', this.state.phoneVerificationCode)
+        if(!recp) return;
+        let user = this.currentAuthenticatedUser()
+        if(user == false) return;
+        recp = this.updateUserAttributes(user, attribute)
+        if(!recp) return;          
+        recp = this.verifyCurrentUserAttribute(attribute)
+        if(!recp) return;
+        this.props.navigation.navigate('PNV',{authType: attribute});   
     }
 };
