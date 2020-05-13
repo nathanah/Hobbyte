@@ -130,7 +130,23 @@ export default class LoginScreen extends React.Component {
           this.props.navigation.navigate('PNV',
             {user: this.state.user, authType: 'signin'})
         })
-        .catch(err => console.log('error signing in!: ', err));
+        .catch((err) => {
+          console.log('error signing in!: ', err)
+          if(err.code == "UserNotConfirmedException") {
+            console.log("phone not confermed, going to verify it!")
+            Auth.resendSignUp(this.state.username).then(
+              (user) => {
+                this.setState({ user });
+                this.props.navigation.navigate('PNV',
+                        {username: this.state.username, authType: 'signup'})
+              }
+            ).catch(
+                (err) => {
+                  console.log(err)
+                }
+              )
+          }
+          });
     };
 
     _resetAsync = async () => {
