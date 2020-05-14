@@ -80,14 +80,20 @@ export default class PhoneNumberVerification extends React.Component {
       if(this.props.navigation.getParam('authType', 'none') == 'signup') {
         console.log("------------This is signup-----------------")
         Auth.confirmSignUp(this.state.username, this.state.verificationCode)
-        .then(() => {
-            console.log('successful confirm sign up!')
-            AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-            //Need to sign in so that the user is authenticated
-            this.props.navigation.navigate("SignIn");
-          })
-        .catch(err => {console.log('error confirming signing up!: ', err);
-                alert('error confirming signing up!: '+ err.message);});
+        .then(
+            ()=>{
+              console.log('successful confirm sign up!')
+              AsyncStorage.setItem("userToken", JSON.stringify(Auth))
+              //Need to sign in so that the user is authenticated
+              this.props.navigation.navigate("SignIn");
+            }
+          )
+        .catch(
+          (err) => {
+            console.log('error confirming signing up!: ', err);
+                alert('error confirming signing up!: '+ err.message);
+          }
+        )
       } else if(this.props.navigation.getParam('authType', 'none') == 'signin') {
         console.log("------------This is signin-----------------")
         // remove from final version
@@ -99,26 +105,59 @@ export default class PhoneNumberVerification extends React.Component {
 
         // need to comment back in when texting works in AWS
         Auth.confirmSignIn(this.state.user, this.state.verificationCode)
-        .then(() => {
-          console.log('successful confirm sign in!');
-          AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-          this.props.navigation.navigate('Main' );
-        })
+        .then(
+          () => {
+            console.log('successful confirm sign in!');
+            AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+
+            Auth.currentAuthenticatedUser()
+              //Check if email is verified, if not verify it, else go to main
+              .then(
+                (user) => {
+                  console.log("email_verified: ", user.attributes.email_verified)
+                  console.log("!email_verified: ", !user.attributes.email_verified)
+                  if(!user.attributes.email_verified){
+                    console.log("Email verified is false")
+                    Auth.verifyCurrentUserAttribute('email')
+                      .then(
+                        ()=>{
+                          console.log("init email verification")
+                          this.props.navigation.navigate('PNV', {authType: 'verify_email'})
+                        }
+                      )
+                      .catch(
+                        (err)=>{
+                          console.log("Error in init email verification: ", err)
+                        }
+                      )
+                    
+                  } else {
+                    this.props.navigation.navigate('Main' );
+                  }
+                })
+              .catch(
+                (err)=>{
+                  console.log("Error checking if email is verified: ", err)
+                }
+              )
+          }
+        )
         .catch(err => {console.log('error confirming signing in!: ', err);
                 alert('error confirming signing in!: '+err.message);});
 
-      } else if(this.props.navigation.getParam('authType', 'none') == 'email' ||
-                     this.props.navigation.getParam('authType', 'none') == 'phone_number') {
+      } else if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
+        console.log("------------Verifying the email-----------------")
+        console.log("comming from: ", this.props.navigation.getParam('authType', 'none'))
 
-        console.log("------------This is attribute verification-----------------")
-        let attribute = this.props.navigation.getParam('authType', 'none')
-        Auth.verifyCurrentUserAttributeSubmit(attribute, this.state.verificationCode).then(
+        Auth.verifyCurrentUserAttributeSubmit('email', this.state.verificationCode).then(
             ()=>{
-              console.log(attribute, " verification success! ")
+              console.log("email has been verified.")              
+              //We came form signup so we want to go to signin...
               this.props.navigation.navigate('Main')
+              
             }
         ).catch((err)=>{
-            console.log(attribute, " verification error: ", err)
+            console.log("Error verifing Email, comming form: ", err)
         })
       }
     };

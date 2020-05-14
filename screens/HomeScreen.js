@@ -99,7 +99,7 @@ export default class HomeScreen extends React.Component {
       (user) => {
         console.log("{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}")
         console.log(user.attributes)
-        console.log(user.attributes.email_verified)
+        console.log("type: ", typeof("hello"))
         // Auth.userAttributes(user).then(
         //   (attribures) => {
         //     console.log(attribures)
