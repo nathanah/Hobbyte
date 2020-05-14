@@ -246,14 +246,14 @@ _submitAsync = async () => {
   console.log("phone # :" + this.state.phoneNumber);
   console.log("password:" + this.state.password);
 
-  if (this.state.username== ''){
-    Alert.alert("Sign In Error:","Please enter a username. "); 
-  } else if(this.state.email == ''){
-    Alert.alert("Sign In Error:","Please enter an email."); 
-  } else if (this.state.phoneNumber== ''){
-    Alert.alert("Sign In Error:","Please enter a phone number with the following format: +14445556666"); 
-  } else if (this.state.password== ''){
-    Alert.alert("Sign In Error:","Please enter a password.");
+  if ( this.state.username == null ||this.state.username== '' ){
+    Alert.alert("Sign Up Error:","Please enter a username. "); 
+  } else if(this.state.email == null || this.state.email == ''){
+    Alert.alert("Sign Up Error:","Please enter an email."); 
+  } else if (this.state.phoneNumber == null || this.state.phoneNumber== ''){
+    Alert.alert("Sign Up Error:","Please enter a phone number with the following format: +14445556666"); 
+  } else if (this.state.password == null || this.state.password== ''){
+    Alert.alert("Sign Up Error:","Please enter a password.");
   } else {
 
     Auth.signUp({
