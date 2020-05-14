@@ -97,12 +97,14 @@ export default class HomeScreen extends React.Component {
   _resetAttributes = async ()=> {
     Auth.currentAuthenticatedUser().then(
       (user) => {
-        console.log(user)
-        Auth.userAttributes(user).then(
-          (attribures) => {
-            console.log(attribures)
-          }
-        ).catch(err=>console.log(err))
+        console.log("{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}")
+        console.log(user.attributes)
+        console.log(user.attributes.email_verified)
+        // Auth.userAttributes(user).then(
+        //   (attribures) => {
+        //     console.log(attribures)
+        //   }
+        // ).catch(err=>console.log(err))
         this.props.navigation.navigate('AR');
       }
     ).catch(err=>console.log(err));

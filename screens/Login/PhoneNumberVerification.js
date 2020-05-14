@@ -83,7 +83,8 @@ export default class PhoneNumberVerification extends React.Component {
         .then(() => {
             console.log('successful confirm sign up!')
             AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-            this.props.navigation.navigate('Home', Auth.user);
+            //Need to sign in so that the user is authenticated
+            this.props.navigation.navigate("SignIn");
           })
         .catch(err => {console.log('error confirming signing up!: ', err);
                 alert('error confirming signing up!: '+ err.message);});

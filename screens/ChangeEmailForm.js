@@ -67,9 +67,7 @@ export default class ChangePasswordForm extends React.Component {
             autoCapitalize='none'
             autoCorrect={false}
             value={this.state.newAttributeValue}
-            onChange ={event => this.setState({newAttributeValue: '',
-                                               emailVerificationCode:'',
-                                               phoneVerificationCode:''})}
+            onChange ={event => this.setState({newAttributeValue:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
 
@@ -78,6 +76,12 @@ export default class ChangePasswordForm extends React.Component {
         onPress={this.changeAttribute}
         activeOpacity = { .8 }>
                 <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.ButtonContainer}
+        onPress={this.resendCodes}
+        activeOpacity = { .8 }>
+                <Text style={styles.buttonText}>Resend Codes</Text>
         </TouchableOpacity>
           </ScrollView>
 
@@ -89,22 +93,22 @@ export default class ChangePasswordForm extends React.Component {
 
   /*--------------------Async------------------------*/
 
-  verifyCurrentUserAttributeSubmit = (attribute, verificationCode) => {
-    Auth.verifyCurrentUserAttributeSubmit('email',verificationCode)
-        .then(
-            ()=>{
-                console.log(attribute, " verification SUCCESS!")
-                return true
-            }
-        )
-        .catch(
-            (err) => {
-                this.handelChangeError(err, 
-                    "verifyCurrentUserAttributeSubmit", 
-                    attribute)
-            }
-        )
-    }
+//   verifyCurrentUserAttributeSubmit = (attribute, verificationCode) => {
+//     Auth.verifyCurrentUserAttributeSubmit('email',verificationCode)
+//         .then(
+//             ()=>{
+//                 console.log(attribute, " verification SUCCESS!")
+//                 return true
+//             }
+//         )
+//         .catch(
+//             (err) => {
+//                 return this.handelChangeError(err, 
+//                     "verifyCurrentUserAttributeSubmit", 
+//                     attribute)
+//             }
+//         )
+//     }
 
     handelChangeError = (err, callingFunction, attribute, nextPage) => {
         console.log("ERROR in, ", callingFunction, ": ", attribute)
@@ -114,70 +118,166 @@ export default class ChangePasswordForm extends React.Component {
         //                emailVerificationCode:'',
         //                phoneVerificationCode:''
         //             })
-        return false;
+        // return false;
     }
 
 
-    currentAuthenticatedUser(){
-        Auth.currentAuthenticatedUser()
-            .then(
-                (user)=>{
-                    return user;
-                }
-            )
-            .catch(
-                (err) => {
-                    this.handelChangeError(err, 
-                        "currentAuthenticatedUser", 
-                        attribute)
-                }
-            )
-    }
+    // currentAuthenticatedUser(){
+    //     Auth.currentAuthenticatedUser()
+    //         .then(
+    //             (user)=>{
+    //                 return user;
+    //             }
+    //         )
+    //         .catch(
+    //             (err) => {
+    //                 return this.handelChangeError(err, 
+    //                     "currentAuthenticatedUser", 
+    //                     attribute)
+    //             }
+    //         )
+    // }
 
-    updateUserAttributes(user, attribute) {
-        var attributeUpdate = {}
-        attributeUpdate[attribute] = this.state.newAttributeValue
-        Auth.updateUserAttributes(user, attributeUpdate)
-        .then(
-            () => {
-                console.log("Attribute Updeate SUCESS")
-                return true
-            }
-        )
-        .catch(
-            (err) => {
-                this.handelChangeError(err, 
-                    "updateUserAttributes", 
-                    attribute)
-            }
-        )
-    }
-    verifyCurrentUserAttribute(attribute) {
-        Auth.verifyCurrentUserAttribute(attribute)
+    // updateUserAttributes(user, attribute) {
+    //     var attributeUpdate = {}
+    //     attributeUpdate[attribute] = this.state.newAttributeValue
+    //     Auth.updateUserAttributes(user, attributeUpdate)
+    //     .then(
+    //         () => {
+    //             console.log("Attribute Updeate SUCESS")
+    //             return true
+    //         }
+    //     )
+    //     .catch(
+    //         (err) => {
+    //             return this.handelChangeError(err, 
+    //                 "updateUserAttributes", 
+    //                 attribute)
+    //         }
+    //     )
+    // }
+    // verifyCurrentUserAttribute(attribute) {
+    //     Auth.verifyCurrentUserAttribute(attribute)
+    //     .then(
+    //         ()=>{
+    //             console.log("changeEmail scuess!! Going to verify emial") 
+    //             return true   
+    //         }
+    //     )
+    //     .catch(
+    //         (err) => {
+    //             return this.handelChangeError(err, 
+    //                 "verifyCurrentUserAttribute", 
+    //                 attribute)
+    //         }
+    //     )  
+    // }
+
+
+    resendCodes = () => {
+        Auth.verifyCurrentUserAttribute('email')
         .then(
             ()=>{
-                console.log("changeEmail scuess!! Going to verify emial") 
-                return true   
+                console.log("changeEmail scuess!! Going to verify emial")    
+                Auth.verifyCurrentUserAttribute('phone_number')
+                  .then(
+                      ()=>{
+                          console.log("CODES HAVE BEEN RESENT")
+                      }
+                  )
+                  .catch(
+                      (err) => {
+                          this.handelChangeError(err, 
+                              "verifyCurrentUserAttribute", 
+                              'phone_number')
+                      }
+                  )
             }
         )
         .catch(
             (err) => {
-                this.handelChangeError(err, 
+                 this.handelChangeError(err, 
                     "verifyCurrentUserAttribute", 
-                    attribute)
+                    'emial')
             }
-        )  
+        ) 
     }
-
-
-
-  changeAttribute = () => {
+    changeAttribute = () => {
         let attribute = this.props.navigation.getParam('attribute', 'none');
         console.log(this.state)
         console.log("--------------This is changeAttribute reset form--------------------------")
         console.log("___________________we are changing ", attribute, "______________________")
         
-        
+        Auth.verifyCurrentUserAttributeSubmit('email',this.state.emailVerificationCode)
+            .then(
+                ()=>{
+                    console.log("email", " verification SUCCESS!")
+                    Auth.verifyCurrentUserAttributeSubmit('phone_number',this.state.phoneVerificationCode)
+                        .then(
+                            ()=>{
+                                console.log("phone_number", " verification SUCCESS!")
+                                Auth.currentAuthenticatedUser()
+                                    .then(
+                                        (user)=>{
+                                            var attributeUpdate = {}
+                                            attributeUpdate[attribute] = this.state.newAttributeValue
+                                            Auth.updateUserAttributes(user, attributeUpdate)
+                                                .then(
+                                                    () => {
+                                                        console.log("Attribute Updeate SUCESS")
+                                                        Auth.verifyCurrentUserAttribute(attribute)
+                                                            .then(
+                                                                ()=>{
+                                                                    console.log("changeEmail scuess!! Going to verify emial") 
+                                                                    this.props.navigation.navigate('PNV',{authType: attribute});   
+                                                                }
+                                                            )
+                                                            .catch(
+                                                                (err) => {
+                                                                    return this.handelChangeError(err, 
+                                                                        "verifyCurrentUserAttribute", 
+                                                                        attribute)
+                                                                }
+                                                            )  
+                                                    }
+                                                )
+                                                .catch(
+                                                    (err) => {
+                                                        this.handelChangeError(err, 
+                                                            "updateUserAttributes", 
+                                                            attribute)
+                                                    }
+                                                )
+                                        }
+                                    )
+                                    .catch(
+                                        (err) => {
+                                            this.handelChangeError(err, 
+                                                "currentAuthenticatedUser", 
+                                                attribute)
+                                        }
+                                    )
+                            }
+                        )
+                        .catch(
+                            (err) => {
+                                this.handelChangeError(err, 
+                                    "verifyCurrentUserAttributeSubmit", 
+                                    "phone_number")
+                            }
+                        )
+                }
+            )
+            .catch(
+                (err) => {
+                    this.handelChangeError(err, 
+                        "verifyCurrentUserAttributeSubmit", 
+                        "email")
+                }
+            )
+
+
+
         // console.log("attributeUpdate: ", attributeUpdate)
         if(this.state.emailVerificationCode == '' ||
             this.state.phoneVerificationCode == '') {

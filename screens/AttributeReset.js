@@ -71,7 +71,8 @@ export default class AttributeReset extends React.Component {
     console.log("ERROR in, ", callingFunction, ": ", attribute)
     console.log('error: ', err)
     alert("ERROR: " + err["message"])
-    return false
+    this.props.navigation.navigate("AR")
+    
   }
 
   verifyCurrentUserAttribute(attribute) {
@@ -79,12 +80,12 @@ export default class AttributeReset extends React.Component {
         .then(
             ()=>{
                 console.log("changeEmail scuess!! Going to verify emial")    
-                return true
+                // return true;
             }
         )
         .catch(
             (err) => {
-                this.handelChangeError(err, 
+                 this.handelChangeError(err, 
                     "verifyCurrentUserAttribute", 
                     attribute)
             }
@@ -96,13 +97,33 @@ export default class AttributeReset extends React.Component {
     next['attribute'] = attribute
     console.log("going to change: ", attribute)
 
-    let recp;
-    recp = this.verifyCurrentUserAttribute('email')
-    if(!recp) return;
-    recp = this.verifyCurrentUserAttribute('phone_number')
-    if(!recp) return;
-    this.props.navigation.navigate("ChangeEmailForm", next)
-    
+    Auth.verifyCurrentUserAttribute('email')
+        .then(
+            ()=>{
+                console.log("changeEmail scuess!! Going to verify emial")    
+                Auth.verifyCurrentUserAttribute('phone_number')
+                  .then(
+                      ()=>{
+                          console.log("changeEmail scuess!! Going to verify emial")    
+                          this.props.navigation.navigate("ChangeEmailForm", next)
+                      }
+                  )
+                  .catch(
+                      (err) => {
+                          this.handelChangeError(err, 
+                              "verifyCurrentUserAttribute", 
+                              'phone_number')
+                      }
+                  )
+            }
+        )
+        .catch(
+            (err) => {
+                 this.handelChangeError(err, 
+                    "verifyCurrentUserAttribute", 
+                    'emial')
+            }
+        ) 
   }
 };
 AttributeReset.navigationOptions = {
