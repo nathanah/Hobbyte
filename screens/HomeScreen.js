@@ -1,4 +1,3 @@
-
 // HomeScreen
 // Should appear after Login page
 // currently displays green screen with Sign Out button
@@ -38,11 +37,12 @@ export default class HomeScreen extends React.Component {
           title="Sign out"
           onPress={this._signOutAsync}
         />
+
+  
         {/* <Button
           title="Clear Rooms"
           onPress={() => AsyncStorage.removeItem("rooms")}
         /> */}
-        />
         <Button
           title="Authenticate email"
           onPress={

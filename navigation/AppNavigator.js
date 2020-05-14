@@ -45,19 +45,19 @@ const bottomTabNavigator = createBottomTabNavigator(
     {
      
       Start: {
-        screen: HomeScreen,
+        screen: ChatRoom,
         navigationOptions: {
           headerLeft: null,
           tabBarIcon: ({ tintColor }) => (
-            <Icon name="home" size={25} color={tintColor} />
+            <Icon name="chat" size={25} color={tintColor} />
           )
         }
       },
-      List: {
-        screen: ChatRoom,
+      Profile: {
+        screen: HomeScreen,
         navigationOptions: {
           tabBarIcon: ({ tintColor }) => (
-            <Icon name="chat" size={25} color={tintColor} />
+            <Icon name="face" size={25} color={tintColor} />
           )
         }, 
       
