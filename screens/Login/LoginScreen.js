@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 //import { Video } from 'expo-av';
-import {View, Text, TouchableOpacity, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
+import {View, Text, TouchableOpacity, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, ImageBackground} from 'react-native';
 import {Auth} from 'aws-amplify';
 import {styles} from '../../styles/styles'
-
+import bgImage from '../../assets/images/white_logo_text.png'
+import Icon from 'react-native-vector-icons/Ionicons'
 /*=====================================================*/
 /*            Login Screen                              */
 /*=====================================================*/
@@ -15,23 +16,38 @@ export default class LoginScreen extends React.Component {
     user: {},
     errorMessage: '',
   };
-
+  constructor(){
+    super()
+    this.state = {
+      showPass: true,
+      press: false
+    }
+  }
+  showPass = () => {
+    if (this.state.press == false){
+      this.setState({showPass:false, press:true})
+    }else{
+      this.setState({showPass:true, press:false})
+    }
+  }
   render() {
     return (
-      <View style={{backgroundColor: "#728C69", flex: 1}}>
-          <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <View style={{backgroundColor: "#19b7bf", flex: 1}}>
+          <KeyboardAvoidingView behavior="height" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
           <Image
             style={styles.logo}
-            source={require('../../assets/images/islands100black.png')}
+            source={require('../../assets/images/white_logo_text.png')}
             />
-          <Text style={styles.title}>Welcome to Sanctuary</Text>
+          <View>
+            <Icon name = {'ios-person'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+          
           <TextInput
             placeholder="Username"
             style={styles.formBox}
             underlineColorAndroid = {'transparent'}
-            placeholderTextColor = "#000000"
+            placeholderTextColor = "#FFFFFF"
             returnKeyType = "next"
             onSubmitEditing = {() => {this.passwordInput.focus();}}
             keyboardType="email-address"
@@ -41,12 +57,15 @@ export default class LoginScreen extends React.Component {
             onChange ={event => this.setState({username:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
+</View>
+<View>
+<Icon name = {'ios-lock'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
 
           <TextInput
             placeholder = "Password"
             style={styles.formBox}
-            placeholderTextColor = "#000000"
-            secureTextEntry
+            placeholderTextColor = "#FFFFFF"
+            secureTextEntry = {this.state.showPass}
             returnKeyType="go"
             ref = {(input) => {this.passwordInput = input;}}
             value={this.state.password}
@@ -54,23 +73,37 @@ export default class LoginScreen extends React.Component {
             onSubmitEditing = {this._loginAsync}
             underlineColorAndroid = "transparent"
           />
-
+<TouchableOpacity style = {styles.btnEye}
+          onPress = {this.showPass.bind(this)}>
+            <Icon name = {this.state.press == false ? 'ios-eye':'ios-eye-off'} size = {26} color = {'rgba(255,255,255,0.7)'}/>
+          </TouchableOpacity>
+</View>
         <TouchableOpacity
         style={styles.ButtonContainer}
         activeOpacity = { .8 }
         onPress={this._loginAsync}>
                 <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
+        <View style={styles.sidebuttoncontainer}>
 
         <TouchableOpacity style={styles.resetContainer}>
-                <Text
-                  onPress={this._goToPasswordReset}>Forgot password or username?</Text>
-        </TouchableOpacity>
+                <Text style={styles.texts}
+                  onPress={this._goToPasswordReset}>Forgot password?</Text>
+                  </TouchableOpacity>
 
-        <TouchableOpacity style={styles.resetContainer}>
-                <Text
+                  </View>
+        <TouchableOpacity style = {{paddingTop:45}}>
+
+                <Text style={styles.texts}
                   onPress={this._signUpAsync}>New User? Sign Up Here!</Text>
         </TouchableOpacity>
+<<<<<<< HEAD
+=======
+        <TouchableOpacity style={styles.resetContainer}>
+                <Text style={styles.texts}
+                  onPress={this._goToHome}>Home Screen</Text>
+        </TouchableOpacity>
+>>>>>>> ae5b8e780a79f8176a45fe85594cf918e3d9f167
 
 
         </ScrollView>

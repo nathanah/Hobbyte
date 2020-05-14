@@ -21,7 +21,7 @@ import {
 
 // import Login from './Login/';
 
-import { MonoText } from '../components/StyledText';
+import { MonoText } from '../../components/StyledText';
 import {Auth} from 'aws-amplify';
 
 
@@ -29,33 +29,31 @@ import {Auth} from 'aws-amplify';
 /*=====================================================*/
 /*            Home Screen                              */
 /*=====================================================*/
-export default class HomeScreen extends React.Component {
+export default class PasswordResetRejection extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Welcome To Sanctuary</Text>
+        <KeyboardAvoidingView behavior="height" style={styles.container}>
+          <ScrollView keyboardShouldPersistTaps='never'>
+        <Text>
+            You either entered an invalid username or you never verified your email!!!
+            If you never verified your account is mine now!! Hahahaha...
+            So sorry, you can't have it back unless you remember your password.
+        </Text>
         <Button
-          title="Sign out"
-          onPress={this._signOutAsync}
-        />
-        {/* <Button
-          title="Clear Rooms"
-          onPress={() => AsyncStorage.removeItem("rooms")}
-        /> */}
+          title="try to enter username again"
+          onPress={() => this.props.navigation.navigate('PRS')}
         />
         <Button
-          title="Authenticate email"
-          onPress={
-            ()=>{
-              Auth.verifyCurrentUserAttribute('email').then(()=>{
-                console.log("email verification worked")
-                this.props.navigation.navigate('PNV',{authType: "email_verification"});
-              }).catch(
-                (err)=>{console.log("email verificatino error: ", err)
-              })
-            } 
-        }
+          title="Sign In"
+          onPress={() => this.props.navigation.navigate('SignIn')}
         />
+       <Button
+          title="Create New Account"
+          onPress={() => this.props.navigation.navigate('SignUp')}
+        />
+        </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -77,9 +75,6 @@ export default class HomeScreen extends React.Component {
 }
 
 
-HomeScreen.navigationOptions = {
-  header: null,
-};
 
 const styles = StyleSheet.create({
   container: {

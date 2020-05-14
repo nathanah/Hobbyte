@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView } from 'react-native';
+import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
-export default class TwoFactorScreen extends React.Component {
+export default class PasswordResetForm extends React.Component {
 
 
   state = {
-
     verificationCode: '',
-
+    password:'',
+    username: this.props.navigation.getParam('username','none'),
   };
 
   render() {
@@ -23,29 +23,44 @@ export default class TwoFactorScreen extends React.Component {
 
           <Image
             style={styles.logo}
-            source={require('../../assets/images/islands100white.png')}
+            source={require('../../assets/images/islands100black.png')}
             />
-          <Text style={styles.header}>Two Factor Verification Code</Text>
+          <Text style={styles.header}>Enter your email verification code and new password!!!</Text>
           <TextInput
-            placeholder="Code"
+            placeholder="Email Code"
             style={styles.formBox}
             placeholderTextColor = "#000000"
             returnKeyType = "go"
+            keyboardType="phone-pad"
             autoFocus={true}
-            onSubmitEditing = {this._loginAsync}
+            onSubmitEditing = {() => {this.passwordInput.focus();}}
             autoCapitalize='none'
             autoCorrect={false}
             value={this.state.verificationCode}
             onChange ={event => this.setState({verificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
+            <TextInput
+            placeholder="password"
+            style={styles.formBox}
+            placeholderTextColor = "#000000"
+            returnKeyType = "go"
+            secureTextEntry
+            autoFocus={true}
+            onSubmitEditing = {this._passwordResetAsync}
+            autoCapitalize='none'
+            autoCorrect={false}
+            value={this.state.password}
+            onChange ={event => this.setState({password:event.nativeEvent.text})}
+            underlineColorAndroid = "transparent"
+          />
 
 
         <TouchableOpacity style={styles.ButtonContainer}
-        activeOpacity = { .8 }
-        onPress={this._loginAsync}>
+        onPress={this._passwordRestAsync}
+        activeOpacity = { .8 }>
                 <Text style={styles.buttonText}
-                  >LOGIN</Text>
+                  >Submit</Text>
         </TouchableOpacity>
 
 
@@ -56,7 +71,6 @@ export default class TwoFactorScreen extends React.Component {
 
           </ScrollView>
 
-
       </KeyboardAvoidingView>
       </View>
 
@@ -64,16 +78,21 @@ export default class TwoFactorScreen extends React.Component {
   }
 
   /*--------------------Async------------------------*/
-    _loginAsync = async () => {
+  _passwordRestAsync = async () => {
+      console.log("--------------This is password reset form--------------------------")
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Login information input from user: ");
-      console.log("code:" + this.state.verificationCode);
-
-      Auth.confirmSignUp(this.state.username, this.state.verificationCode)
-      .then(() => console.log('successful confirm sign up!'))
-      .catch(err => console.log('error confirming signing up!: ', err));
-      this.props.navigation.navigate('Home');
+      Auth.forgotPasswordSubmit(this.state.username, this.state.verificationCode, this.state.password).then(
+          ()=>{
+            console.log("password reset complete!")
+            console.log("passwars: ", this.state.password)
+            this.props.navigation.navigate('SignIn')  
+          }
+      ).catch(
+          (err)=>{
+              console.log("password reset error: ", err)
+          }
+      )
     };
 
     _resetAsync = async () => {
@@ -83,6 +102,3 @@ export default class TwoFactorScreen extends React.Component {
       this.props.navigation.navigate('PhoneReset');
     };
 }
-
-
-

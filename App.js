@@ -49,7 +49,7 @@ export default function App(props) {
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      require('./assets/images/islands100black.png'),
+      require('./assets/images/white_logo_notext.png'),
       
     ]),
     Font.loadAsync({

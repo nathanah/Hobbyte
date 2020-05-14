@@ -9,13 +9,13 @@
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "./assets/images/logo.png",
+    "icon": "./assets/images/islandlogo.png",
     "splash": {
-      "image": "./assets/images/islandsblack1024.png",
+      "image": "./assets/images/white_logo_notext.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#19b7bf"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.Hobbyte.Sanctuary"
     },
     "description": "Echo Chamber version 4.9.2020"
   }

@@ -16,12 +16,12 @@ export default class PhoneResetScreen extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#728C69", flex: 1}}>
+      <View style={{backgroundColor: "#19b7bf", flex: 1}}>
          <ScrollView keyboardShouldPersistTaps='never'>
-          <KeyboardAvoidingView behavior="padding" style={styles.container}>
+          <KeyboardAvoidingView behavior="height" style={styles.container}>
           <Image
             style={styles.logo}	            style={styles.logo}
-            source={require('../../assets/images/islands100white.png')}
+            source={require('../../assets/images/white_logo_notext.png')}
             />
         <Text style={styles.header}>Reset Phone Number</Text>
         <TextInput

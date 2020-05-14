@@ -23,6 +23,9 @@ import ResetScreen              from '../screens/Login/ResetScreen';
 import TwoFactorScreen          from "../screens/Login/TwoFactorScreen";
 import SignUpScreen             from "../screens/Login/SignUpScreen";
 import PhoneNumberVerification  from "../screens/Login/PhoneNumberVerification";
+import PasswordResetForm        from "../screens/Login/PasswordResetForm"
+import PasswordResetRejection   from "../screens/Login/PasswordResetRejection"
+
 import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
 import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 
@@ -72,40 +75,117 @@ const bottomTabNavigator = createBottomTabNavigator(
 
 /*---------------------Navigation Stack -----------------------------*/
 //Define different pages
+
+
 const RootStack = createStackNavigator({
   SignIn: {
     screen: LoginScreen,
     navigationOptions:{
       headerLeft: null,
+      headerShown: false,
+
     }
   } ,
-  SignUp: SignUpScreen,
-  Reset: ResetScreen,
-  TFS: TwoFactorScreen,
-  PNV: PhoneNumberVerification,
-  PhoneReset: PhoneResetScreen,
-  PRS: PasswordResetScreen,
+  SignUp: {
+    screen: SignUpScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  Reset: {
+    screen: ResetScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  TFS: {
+    screen: TwoFactorScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PNV: {
+    screen: PhoneNumberVerification,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PhoneReset: {
+    screen: PhoneResetScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PRS: {
+    screen: PasswordResetScreen,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PRF: {
+    screen: PasswordResetForm,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  PRR: {
+    screen: PasswordResetRejection,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
 
   Home: {
     screen: bottomTabNavigator,
     navigationOptions:{
-      headerLeft: null,
       gesturesEnabled: false,
     }
   } ,
   Main: {
     screen: bottomTabNavigator,
     navigationOptions:{
-      headerLeft: null,
       gesturesEnabled: false,
+
     }
   } ,
 
+  ChatPage: {
+    screen: ChatScreen,
+    navigationOptions:{
 
-  ChatPage: ChatScreen,
-  ChatRoom: ChatRoom,
-  makeRoom: CreateChatRoom,
-  RoomSettings: RoomSettings,
+      gesturesEnabled: false,
+    }
+  },
+  ChatRoom: {
+    screen: ChatRoom,
+    navigationOptions:{
+
+      gesturesEnabled: false,
+    }
+  },
+  makeRoom: {
+    screen: CreateChatRoom,
+    navigationOptions:{
+
+      gesturesEnabled: false,
+    }
+  },
+  RoomSettings: {
+    screen: RoomSettings,
+    navigationOptions:{
+
+      gesturesEnabled: false,
+    }
+  },
+  
 },
 {
   initialRouteName: 'SignIn',
