@@ -18,7 +18,6 @@ import {Icon} from 'react-native-elements';
 
 //Import screens
 //Login Screens
-import AuthLoadingScreen        from "../screens/AuthLoadingScreen";
 import LoginScreen              from "../screens/Login/LoginScreen";
 import ResetScreen              from '../screens/Login/ResetScreen';
 import TwoFactorScreen          from "../screens/Login/TwoFactorScreen";
@@ -28,7 +27,6 @@ import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
 import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 
 //Main Screens
-import MainScreen               from "../screens/MainScreen";
 import HomeScreen               from "../screens/HomeScreen";
 
 //Chat Screens
@@ -42,6 +40,7 @@ import RoomSettings             from "../screens/Chat/RoomSettingsScreen";
 /*---------------------Navigation Tabs -----------------------------*/
 const bottomTabNavigator = createBottomTabNavigator(
     {
+     
       Start: {
         screen: HomeScreen,
         navigationOptions: {
@@ -57,7 +56,8 @@ const bottomTabNavigator = createBottomTabNavigator(
           tabBarIcon: ({ tintColor }) => (
             <Icon name="chat" size={25} color={tintColor} />
           )
-        }
+        }, 
+      
     },
 
     },
@@ -73,8 +73,6 @@ const bottomTabNavigator = createBottomTabNavigator(
 /*---------------------Navigation Stack -----------------------------*/
 //Define different pages
 const RootStack = createStackNavigator({
-  AuthLoading: AuthLoadingScreen,
-  //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
   SignIn: {
     screen: LoginScreen,
     navigationOptions:{
@@ -110,7 +108,7 @@ const RootStack = createStackNavigator({
   RoomSettings: RoomSettings,
 },
 {
-  initialRouteName: 'AuthLoading',
+  initialRouteName: 'SignIn',
 }
 );
 

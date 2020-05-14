@@ -35,28 +35,13 @@ export default class HomeScreen extends React.Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Welcome To Sanctuary</Text>
         <Button
-          title="Go to Details... again"
-          onPress={() => this.props.navigation.navigate('Home')}
-        />
-        <Button
           title="Sign out"
           onPress={this._signOutAsync}
         />
-
-
-
-       <Button
-          title="Go back to main screen"
-          onPress={() => this.props.navigation.navigate('Main')}
-        />
-        <Button
-          title="Go to conversation chat room page"
-          onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
-        />
-        <Button
+        {/* <Button
           title="Clear Rooms"
           onPress={() => AsyncStorage.removeItem("rooms")}
-        />
+        /> */}
       </View>
     );
   }

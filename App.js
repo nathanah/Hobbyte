@@ -5,9 +5,6 @@ import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
-import MainScreen from './screens/MainScreen';
-// import ChatRoom from './screens/Chat/ChatRoomScreen';
-// import ChatScreen from './screens/Chat/ChatScreen';
 
 /*John - This is setup for Amplify*/
 import Amplify, { Auth } from 'aws-amplify';
@@ -16,14 +13,7 @@ Amplify.configure(awsconfig);
 global.Buffer = global.Buffer || require('buffer').Buffer
 /*</John>*/
 
-// Abby - Setup for AWS AppSync and Apollo
-// import AWSAppSyncClient from "aws-appsync";
-// import {ApolloProvider} from "react-apollo";
-// import {Rehydrated} from "aws-appsync-react";
-// import AppSyncConfig from "./aws-exports";
 
-import { Component } from 'react';
-import { Switch, Route, BrowserRouter as Router, ServerRouter } from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 const history = createMemoryHistory();
 
@@ -51,7 +41,6 @@ export default function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <AppNavigator />
-        {/* <MainScreen /> */}
       </View>
     );
   }
