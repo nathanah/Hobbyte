@@ -443,6 +443,7 @@ export default class ChatRoom extends Component {
         //settings change
         case ActionType.SETTINGS_CHANGE:{
           await settingsChange(payload);
+          this.loadSettings();
           this.loadRooms(this.roomsKey);
           console.log("TODO: Implement settings change");
           break;

@@ -8,7 +8,7 @@ import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
 import {listMessages} from '../../src/graphql/queries';
 import {ActionType, Payload} from '../../src/payload';
-import * as  Crypto from 'expo-crypto'; 
+import * as  Crypto from 'expo-crypto';
 /*=====================================================*/
 // ASYNC FUNCTIONS
 /*=====================================================*/
@@ -26,7 +26,7 @@ async function sendMessage(payload) {
   console.log("in send message")
   roomMembers = JSON.parse(payload.roomMembers);
   console.log("roomMembers: ", roomMembers)
-  console.log("from: "  + payload.sender); 
+  console.log("from: "  + payload.sender);
 
   //Encrypt payload here
 
@@ -68,7 +68,7 @@ function createNewChatMessage(room, messages /*must be this.state*/) {
                       actionType=ActionType.TEXT_MESSAGE,
                       roomId=room.id,
                       roomName=room.name,
-                      roomMembers=room.members,
+                      roomMembers=JSON.parse(room.members),
                       from =room.username,
                       created = date,
                       joiningMember=null,
@@ -85,9 +85,9 @@ async function displayOneMessage(messageObj, payload, room){
   // displays one message at a time on gifted chat and stores in AsyncStorage
   // alert("displaying");
   const hash = await Crypto.digestStringAsync(
-    Crypto.CryptoDigestAlgorithm.SHA256, 
+    Crypto.CryptoDigestAlgorithm.SHA256,
       messageObj.from
-  ); 
+  );
   let from = payload.sender;
   var addMessage = {
     _id: messageObj.id,
@@ -105,7 +105,7 @@ async function displayOneMessage(messageObj, payload, room){
 
   // todo this is not working, printing previous and duplicate messages
   // console.log("roomid??" + room.state.id );
-  console.log ("storing new messages in async" + room.state.messages); 
+  console.log ("storing new messages in async" + room.state.messages);
   // AsyncStorage.setItem(room.state.id, JSON.stringify(GiftedChat.append(room.state.messages, [addMessage])));
   // AsyncStorage.setItem(payload.roomId, room.state.messages).then(successMessage =>{console.log("Async store incoming message success")}).catch(fail => {console.log("fail")});
   //todo call delete mutation
@@ -297,10 +297,10 @@ class ChatScreen extends React.Component {
   loadMessages = async (key) => {
     const messageItems = this;
     var result = await AsyncStorage.getItem(key);
-    console.log("load messages from local storage:" + result); 
+    console.log("load messages from local storage:" + result);
     if(result != null && result.length){
-      result = JSON.parse(result); 
-      // result.sort((a,b) => b.createdAt - a.createdAt); 
+      result = JSON.parse(result);
+      // result.sort((a,b) => b.createdAt - a.createdAt);
       console.log("not null");
       this.setState({messages: result});
     }
@@ -318,11 +318,11 @@ class ChatScreen extends React.Component {
     }
 
     var rooms = await AsyncStorage.getItem("rooms");
-    rooms = JSON.parse(rooms); 
+    rooms = JSON.parse(rooms);
     for (var i = 0; i < rooms.length; i++){
       var roomItem = rooms[i];
       if (roomItem.id == key){
-        rooms[i].unreadCount = 0; 
+        rooms[i].unreadCount = 0;
         await AsyncStorage.setItem("rooms", JSON.stringify(rooms));
     }
   }
