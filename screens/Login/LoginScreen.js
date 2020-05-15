@@ -141,10 +141,6 @@ export default class LoginScreen extends React.Component {
                 <Text style={styles.texts}
                   onPress={this._signUpAsync}>New User? Sign Up Here!</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.resetContainer}>
-                <Text style={styles.texts}
-                  onPress={this._goToHome}>Home Screen</Text>
-        </TouchableOpacity>
 
 
         </ScrollView>

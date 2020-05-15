@@ -1,4 +1,3 @@
-
 // HomeScreen
 // Should appear after Login page
 // currently displays green screen with Sign Out button
@@ -35,25 +34,15 @@ export default class HomeScreen extends React.Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Welcome To Sanctuary</Text>
         <Button
-          title="Go to Details... again"
-          onPress={() => this.props.navigation.navigate('Home')}
-        />
-        <Button
           title="Sign out"
           onPress={this._signOutAsync}
         />
-       <Button
-          title="Go back to main screen"
-          onPress={() => this.props.navigation.navigate('Main')}
-        />
-        <Button
-          title="Go to conversation chat room page"
-          onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
-        />
-        <Button
+
+
+        {/* <Button
           title="Clear Rooms"
           onPress={() => AsyncStorage.removeItem("rooms")}
-        />
+        /> */}
         <Button
           title="Authenticate email"
           onPress={
@@ -64,7 +53,7 @@ export default class HomeScreen extends React.Component {
               }).catch(
                 (err)=>{console.log("email verificatino error: ", err)
               })
-            } 
+            }
         }
         />
 
@@ -74,7 +63,7 @@ export default class HomeScreen extends React.Component {
           onPress={
             this._resetAttributes
         }
-        />    
+        />
       </View>
     );
   }
@@ -108,8 +97,8 @@ export default class HomeScreen extends React.Component {
         this.props.navigation.navigate('AR');
       }
     ).catch(err=>console.log(err));
-    
-  } 
+
+  }
 }
 
 
