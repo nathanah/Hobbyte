@@ -11,7 +11,8 @@ async function setUpEkit(tokenObj){
   EThree.initialize(tokenObj.data)
   .then(e3kit => {
     showMessage('e3kit ready for identity: ' + e3kit.identity);
-    return e3kit.register();
+    e3kit.register();
+
   });
 }
 async function setUpSocket(username) {
