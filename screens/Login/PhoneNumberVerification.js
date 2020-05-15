@@ -3,10 +3,17 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
-//import { EThree } from '@virgilsecurity/e3kit-native';
+import { EThree } from '@virgilsecurity/e3kit-native';
 import io from 'socket.io-client';
 
-
+async function setUpEkit(tokenObj){
+  console.log("initializing user...");
+  EThree.initialize(tokenObj.data)
+  .then(e3kit => {
+    showMessage('e3kit ready for identity: ' + e3kit.identity);
+    return e3kit.register();
+  });
+}
 async function setUpSocket(username) {
   console.log("username now: " + username); 
     'use strict';
@@ -39,6 +46,7 @@ async function setUpSocket(username) {
 
   socket.on('tokenFromServer', message => {
     console.log("Token from Server:" + JSON.stringify(message)); 
+    setUpEkit(message);
     // return message.json().then(data=>data.VirgilToken);
   
   })
