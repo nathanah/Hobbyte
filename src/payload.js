@@ -11,7 +11,11 @@ export class Payload{
                 roomName,
                 roomMembers,
                 sender,
-                created) {
+                created,
+                joiningMember,
+                leavingMember,
+                textContent,
+                newRoomName) {
 
       this.actionType = actionType;
       this.roomId = roomId;

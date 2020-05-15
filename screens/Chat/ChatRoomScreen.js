@@ -249,10 +249,9 @@ export default class ChatRoom extends Component {
           <Text style={styles.list_item_text}>{item.unreadCount}     {item.name}</Text>
           <Button title="Enter" color="#0064e1" onPress={
             () => {
-              // console.log( "membersString: ", item.membersString )
               this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(),
                                                               "id": item.id,
-                                                              "membersString": item.members  }
+                                                              "members": item.members  }
                                                               )
             }
             } />

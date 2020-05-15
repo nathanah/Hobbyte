@@ -106,7 +106,7 @@ export default class CreateChatRoomScreen extends React.Component {
     var id = Date.now().toString();
 
     if(await this.roomDoesNotExist(newRooms,this.membersString)){
-      var newRoom = {"id": id, "name": this.state.roomName, "members": this.membersString, "unreadCount": 0};
+      var newRoom = {"id": id, "name": this.state.roomName, "members": this.members, "unreadCount": 0};
       console.log(newRoom)
       newRooms.unshift(newRoom);
       await this.storeRooms(this.state.roomsKey, JSON.stringify(newRooms));
@@ -114,7 +114,7 @@ export default class CreateChatRoomScreen extends React.Component {
       // navigate to room
       this.props.navigation.navigate('ChatPage',{ "name": this.state.roomName,
                                                   "id": id,
-                                                  "membersString": this.membersString  });
+                                                  "members": this.members  });
     }
     else{
 

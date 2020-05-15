@@ -24,7 +24,7 @@ Sends stringified and encrypted message object to database.
 */
 async function sendMessage(payload) {
   console.log("in send message")
-  roomMembers = JSON.parse(payload.roomMembers);
+  var roomMembers = payload.roomMembers;
   console.log("roomMembers: ", roomMembers)
   console.log("from: "  + payload.sender);
 
@@ -65,16 +65,16 @@ function createNewChatMessage(room, messages /*must be this.state*/) {
   const messageText = messages[0].text; // messages is latest message
   const date = new Date();
   const payload = new Payload(
-                      actionType=ActionType.TEXT_MESSAGE,
-                      roomId=room.id,
-                      roomName=room.name,
-                      roomMembers=JSON.parse(room.members),
-                      from =room.username,
-                      created = date,
-                      joiningMember=null,
-                      leavingMember=null,
-                      textContent= messageText,
-                      newRoomName=null
+                      /*actionType=*/ActionType.TEXT_MESSAGE,
+                      /*roomId=*/room.id,
+                      /*roomName=*/room.name,
+                      /*roomMembers=*/room.members,
+                      /*from =*/room.username,
+                      /*created = */date,
+                      /*joiningMember=*/null,
+                      /*leavingMember=*/null,
+                      /*textContent=*/ messageText,
+                      /*newRoomName=*/null
                       ).get()
   console.log("in createNewChatMessage: ", payload );
   console.log("created payload");
@@ -181,11 +181,6 @@ async function getNewMessages(currentObj, roomId){
 
 }
 
-let parsMembersString = (membersString) => {
-  console.log("membersString: ",membersString)
-  return membersString;
-}
-
 
 /*=====================================================*/
 // ChatScreen Component
@@ -208,7 +203,7 @@ class ChatScreen extends React.Component {
 
       name: this.props.navigation.getParam('name'),
       id: this.props.navigation.getParam('id'),
-      members: parsMembersString(this.props.navigation.getParam('membersString')),
+      members: this.props.navigation.getParam('members'),
       username: "temp",
     }
   }
