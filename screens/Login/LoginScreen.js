@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 //import { Video } from 'expo-av';
-import {View, 
-        Text, 
-        TouchableOpacity, 
-        KeyboardAvoidingView, 
-        TextInput, 
-        Image, 
-        Keyboard, 
-        ScrollView, 
+import {View,
+        Text,
+        TouchableOpacity,
+        KeyboardAvoidingView,
+        TextInput,
+        Image,
+        Keyboard,
+        ScrollView,
         ImageBackground,
+        AsyncStorage,
         Alert, } from 'react-native';
 import {Auth} from 'aws-amplify';
 import {styles} from '../../styles/styles'
@@ -17,12 +18,12 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 
 /*=====================================================*/
-  // ASYNC Functions 
+  // ASYNC Functions
 /*=====================================================*/
 
 async function loginError(err, obj) {
   switch(err.code){
-    case "UserNotConfirmedException": 
+    case "UserNotConfirmedException":
       console.log("phone not confirmed, going to verify it!")
       Auth.resendSignUp(obj.state.username).then(
         (user) => {
@@ -35,14 +36,14 @@ async function loginError(err, obj) {
             console.log(err)
           }
         )
-    break; 
+    break;
 
     case "UserNotFoundException":
-      console.log("user was not found in aws cognito"); 
+      console.log("user was not found in aws cognito");
       Alert.alert("Login Error", "The username is incorrect. Please try again");
-      
-    break; 
-    default: 
+
+    break;
+    default:
       console.log(err)
       Alert.alert("Login Error", "Username or password was entered incorrectly. Please try again");
     break;
@@ -66,6 +67,7 @@ export default class LoginScreen extends React.Component {
       showPass: true,
       press: false
     }
+      this.oneTimeSignIn();
   }
   showPass = () => {
     if (this.state.press == false){
@@ -74,6 +76,7 @@ export default class LoginScreen extends React.Component {
       this.setState({showPass:true, press:false})
     }
   }
+
   render() {
     return (
       <View style={{backgroundColor: "#19b7bf", flex: 1}}>
@@ -86,7 +89,7 @@ export default class LoginScreen extends React.Component {
             />
           <View>
             <Icon name = {'ios-person'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
-          
+
           <TextInput
             placeholder="Username"
             style={styles.formBox}
@@ -155,6 +158,16 @@ export default class LoginScreen extends React.Component {
   }
 
   /*--------------------Async------------------------*/
+
+    oneTimeSignIn = async () => {
+      //One time signin
+      const userToken = JSON.parse(await AsyncStorage.getItem('userToken'));
+      if(userToken){
+        this.props.navigation.navigate('Home', userToken.username);
+      }
+    }
+
+
     _loginAsync = async () => {
       console.log("Login information input from user: ");
       console.log("username:" + this.state.username);
@@ -164,11 +177,11 @@ export default class LoginScreen extends React.Component {
       const { username, password } = this.state;
 
       if (this.state.username== null || this.state.username == ''){
-        Alert.alert("Sign In Error:","Please enter a username. "); 
+        Alert.alert("Sign In Error:","Please enter a username. ");
       } else if (this.state.password== null || this.state.password == ''){
         Alert.alert("Sign In Error:","Please enter a password.");
       } else {
-    
+
       Auth.signIn(username, password)
         .then(user => {
           console.log("This os the user+++++++++++++++", user)
