@@ -18,20 +18,27 @@ async function setUpSocket(username) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: info.username
+            username: username
         })
     };
   console.log("attempting to connect socket..."); 
   socket.on('connect', function () {
   console.log('connected to server');
   info.username = username;
+  console.log("Response: " + response);
  
   console.log('username: ' + info.username);
-  socket.emit('pass data to server',info); 
+  socket.emit('pass data to server',info, response); 
   
   // Listener
   socket.on('dataFromServer', message => {
     console.log("Message from Server:" + JSON.stringify(message)); 
+    // return message.json().then(data=>data.VirgilToken);
+  
+  })
+
+  socket.on('tokenFromServer', message => {
+    console.log("Token from Server:" + JSON.stringify(message)); 
     // return message.json().then(data=>data.VirgilToken);
   
   })

@@ -91,15 +91,21 @@ const generatorPromise = getJwtGenerator();
 
 var token = {};
 
-io.on('connect', async (socket, res) => {
+io.on('connect', async (socket) => {
   console.log('someone connected from: ' + socket.handshake.address);
   const generator = await generatorPromise;
-  socket.on('pass data to server', function(info){
+  socket.on('pass data to server', function(info, res){
     
     const virgilJwtToken = generator.generateToken(info.username); // Generated Virgil Token based on username
     console.log('console log: send data to anybody', info);
+    console.log("from user in json:" + JSON.stringify(res));
     console.log("token: " + virgilJwtToken.toString());
+     
+    // res.json({virgilToken: virgilJwtToken.toString()}); 
     socket.emit ('dataFromServer', virgilJwtToken.toString());     //Parse the token to user.
+   
+
+    socket.emit ('tokenFromServer', {data:{virgilToken: virgilJwtToken.toString()}});
     io.emit('io emit: send data to anybody', info);
   });
 });
