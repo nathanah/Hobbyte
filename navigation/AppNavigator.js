@@ -18,13 +18,12 @@ import {Icon} from 'react-native-elements';
 
 //Import screens
 //Login Screens
-import AuthLoadingScreen        from "../screens/AuthLoadingScreen";
 import LoginScreen              from "../screens/Login/LoginScreen";
 import ResetScreen              from '../screens/Login/ResetScreen';
 import TwoFactorScreen          from "../screens/Login/TwoFactorScreen";
 import SignUpScreen             from "../screens/Login/SignUpScreen";
 import PhoneNumberVerification  from "../screens/Login/PhoneNumberVerification";
-import PasswordResetForm        from "../screens/Login/PasswordResetForm"
+import PasswordRecoverForm        from "../screens/Login/PasswordRecoverForm"
 import PasswordResetRejection   from "../screens/Login/PasswordResetRejection"
 
 import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
@@ -33,6 +32,9 @@ import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 //Main Screens
 import HomeScreen               from "../screens/HomeScreen";
 
+import AttributeReset           from "../screens/AttributeReset";
+import ChangePasswordForm       from "../screens/ChangePasswordForm"
+import ChangeEmailForm          from "../screens/ChangeEmailForm"
 //Chat Screens
 import ChatRoom                 from "../screens/Chat/ChatRoomScreen";
 import ChatScreen               from "../screens/Chat/ChatScreen";
@@ -44,22 +46,24 @@ import RoomSettings             from "../screens/Chat/RoomSettingsScreen";
 /*---------------------Navigation Tabs -----------------------------*/
 const bottomTabNavigator = createBottomTabNavigator(
     {
+     
       Start: {
-        screen: HomeScreen,
-        navigationOptions: {
-          headerLeft: null,
-          tabBarIcon: ({ tintColor }) => (
-            <Icon name="home" size={25} color={tintColor} />
-          )
-        }
-      },
-      List: {
         screen: ChatRoom,
         navigationOptions: {
+          headerLeft: null,
           tabBarIcon: ({ tintColor }) => (
             <Icon name="chat" size={25} color={tintColor} />
           )
         }
+      },
+      Profile: {
+        screen: HomeScreen,
+        navigationOptions: {
+          tabBarIcon: ({ tintColor }) => (
+            <Icon name="face" size={25} color={tintColor} />
+          )
+        }, 
+      
     },
 
     },
@@ -77,8 +81,6 @@ const bottomTabNavigator = createBottomTabNavigator(
 
 
 const RootStack = createStackNavigator({
-  AuthLoading: AuthLoadingScreen,
-  //once authloade is loaded, gets taken to see if signed in. if yes, goes to log in screen.else goes to home
   SignIn: {
     screen: LoginScreen,
     navigationOptions:{
@@ -115,6 +117,27 @@ const RootStack = createStackNavigator({
       headerShown: false,
     }
   },
+  AR: {
+    screen: AttributeReset,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  ChangePasswordForm: {
+    screen: ChangePasswordForm,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
+  ChangeEmailForm: {
+    screen: ChangeEmailForm,
+    navigationOptions:{
+      headerLeft: null,
+      headerShown: false,
+    }
+  },
   PhoneReset: {
     screen: PhoneResetScreen,
     navigationOptions:{
@@ -130,7 +153,7 @@ const RootStack = createStackNavigator({
     }
   },
   PRF: {
-    screen: PasswordResetForm,
+    screen: PasswordRecoverForm,
     navigationOptions:{
       headerLeft: null,
       headerShown: false,
@@ -189,7 +212,7 @@ const RootStack = createStackNavigator({
 
 },
 {
-  initialRouteName: 'AuthLoading',
+  initialRouteName: 'SignIn',
 }
 );
 

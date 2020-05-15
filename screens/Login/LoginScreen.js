@@ -1,10 +1,54 @@
 import React, { Component } from 'react';
 //import { Video } from 'expo-av';
-import {View, Text, TouchableOpacity, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, ImageBackground} from 'react-native';
+import {View, 
+        Text, 
+        TouchableOpacity, 
+        KeyboardAvoidingView, 
+        TextInput, 
+        Image, 
+        Keyboard, 
+        ScrollView, 
+        ImageBackground,
+        Alert, } from 'react-native';
 import {Auth} from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import bgImage from '../../assets/images/white_logo_text.png'
 import Icon from 'react-native-vector-icons/Ionicons'
+
+
+/*=====================================================*/
+  // ASYNC Functions 
+/*=====================================================*/
+
+async function loginError(err, obj) {
+  switch(err.code){
+    case "UserNotConfirmedException": 
+      console.log("phone not confirmed, going to verify it!")
+      Auth.resendSignUp(obj.state.username).then(
+        (user) => {
+          obj.setState({ user });
+          obj.props.navigation.navigate('PNV',
+                  {username: obj.state.username, authType: 'signup'})
+        }
+      ).catch(
+          (err) => {
+            console.log(err)
+          }
+        )
+    break; 
+
+    case "UserNotFoundException":
+      console.log("user was not found in aws cognito"); 
+      Alert.alert("Login Error", "The username is incorrect. Please try again");
+      
+    break; 
+    default: 
+      console.log(err)
+      Alert.alert("Login Error", "Username or password was entered incorrectly. Please try again");
+    break;
+  }
+}
+
 /*=====================================================*/
 /*            Login Screen                              */
 /*=====================================================*/
@@ -97,10 +141,6 @@ export default class LoginScreen extends React.Component {
                 <Text style={styles.texts}
                   onPress={this._signUpAsync}>New User? Sign Up Here!</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.resetContainer}>
-                <Text style={styles.texts}
-                  onPress={this._goToHome}>Home Screen</Text>
-        </TouchableOpacity>
 
 
         </ScrollView>
@@ -116,33 +156,37 @@ export default class LoginScreen extends React.Component {
 
   /*--------------------Async------------------------*/
     _loginAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
       console.log("Login information input from user: ");
       console.log("username:" + this.state.username);
       console.log("password:" + this.state.password);
 
+
       const { username, password } = this.state;
+
+      if (this.state.username== null || this.state.username == ''){
+        Alert.alert("Sign In Error:","Please enter a username. "); 
+      } else if (this.state.password== null || this.state.password == ''){
+        Alert.alert("Sign In Error:","Please enter a password.");
+      } else {
+    
       Auth.signIn(username, password)
         .then(user => {
+          console.log("This os the user+++++++++++++++", user)
           this.setState({ user });
           console.log('successful sign in!');
           this.props.navigation.navigate('PNV',
             {user: this.state.user, authType: 'signin'})
         })
-        .catch(err => console.log('error signing in!: ', err));
+        .catch((err) => { loginError(err, this) });
+        }
     };
 
     _resetAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
       console.log("Redirecting to reset page");
       this.props.navigation.navigate('Reset');
     };
 
     _signUpAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
       console.log("Redirecting to Sign Up page");
       this.props.navigation.navigate('SignUp');
     };

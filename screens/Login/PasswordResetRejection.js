@@ -17,6 +17,7 @@ import {
   View,
   Button,
   AsyncStorage,
+  KeyboardAvoidingView
 } from 'react-native';
 
 // import Login from './Login/';

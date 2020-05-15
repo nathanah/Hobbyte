@@ -8,7 +8,8 @@ import {
   View,
   Switch,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -93,6 +94,22 @@ const validationSchema = yup.object().shape({
     ),
 });
 
+
+function signInError(err){
+  console.log(err); 
+  switch(err.message){
+    case "Invalid phone number format.": 
+      alert("Invalid phone number entered. Please enter phone number in the following format: +14445556666");
+      break;
+
+    case "User already exists": 
+      alert("Sorry, this username is already taken."); 
+      break; 
+    default: 
+      Alert.alert("Sign In Error:", err); 
+      break; 
+  }
+}
 export default class SignUpScreen extends React.Component{
   state = {
     username: '',
@@ -151,7 +168,7 @@ export default class SignUpScreen extends React.Component{
             label = "Phone Number"
             formikProps={formikProps}
             formikKey="phoneNumber"
-            placeholder="+1(123)-456-7890"
+            placeholder="+14445556666"
             returnKeyType = "next"
             autoFocus={true}
             autoCapitalize='none'
@@ -229,22 +246,34 @@ _submitAsync = async () => {
   console.log("phone # :" + this.state.phoneNumber);
   console.log("password:" + this.state.password);
 
+  if ( this.state.username == null ||this.state.username== '' ){
+    Alert.alert("Sign Up Error:","Please enter a username. "); 
+  } else if(this.state.email == null || this.state.email == ''){
+    Alert.alert("Sign Up Error:","Please enter an email."); 
+  } else if (this.state.phoneNumber == null || this.state.phoneNumber== ''){
+    Alert.alert("Sign Up Error:","Please enter a phone number with the following format: +14445556666"); 
+  } else if (this.state.password == null || this.state.password== ''){
+    Alert.alert("Sign Up Error:","Please enter a password.");
+  } else {
 
-  Auth.signUp({
-    username: this.state.username,
-    password: this.state.password,
-    attributes: {
-      email: this.state.email,
-      phone_number: this.state.phoneNumber,
-    },
-  })
-    .then(() => {
-      console.log('successful sign up!')
-      this.props.navigation.navigate('PNV',
-            {username: this.state.username, authType: 'signup'})
+    Auth.signUp({
+      username: this.state.username,
+      password: this.state.password,
+      attributes: {
+        email: this.state.email,
+        phone_number: this.state.phoneNumber,
+      },
     })
-    .catch(err => console.log('error signing up!: ', err));
-
+      .then(() => {
+        console.log('successful sign up!')
+        this.props.navigation.navigate('PNV',
+              {username: this.state.username, authType: 'signup'})
+      })
+      // .catch(err => console.log('error signing up!: ', err));
+      .catch(err => signInError(err));
+  
+  
+  }
 
 };
 }
