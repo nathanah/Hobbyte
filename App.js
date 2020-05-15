@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
-import MainScreen from './screens/MainScreen';
 // import ChatRoom from './screens/Chat/ChatRoomScreen';
 // import ChatScreen from './screens/Chat/ChatScreen';
 
@@ -61,7 +60,7 @@ async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
       require('./assets/images/white_logo_notext.png'),
-      
+
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar

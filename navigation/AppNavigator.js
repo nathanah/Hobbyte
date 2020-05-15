@@ -31,7 +31,6 @@ import PhoneResetScreen         from "../screens/Login/PhoneResetScreen";
 import PasswordResetScreen      from "../screens/Login/PasswordResetScreen";
 
 //Main Screens
-import MainScreen               from "../screens/MainScreen";
 import HomeScreen               from "../screens/HomeScreen";
 
 //Chat Screens
@@ -187,7 +186,7 @@ const RootStack = createStackNavigator({
       gesturesEnabled: false,
     }
   },
-  
+
 },
 {
   initialRouteName: 'AuthLoading',
