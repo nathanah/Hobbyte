@@ -29,91 +29,104 @@ import {Auth} from 'aws-amplify';
 /*=====================================================*/
 /*            Home Screen                              */
 /*=====================================================*/
-export default class HomeScreen extends React.Component {
+export default class AttributeReset extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Welcome To Sanctuary</Text>
         <Button
-          title="Go to Details... again"
-          onPress={() => this.props.navigation.navigate('Home')}
+          title="Reset Password"
+          onPress={() => this.changePassword()}
         />
         <Button
-          title="Sign out"
-          onPress={this._signOutAsync}
+          title="Reset Email Adress"
+          onPress={() => this.changeAttribure('email')}
         />
-       <Button
-          title="Go back to main screen"
+        <Button
+          title="Reset Phone Number"
+          onPress={() => this.changeAttribure('phone_number')}
+        />
+        <Button
+          title="Return to Home Page"
           onPress={() => this.props.navigation.navigate('Main')}
         />
-        <Button
-          title="Go to conversation chat room page"
-          onPress={() => this.props.navigation.navigate('ChatRoom',{ name:Auth.user.username})}
-        />
-        <Button
-          title="Clear Rooms"
-          onPress={() => AsyncStorage.removeItem("rooms")}
-        />
-        <Button
-          title="Authenticate email"
-          onPress={
-            ()=>{
-              Auth.verifyCurrentUserAttribute('email').then(()=>{
-                console.log("email verification worked")
-                this.props.navigation.navigate('PNV',{authType: "email"});
-              }).catch(
-                (err)=>{console.log("email verificatino error: ", err)
-              })
-            } 
-        }
-        />
-
-
-        <Button
-          title="Reset User Information"
-          onPress={
-            this._resetAttributes
-        }
-        />    
       </View>
     );
   }
 
 
   /*--------------------Async------------------------*/
-  _signOutAsync = async () => {
-    // TODO - clear Async storage
-    // await AsyncStorage.clear();
-    Auth.signOut()
-    .then(() => {
-      console.log("Signed Out");
-      AsyncStorage.clear();
-      this.props.navigation.navigate('SignIn'); // not redirecting for some reason
-    })
-    .catch(err => console.log('error confirming signing in!: ', err));
-  };
-
-
-  _resetAttributes = async ()=> {
-    Auth.currentAuthenticatedUser().then(
-      (user) => {
-        console.log("{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}")
-        console.log(user.attributes)
-        console.log("type: ", typeof("hello"))
-        // Auth.userAttributes(user).then(
-        //   (attribures) => {
-        //     console.log(attribures)
-        //   }
-        // ).catch(err=>console.log(err))
-        this.props.navigation.navigate('AR');
+  changePassword = () => {
+    Auth.verifyCurrentUserAttribute("phone_number").then(
+      this.props.navigation.navigate("ChangePasswordForm")
+    ).catch(
+      (err)=>{
+        console.log("error in AttribureReset: resetPassword: could not verifyCurrentUserAttribute: phone number")
+        console.log("error: ", err)
       }
-    ).catch(err=>console.log(err));
+    )
+  }
+
+  handelChangeError = (err, callingFunction, attribute, nextPage) => {
+    console.log("ERROR in, ", callingFunction, ": ", attribute)
+    console.log('error: ', err)
+    alert("ERROR: " + err["message"])
+    this.props.navigation.navigate("AR")
     
-  } 
-}
+  }
 
+  verifyCurrentUserAttribute(attribute) {
+        Auth.verifyCurrentUserAttribute(attribute)
+        .then(
+            ()=>{
+                console.log("changeEmail scuess!! Going to verify emial")    
+                // return true;
+            }
+        )
+        .catch(
+            (err) => {
+                 this.handelChangeError(err, 
+                    "verifyCurrentUserAttribute", 
+                    attribute)
+            }
+        )  
+    }
 
-HomeScreen.navigationOptions = {
+  changeAttribure = (attribute) => {
+    let next = {}
+    next['attribute'] = attribute
+    console.log("going to change: ", attribute)
+
+    Auth.verifyCurrentUserAttribute('email')
+        .then(
+            ()=>{
+                console.log("changeEmail scuess!! Going to verify emial")    
+                Auth.verifyCurrentUserAttribute('phone_number')
+                  .then(
+                      ()=>{
+                          console.log("changeEmail scuess!! Going to verify emial")    
+                          this.props.navigation.navigate("ChangeEmailForm", next)
+                      }
+                  )
+                  .catch(
+                      (err) => {
+                          this.handelChangeError(err, 
+                              "verifyCurrentUserAttribute", 
+                              'phone_number')
+                      }
+                  )
+            }
+        )
+        .catch(
+            (err) => {
+                 this.handelChangeError(err, 
+                    "verifyCurrentUserAttribute", 
+                    'emial')
+            }
+        ) 
+  }
+};
+AttributeReset.navigationOptions = {
   header: null,
 };
 

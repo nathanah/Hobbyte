@@ -175,6 +175,7 @@ export default class LoginScreen extends React.Component {
     
       Auth.signIn(username, password)
         .then(user => {
+          console.log("This os the user+++++++++++++++", user)
           this.setState({ user });
           console.log('successful sign in!');
           this.props.navigation.navigate('PNV',
