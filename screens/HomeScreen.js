@@ -22,7 +22,8 @@ import {
 
 import { MonoText } from '../components/StyledText';
 import {Auth} from 'aws-amplify';
-
+import {styles} from '../styles/styles'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 
 /*=====================================================*/
@@ -31,39 +32,67 @@ import {Auth} from 'aws-amplify';
 export default class HomeScreen extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Welcome To Sanctuary</Text>
-        <Button
-          title="Sign out"
-          onPress={this._signOutAsync}
-        />
+      <View style={{backgroundColor: "#19b7bf", flex: 1}}>
+        <Image
+            style={styles.logo}
+            source={require('../assets/images/white_logo_notext.png')}
+            />
+        <Text style={{
+      fontSize:15,
+      fontSize: 20,
+      fontWeight: "bold",
+      fontFamily:'space-mono',
+      textAlign:'center',
+      color:'#FFF'
+      }}>Options</Text>
+        <View style={{backgroundColor: "#19b7bf", flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+            <Icon name = {'ios-exit'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
 
-
+<TouchableOpacity
+        style={styles.ButtonContainer}
+        activeOpacity = { .8 }
+        onPress={this._signOutAsync}
+        >
+                <Text style={styles.signoutbuttonText}>Sign out</Text>
+        </TouchableOpacity>
+        </View>
         {/* <Button
           title="Clear Rooms"
           onPress={() => AsyncStorage.removeItem("rooms")}
         /> */}
-        <Button
-          title="Authenticate email"
-          onPress={
-            ()=>{
-              Auth.verifyCurrentUserAttribute('email').then(()=>{
-                console.log("email verification worked")
-                this.props.navigation.navigate('PNV',{authType: "email"});
-              }).catch(
-                (err)=>{console.log("email verificatino error: ", err)
-              })
-            }
-        }
-        />
+        <View>
+            <Icon name = {'ios-mail'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
 
+        <TouchableOpacity
+        style={styles.ButtonContainer}
+        activeOpacity = { .8 }
+        onPress={
+          ()=>{
+            Auth.verifyCurrentUserAttribute('email').then(()=>{
+              console.log("email verification worked")
+              this.props.navigation.navigate('PNV',{authType: "email"});
+            }).catch(
+              (err)=>{console.log("email verificatino error: ", err)
+            })
+          }
+      }>
+                <Text style={styles.signoutbuttonText}>Authenticate email</Text>
+        </TouchableOpacity>
+        </View>
+        <View>
+            <Icon name = {'ios-refresh'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
 
-        <Button
-          title="Reset User Information"
-          onPress={
-            this._resetAttributes
-        }
-        />
+        <TouchableOpacity
+        style={styles.ButtonContainer}
+        activeOpacity = { .8 }
+        onPress={
+          this._resetAttributes
+      }>
+                <Text style={styles.signoutbuttonText}>Reset User Information</Text>
+        </TouchableOpacity>
+        </View>
+        </View>
       </View>
     );
   }
@@ -100,104 +129,3 @@ export default class HomeScreen extends React.Component {
 
   }
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#add836',
-    alignContent:'center',
-    paddingTop: 50,
-    paddingHorizontal: 50
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-
-  signOutButton:{
-    backgroundColor:'#FFF',
-    padding:10,
-    textAlign:'center',
-    fontWeight:"500",
-
-  }
-});

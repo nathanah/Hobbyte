@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../styles/styles'
+import Icon from 'react-native-vector-icons/Ionicons'
+
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
@@ -19,15 +21,20 @@ export default class ChangePasswordForm extends React.Component {
 
   render() {
     return (
-      <View style={{backgroundColor: "#728C69", flex: 1}}>
+      <View style={{backgroundColor: "#19b7bf", flex: 1}}>
           <KeyboardAvoidingView behavior="height" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
 
           <Image
             style={styles.logo}
-            source={require('../assets/images/islands100black.png')}
+            source={require('../assets/images/white_logo_notext.png')}
             />
-          <Text style={styles.header}>{this.getTitleMessage()}</Text>
+          <Text style={styles.title}>{this.getTitleMessage()}</Text>
+          <View>
+            <Icon name = {'ios-chatboxes'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+          
+          
+          
           <TextInput
             placeholder="Text Message Code"
             style={styles.formBox}
@@ -42,6 +49,12 @@ export default class ChangePasswordForm extends React.Component {
             onChange ={event => this.setState({phoneVerificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
+          </View>
+          <View>
+            <Icon name = {'ios-mail'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+          
+          
+          
           <TextInput
             placeholder="Email Code"
             style={styles.formBox}
@@ -56,6 +69,11 @@ export default class ChangePasswordForm extends React.Component {
             onChange ={event => this.setState({emailVerificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
+          </View>
+          <View>
+            <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+          
+          
           
           <TextInput
             placeholder="new attribute value"
@@ -70,7 +88,7 @@ export default class ChangePasswordForm extends React.Component {
             onChange ={event => this.setState({newAttributeValue:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
-
+</View>
 
         <TouchableOpacity style={styles.ButtonContainer}
         onPress={this.changeAttribute}

@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
+import Icon from 'react-native-vector-icons/Ionicons'
+
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
@@ -28,7 +30,9 @@ export default class PhoneNumberVerification extends React.Component {
             style={styles.logo}
             source={require('../../assets/images/white_logo_notext.png')}
             />
-          <Text style={styles.header}>{this.getPromptMessage()}</Text>
+          <Text style={styles.title}>{this.getPromptMessage()}</Text>
+          <View>
+            <Icon name = {'ios-chatbubbles'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
           <TextInput
             placeholder="Code"
             style={styles.formBox}
@@ -43,7 +47,7 @@ export default class PhoneNumberVerification extends React.Component {
             onChange ={event => this.setState({verificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
-
+</View>
 
         <TouchableOpacity style={styles.ButtonContainer}
         onPress={this._loginAsync}
@@ -54,7 +58,7 @@ export default class PhoneNumberVerification extends React.Component {
 
 
         <TouchableOpacity style={styles.resetContainer}>
-                <Text
+                <Text style={styles.texts}
                   onPress={this._resetAsync}>Changed phone number?</Text>
         </TouchableOpacity>
 

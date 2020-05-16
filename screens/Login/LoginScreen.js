@@ -131,19 +131,20 @@ export default class LoginScreen extends React.Component {
         onPress={this._loginAsync}>
                 <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <View style={styles.sidebuttoncontainer}>
+        <TouchableOpacity style={styles.ButtonContainer}
+        activeOpacity = { .8 }
+        onPress={this._signUpAsync}>
 
-        <TouchableOpacity style={styles.resetContainer}>
+                <Text style={styles.resetbuttonText}
+                  >New User? Sign Up Here!</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
                 <Text style={styles.texts}
                   onPress={this._goToPasswordReset}>Forgot password?</Text>
                   </TouchableOpacity>
 
-                  </View>
-        <TouchableOpacity style = {{paddingTop:45}}>
-
-                <Text style={styles.texts}
-                  onPress={this._signUpAsync}>New User? Sign Up Here!</Text>
-        </TouchableOpacity>
+        
 
 
         </ScrollView>

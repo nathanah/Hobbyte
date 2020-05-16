@@ -9,9 +9,9 @@
       "android",
       "web"
     ],
-    "version": "1.0.2",
+    "version": "1.0.5",
     "orientation": "portrait",
-    "icon": "./assets/images/islandlogo.png",
+    "icon": "./assets/images/logo.png",
     "splash": {
       "image": "./assets/images/white_logo_notext.png",
       "resizeMode": "contain",

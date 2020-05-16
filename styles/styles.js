@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     //},
     ButtonContainer:{
 
-        padding: 10,
-        paddingBottom: 45,
+        //padding: 10,
+        //paddingBottom: 45,
 
     },
     backgroundContainer:{
@@ -48,14 +48,26 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems:'center',
     },
-    resetContainer:{
-      backgroundColor: 'green',
-      width: '50%',
-      height: 50,
-      paddingVertical: 5,
-      backgroundColor: '#19b7bf',
-      borderRadius: 25,
-  },
+    texts:{
+
+      textAlign:'center',
+        color:'#FFF',
+        fontWeight: "600",
+        fontFamily:'space-mono',
+
+        backgroundColor:'#19b7bf',
+        // borderRadius:20,
+        // borderWidth: 1,
+        padding:10,
+        borderRadius: 25,
+        fontSize: 16,
+        marginHorizontal: 85,
+        marginBottom: 15,
+        paddingHorizontal: 20,
+        fontFamily:'space-mono',
+        textDecorationLine: 'underline',
+    },
+
   header:{
     paddingBottom: 25,
     fontSize: 18,
@@ -79,7 +91,55 @@ const styles = StyleSheet.create({
 
 
     },
+    signoutbuttonText:{
+      height: 45,
+      backgroundColor: '#19b7bf',
+      borderRadius: 25,
+      fontSize: 16,
+      paddingLeft: 45,
+      backgroundColor: 'rgba(0,0,0,0.35)',
+      color: 'rgba(255,255,255,0.7)',
+      padding:10,
+      borderRadius: 25,
+      fontSize: 16,
+      marginHorizontal: 25,
+      marginBottom: 15,
+      paddingHorizontal: 20,
+      fontFamily:'space-mono',
+
+
+  },
+  
+
+
+
+    resetbuttonText:{
+      textAlign:'center',
+      color:'#FFF',
+      fontWeight: "600",
+      fontFamily:'space-mono',
+
+      backgroundColor:'#32CD32',
+      // borderRadius:20,
+      // borderWidth: 1,
+      padding:10,
+      borderRadius: 25,
+      fontSize: 16,
+      marginHorizontal: 85,
+      marginBottom: 15,
+      paddingHorizontal: 20,
+      fontFamily:'space-mono',
+
+
+  },
     inputIcon:{
+      position: 'absolute',
+      top: 10,
+      left:37,
+
+    },
+    buttonIcon:{
+
       position: 'absolute',
       top: 10,
       left:37,
@@ -88,17 +148,13 @@ const styles = StyleSheet.create({
     title:{
       paddingTop:20,
       fontSize:15,
-
+      fontSize: 20,
+      //fontWeight: "bold",
+      fontFamily:'space-mono',
       textAlign:'center',
       color:'#FFF'
     },
-    texts:{
 
-      fontSize:15,
-      fontFamily:'space-mono',
-
-      color:'#FFF'
-    },
     logo: {
       alignSelf: 'center',
       height: 200,
