@@ -92,7 +92,8 @@ export default class CreateChatRoomScreen extends React.Component {
 
   makeRoom = async () => {
     await this.loadRooms(this.state.roomsKey);
-    var newRooms = this.state.rooms;
+    var newRooms = this.state.rooms || [];
+
 
     this.members = this.state.roomMembers.split(",").map(function(item) {
       return item.trim();
@@ -140,8 +141,9 @@ export default class CreateChatRoomScreen extends React.Component {
     this.loadRooms(key);
   };
 
-  //Checks if there exists a room in the list with specified id(members)
+  // Checks if there exists a room in the list with specified id(members)
   roomDoesNotExist = async (roomList, members) => {
+    console.log(roomList);
     roomList.forEach( room => {
 
       // check for existing room with members

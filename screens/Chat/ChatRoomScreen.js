@@ -395,21 +395,6 @@ export default class ChatRoom extends Component {
     const {rooms} = this.state;
     return (
       <View>
-
-        <Button
-          title="MakeRoom"
-          color="#0064e1"
-          onPress={() => this.props.navigation.navigate('makeRoom',
-              {
-                "roomsKey": this.roomsKey,
-                "rooms": this.state.rooms,
-                "username": this.username
-              }
-            )
-          }
-        />
-
-
         {
           rooms &&
           <SwipeListView
