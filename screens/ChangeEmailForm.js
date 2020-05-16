@@ -27,7 +27,7 @@ export default class ChangePasswordForm extends React.Component {
             style={styles.logo}
             source={require('../assets/images/islands100black.png')}
             />
-          <Text style={styles.header}>Enter your phone verification code, old password, and new password!!!</Text>
+          <Text style={styles.header}>{this.getTitleMessage()}</Text>
           <TextInput
             placeholder="Text Message Code"
             style={styles.formBox}
@@ -92,87 +92,18 @@ export default class ChangePasswordForm extends React.Component {
   }
 
   /*--------------------Async------------------------*/
-
-//   verifyCurrentUserAttributeSubmit = (attribute, verificationCode) => {
-//     Auth.verifyCurrentUserAttributeSubmit('email',verificationCode)
-//         .then(
-//             ()=>{
-//                 console.log(attribute, " verification SUCCESS!")
-//                 return true
-//             }
-//         )
-//         .catch(
-//             (err) => {
-//                 return this.handelChangeError(err, 
-//                     "verifyCurrentUserAttributeSubmit", 
-//                     attribute)
-//             }
-//         )
-//     }
-
+  getTitleMessage(){
+      if(this.props.navigation.getParam('attribute', 'none') == 'email') {
+          return "Fill Out The Form To Change Your Email!"
+      } else {
+        return "Fill Out The Form To Change Your Phone Number!"
+      }
+  }
     handelChangeError = (err, callingFunction, attribute, nextPage) => {
         console.log("ERROR in, ", callingFunction, ": ", attribute)
         console.log('error: ', err)
         alert("ERROR: " + err["message"])
-        // this.setState({newAttributeValue: '',
-        //                emailVerificationCode:'',
-        //                phoneVerificationCode:''
-        //             })
-        // return false;
     }
-
-
-    // currentAuthenticatedUser(){
-    //     Auth.currentAuthenticatedUser()
-    //         .then(
-    //             (user)=>{
-    //                 return user;
-    //             }
-    //         )
-    //         .catch(
-    //             (err) => {
-    //                 return this.handelChangeError(err, 
-    //                     "currentAuthenticatedUser", 
-    //                     attribute)
-    //             }
-    //         )
-    // }
-
-    // updateUserAttributes(user, attribute) {
-    //     var attributeUpdate = {}
-    //     attributeUpdate[attribute] = this.state.newAttributeValue
-    //     Auth.updateUserAttributes(user, attributeUpdate)
-    //     .then(
-    //         () => {
-    //             console.log("Attribute Updeate SUCESS")
-    //             return true
-    //         }
-    //     )
-    //     .catch(
-    //         (err) => {
-    //             return this.handelChangeError(err, 
-    //                 "updateUserAttributes", 
-    //                 attribute)
-    //         }
-    //     )
-    // }
-    // verifyCurrentUserAttribute(attribute) {
-    //     Auth.verifyCurrentUserAttribute(attribute)
-    //     .then(
-    //         ()=>{
-    //             console.log("changeEmail scuess!! Going to verify emial") 
-    //             return true   
-    //         }
-    //     )
-    //     .catch(
-    //         (err) => {
-    //             return this.handelChangeError(err, 
-    //                 "verifyCurrentUserAttribute", 
-    //                 attribute)
-    //         }
-    //     )  
-    // }
-
 
     resendCodes = () => {
         Auth.verifyCurrentUserAttribute('email')
@@ -207,7 +138,11 @@ export default class ChangePasswordForm extends React.Component {
         console.log(this.state)
         console.log("--------------This is changeAttribute reset form--------------------------")
         console.log("___________________we are changing ", attribute, "______________________")
-        
+        if(this.state.emailVerificationCode == '' ||
+        this.state.phoneVerificationCode == '') {
+            alert('Verification codes cannot be empty!')
+            return;
+        }
         Auth.verifyCurrentUserAttributeSubmit('email',this.state.emailVerificationCode)
             .then(
                 ()=>{
@@ -224,21 +159,7 @@ export default class ChangePasswordForm extends React.Component {
                                             Auth.updateUserAttributes(user, attributeUpdate)
                                                 .then(
                                                     () => {
-                                                        console.log("Attribute Updeate SUCESS")
-                                                        Auth.verifyCurrentUserAttribute(attribute)
-                                                            .then(
-                                                                ()=>{
-                                                                    console.log("changeEmail scuess!! Going to verify emial") 
-                                                                    this.props.navigation.navigate('PNV',{authType: attribute});   
-                                                                }
-                                                            )
-                                                            .catch(
-                                                                (err) => {
-                                                                    return this.handelChangeError(err, 
-                                                                        "verifyCurrentUserAttribute", 
-                                                                        attribute)
-                                                                }
-                                                            )  
+                                                        this.props.navigation.navigate('AR');
                                                     }
                                                 )
                                                 .catch(
@@ -276,25 +197,17 @@ export default class ChangePasswordForm extends React.Component {
                 }
             )
 
-
-
-        // console.log("attributeUpdate: ", attributeUpdate)
-        if(this.state.emailVerificationCode == '' ||
-            this.state.phoneVerificationCode == '') {
-                alert('Verification codes cannot be empty!')
-                return;
-            }
-        let recp;
-        recp = this.verifyCurrentUserAttributeSubmit('email', this.state.emailVerificationCode)
-        if(!recp) return;
-        recp = this.verifyCurrentUserAttributeSubmit('phone_number', this.state.phoneVerificationCode)
-        if(!recp) return;
-        let user = this.currentAuthenticatedUser()
-        if(user == false) return;
-        recp = this.updateUserAttributes(user, attribute)
-        if(!recp) return;          
-        recp = this.verifyCurrentUserAttribute(attribute)
-        if(!recp) return;
-        this.props.navigation.navigate('PNV',{authType: attribute});   
+        // let recp;
+        // recp = this.verifyCurrentUserAttributeSubmit('email', this.state.emailVerificationCode)
+        // if(!recp) return;
+        // recp = this.verifyCurrentUserAttributeSubmit('phone_number', this.state.phoneVerificationCode)
+        // if(!recp) return;
+        // let user = this.currentAuthenticatedUser()
+        // if(user == false) return;
+        // recp = this.updateUserAttributes(user, attribute)
+        // if(!recp) return;          
+        // recp = this.verifyCurrentUserAttribute(attribute)
+        // if(!recp) return;
+        // this.props.navigation.navigate('PNV',{authType: attribute});   
     }
 };
