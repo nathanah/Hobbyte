@@ -143,7 +143,7 @@ export default class PhoneNumberVerification extends React.Component {
                       )
 
                   } else {
-                    this.props.navigation.navigate('Main' );
+                    this.props.navigation.navigate('Home' );
                   }
                 })
               .catch(
