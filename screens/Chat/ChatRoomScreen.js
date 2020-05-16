@@ -10,6 +10,7 @@ import {  View,
 
         } from "react-native";
 
+import {Icon} from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
@@ -159,6 +160,26 @@ export default class ChatRoom extends Component {
       rooms: [],
     };
   }
+
+  static navigationOptions = ({navigation, screenProps}) => ({
+      headerRight:
+        <Icon
+          style={{ paddingRight: 10 }}
+          onPress={() => navigation.navigate('makeRoom')}
+          name="add"
+          size={30}
+        />,
+      headerLeft:
+        <Icon
+          style={{ paddingRight: 10 }}
+          onPress={() => navigation.navigate('User')}
+          name="person"
+          size={30}
+        />,
+  });
+
+
+
 
   componentDidMount(){
     this._subscribe = this.props.navigation.addListener('didFocus', () => {

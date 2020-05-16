@@ -43,37 +43,6 @@ import RoomSettings             from "../screens/Chat/RoomSettingsScreen";
 
 
 
-/*---------------------Navigation Tabs -----------------------------*/
-const bottomTabNavigator = createBottomTabNavigator(
-    {
-     
-      Start: {
-        screen: ChatRoom,
-        navigationOptions: {
-          headerLeft: null,
-          tabBarIcon: ({ tintColor }) => (
-            <Icon name="chat" size={25} color={tintColor} />
-          )
-        }
-      },
-      Profile: {
-        screen: HomeScreen,
-        navigationOptions: {
-          tabBarIcon: ({ tintColor }) => (
-            <Icon name="face" size={25} color={tintColor} />
-          )
-        }, 
-      
-    },
-
-    },
-    {
-      initialRouteName: 'Start',
-      tabBarOptions: {
-        activeTintColor: '#eb6e3d'
-      }
-    }
-  );
 
 
 /*---------------------Navigation Stack -----------------------------*/
@@ -167,17 +136,14 @@ const RootStack = createStackNavigator({
     }
   },
 
-  Home: {
-    screen: bottomTabNavigator,
-    navigationOptions:{
-      gesturesEnabled: false,
-    }
-  } ,
-  Main: {
-    screen: bottomTabNavigator,
-    navigationOptions:{
-      gesturesEnabled: false,
+  User: {
+    screen: HomeScreen,
+  },
 
+  Home: {
+    screen: ChatRoom,
+    navigationOptions:{
+      gesturesEnabled: false,
     }
   } ,
 

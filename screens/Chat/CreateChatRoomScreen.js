@@ -28,15 +28,15 @@ export default class CreateChatRoomScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.loadRooms(this.roomsKey);
-    this.loadUsername();
     this.state = {
       username: this.props.navigation.getParam("username"),  //sorted into roomMembers
-      roomsKey: this.props.navigation.getParam("roomsKey"),
+      roomsKey: this.props.navigation.getParam("roomsKey") || "rooms",
       rooms: this.props.navigation.getParam("rooms"),
       roomMembers: "",
       roomName: '',
     };
+    this.loadUsername();
+    this.loadRooms(this.state.roomsKey);
   }
 
   render() {
@@ -166,6 +166,7 @@ export default class CreateChatRoomScreen extends React.Component {
     var username = userTokenParsed.user.signInUserSession.accessToken.payload.username;
     this.setState({"username": username})
     console.log("user: "+this.state.username)
+
   }
 }
 

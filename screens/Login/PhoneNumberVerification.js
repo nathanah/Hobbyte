@@ -137,7 +137,7 @@ export default class PhoneNumberVerification extends React.Component {
                           console.log("Error in init email verification: ", err)
                         }
                       )
-                    
+
                   } else {
                     this.props.navigation.navigate('Main' );
                   }
@@ -158,10 +158,10 @@ export default class PhoneNumberVerification extends React.Component {
 
         Auth.verifyCurrentUserAttributeSubmit('email', this.state.verificationCode).then(
             ()=>{
-              console.log("email has been verified.")              
+              console.log("email has been verified.")
               //We came form signup so we want to go to signin...
-              this.props.navigation.navigate('Main')
-              
+              this.props.navigation.navigate("SignIn");
+
             }
         ).catch((err)=>{
             console.log("Error verifing Email, comming form: ", err)
