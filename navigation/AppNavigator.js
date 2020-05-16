@@ -138,12 +138,17 @@ const RootStack = createStackNavigator({
 
   User: {
     screen: HomeScreen,
+    navigationOptions:{
+      gesturesEnabled: true,
+      headerShown: true,
+    }
   },
 
   Home: {
     screen: ChatRoom,
     navigationOptions:{
       gesturesEnabled: false,
+      headerShown: true,
     }
   } ,
 
