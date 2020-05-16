@@ -10,7 +10,6 @@ export default class PhoneNumberVerification extends React.Component {
 
 
   state = {
-
     verificationCode: '',
     username: this.props.navigation.getParam('username','none'),
     // authType: this.props.navigation.getParam('authType', 'none'),
@@ -29,7 +28,7 @@ export default class PhoneNumberVerification extends React.Component {
             style={styles.logo}
             source={require('../../assets/images/white_logo_notext.png')}
             />
-          <Text style={styles.header}>Enter Verification Code</Text>
+          <Text style={styles.header}>{this.getPromptMessage()}</Text>
           <TextInput
             placeholder="Code"
             style={styles.formBox}
@@ -68,6 +67,13 @@ export default class PhoneNumberVerification extends React.Component {
   }
 
   /*--------------------Async------------------------*/
+    getPromptMessage(){
+      if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
+        return "Enter Email Verification Code"
+      } else {
+        return "Enter Text Verification Code"
+      }
+    }
     _loginAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
@@ -122,6 +128,7 @@ export default class PhoneNumberVerification extends React.Component {
                       .then(
                         ()=>{
                           console.log("init email verification")
+                          this.setState({verificationCode:''})
                           this.props.navigation.navigate('PNV', {authType: 'verify_email'})
                         }
                       )
