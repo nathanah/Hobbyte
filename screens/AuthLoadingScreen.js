@@ -7,7 +7,9 @@
 
 
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, StatusBar, AsyncStorage} from 'react-native';
+import {styles} from '../../styles/styles'
+
+import { View, Text, StyleSheet, ActivityIndicator, StatusBar,Image, AsyncStorage} from 'react-native';
 
 export default class AuthLoadingScreen extends Component {
   constructor(props) {
@@ -42,7 +44,11 @@ export default class AuthLoadingScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={{backgroundColor: "#19b7bf", flex: 1}}>
+        <Image
+            style={styles.logo}
+            source={require('../../assets/images/white_logo_text.png')}
+            />
         <Text > AuthLoadingScreen </Text>
         <ActivityIndicator />
         <StatusBar barStyle="default" />
