@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import {AsyncStorage} from "react-native";
 import {Icon} from 'react-native-elements';
-import nacl from 'tweet-nacl-react-native-expo'
+import {nacl} from 'tweet-nacl-react-native-expo'
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
@@ -27,26 +27,26 @@ async function sendMessage(payload) {
   var roomMembers = payload.roomMembers;
   console.log("roomMembers: ", roomMembers)
   console.log("from: "  + payload.sender);
-  let payloadStr = JSON.stringify(payload);
-  /*
-  const userKeyPair = await nacl.box.keyPair()
-  const userSharedKey = nacl.box.before(aliceKeyPair.publicKey, userKeyPair.secretKey)
-  //Encrypt payload here
+  //let payloadStr = JSON.stringify(payload);
 
-  
-  const strDecoded = new Uint8Array(nacl.util.decodeUTF8(payloadStr))
-  const nonce = await nacl.randomBytes(24)
-  const EncryptedStr = nacl.box.after(strDecoded, nonce, userSharedKey)
-  const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
+  /*
+  const key = nacl.util.encodeBase64(nacl.randomBytes(secretbox.keyLength))
+  const encrypted = encrypt(payload, key);
   */
+
   for (var i = 0; i < roomMembers.length ; i++){
     if(roomMembers[i] != payload.sender){
       console.log("other users: " + roomMembers[i]);
       const package_ = {
         to: roomMembers[i],
         from: payload.sender,
-        payload: payloadStr,
-        //payload: Base64EncryptedStr
+        
+        //payload: payloadStr,
+
+        /*
+        payload: encrypted,
+        key:key,
+        */
       };
       console.log("package: " + JSON.stringify(package_));
       const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
@@ -61,6 +61,42 @@ async function sendMessage(payload) {
   }
 }
 
+/*
+const encrypt = (json, key) => {
+  const keyUint8Array = nacl.util.decodeBase64(key);
+
+  const nonce = randomBytes(secretbox.nonceLength);
+  const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
+  const box = nacl.secretbox(messageUint8, nonce, keyUint8Array);
+
+  const fullMessage = new Uint8Array(nonce.length + box.length);
+  fullMessage.set(nonce);
+  fullMessage.set(box, nonce.length);
+
+  const base64FullMessage = nacl.util.encodeBase64(fullMessage);
+  return base64FullMessage;
+};
+
+const decrypt = (messageWithNonce, key) => {
+  const keyUint8Array = nacl.util.decodeBase64(key);
+  const messageWithNonceAsUint8Array = nacl.util.decodeBase64(messageWithNonce);
+  const nonce = messageWithNonceAsUint8Array.slice(0, nacl.secretbox.nonceLength);
+  const message = messageWithNonceAsUint8Array.slice(
+    nacl.secretbox.nonceLength,
+    messageWithNonce.length
+  );
+
+  const decrypted = nacl.secretbox.open(message, nonce, keyUint8Array);
+
+  if (!decrypted) {
+    throw new Error("Could not decrypt message");
+  }
+
+  const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
+  return JSON.parse(base64DecryptedMessage);
+};
+*/
+
 async function getAuthObject() {
   // obtains userToken and parses it to access username
   var user = await AsyncStorage.getItem("userToken");
@@ -70,6 +106,8 @@ async function getAuthObject() {
 }
 
 function createNewChatMessage(room, messages /*must be this.state*/) {
+
+
   const messageText = messages[0].text; // messages is latest message
   const date = new Date();
   const payload = new Payload(
@@ -237,30 +275,7 @@ class ChatScreen extends React.Component {
           id: this.props.navigation.getParam('id'),
       };
   }
-/*
-  KeyEncodeDecode = async () => {
-    // simple example encode decode (with base64)
-    // usefull for sharing keys with others or storing in file
 
-    const keyPair = await nacl.box.keyPair()
-    const { publicKey, secretKey } = keyPair
-
-    const base64EncodedPublic = nacl.util.encodeBase64(publicKey)
-    const base64EncodedPrivate = nacl.util.encodeBase64(secretKey)
-
-    const base64DecodedPublic = nacl.util.decodeBase64(base64EncodedPublic)
-    const base64DecodedPrivate = nacl.util.decodeBase64(base64EncodedPrivate)
-
-    console.log({
-      publicKey,
-      secretKey,
-      base64EncodedPublic,
-      base64EncodedPrivate,
-      base64DecodedPublic,
-      base64DecodedPrivate
-    })
-  }
-*/
   componentDidMount() {
       this._isMounted = true,
 
@@ -456,13 +471,12 @@ class ChatScreen extends React.Component {
 
       /// parse incomingMessageItem payload and save into new variable
       var messageObj = messageObject.onCreateMessageByRecipient;
-      //var payload = messageObj.payload;
+      
+      var payload = messageObj.payload;
       /*
-      const messageFromsender = nacl.util.decodeBase64(messageObj.payload) 
-      const Decryptedmsg = nacl.box.open.after(messageFromsender, nonce, userSharedKey) 
-      const DecryptedmsgEncoded = nacl.util.encodeUTF8(Decryptedmsg)
+      const decrypted = decrypt(payload, messageObj.key);
       */
-      payload = JSON.parse(DecryptedmsgEncoded);
+      payload = JSON.parse(decrypted);
 
       //sort message into correct room
       var roomObj = await AsyncStorage.getItem(payload.roomId);
