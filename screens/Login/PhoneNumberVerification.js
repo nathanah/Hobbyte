@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
+import { View,
+         Text, 
+         TouchableOpacity, 
+         KeyboardAvoidingView, 
+         TextInput, 
+         Image, 
+         ScrollView, 
+         AsyncStorage,
+         Alert } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -87,7 +95,22 @@ export default class PhoneNumberVerification extends React.Component {
       console.log("Varification type: ", this.state.authType)
       console.log("this is AuthType: ", this.props.navigation.getParam('authType'))
 
-      if(this.props.navigation.getParam('authType', 'none') == 'signup') {
+      let authType = this.props.navigation.getParam('authType', 'none');
+      if(this.state.verificationCode == '') {
+        
+        let errorType;
+        if(authType == 'signup') {
+          errorType = 'New User Confirmation'
+        } else if(authType == 'signin') {
+           errorType = "Login"
+        } else if(authType == 'verify_email') {
+          errorType = 'Email Verification'
+        }
+        Alert.alert(errorType + " Error!",'The Verification Code Field Can Not Be Empty!')
+        return
+      } 
+
+      if(authType == 'signup') {
         console.log("------------This is signup-----------------")
         Auth.confirmSignUp(this.state.username, this.state.verificationCode)
         .then(
@@ -104,7 +127,7 @@ export default class PhoneNumberVerification extends React.Component {
                 alert('error confirming signing up!: '+ err.message);
           }
         )
-      } else if(this.props.navigation.getParam('authType', 'none') == 'signin') {
+      } else if(authType == 'signin') {
         console.log("------------This is signin-----------------")
         // remove from final version
         // if (this.state.verificationCode==1111){
@@ -156,7 +179,7 @@ export default class PhoneNumberVerification extends React.Component {
         .catch(err => {console.log('error confirming signing in!: ', err);
                 alert('error confirming signing in!: '+err.message);});
 
-      } else if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
+      } else if(authType == 'verify_email') {
         console.log("------------Verifying the email-----------------")
         console.log("comming from: ", this.props.navigation.getParam('authType', 'none'))
 
@@ -164,7 +187,7 @@ export default class PhoneNumberVerification extends React.Component {
             ()=>{
               console.log("email has been verified.")
               //We came form signup so we want to go to signin...
-              this.props.navigation.navigate("SignIn");
+              this.props.navigation.navigate("Home");
 
             }
         ).catch((err)=>{
@@ -180,3 +203,9 @@ export default class PhoneNumberVerification extends React.Component {
       this.props.navigation.navigate('PhoneReset');
     };
 }
+
+// error name: NotAuthorizedException - happens when you press submite twicec
+// when code field is empty, app chashes. add check to see that it is not empty. White spage is not an empty string.
+// CodeMismatchException - when the code is incorrect.
+
+//Clear username / password upon submit loginy
