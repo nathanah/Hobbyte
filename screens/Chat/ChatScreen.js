@@ -11,13 +11,13 @@ import nacl from 'tweet-nacl-react-native-expo'
 //   decodeBase64
 // } from "tweetnacl-util";
 
-import { secretbox, randomBytes } from "tweetnacl";
+//import { secretbox, randomBytes } from "tweetnacl";
 import {
   decodeUTF8,
   encodeUTF8,
   encodeBase64,
   decodeBase64
-} from "tweetnacl-util";
+} from "tweet-nacl-react-native-expo/nacl-util";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
@@ -46,7 +46,7 @@ async function sendMessage(payload) {
 
   
   //generate key
-  const key = nacl.util.encodeBase64(randomBytes(nacl.secretBox.keyLength))
+  const key = encodeBase64(nacl.randomBytes(nacl.secretBox.keyLength))
   //encrypted receives the 
   const encrypted = encrypt(payload, key);
   console.log("key" + key);
@@ -81,23 +81,23 @@ async function sendMessage(payload) {
 
 /*
 const encrypt = (json, key) => {
-  const keyUint8Array = nacl.util.decodeBase64(key);
+  const keyUint8Array = decodeBase64(key);
 
-  const nonce = randomBytes(nacl.secretbox.nonceLength);
-  const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
+  const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
+  const messageUint8 = decodeUTF8(JSON.stringify(json));
   const box = nacl.secretbox(messageUint8, nonce, keyUint8Array);
 
   const fullMessage = new Uint8Array(nonce.length + box.length);
   fullMessage.set(nonce);
   fullMessage.set(box, nonce.length);
 
-  const base64FullMessage = nacl.util.encodeBase64(fullMessage);
+  const base64FullMessage = encodeBase64(fullMessage);
   return base64FullMessage;
 };
 
 const decrypt = (messageWithNonce, key) => {
-  const keyUint8Array = nacl.util.decodeBase64(key);
-  const messageWithNonceAsUint8Array = nacl.util.decodeBase64(messageWithNonce);
+  const keyUint8Array = decodeBase64(key);
+  const messageWithNonceAsUint8Array = decodeBase64(messageWithNonce);
   const nonce = messageWithNonceAsUint8Array.slice(0, nacl.secretbox.nonceLength);
   const message = messageWithNonceAsUint8Array.slice(
     nacl.secretbox.nonceLength,
@@ -110,7 +110,7 @@ const decrypt = (messageWithNonce, key) => {
     throw new Error("Could not decrypt message");
   }
 
-  const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
+  const base64DecryptedMessage = encodeUTF8(decrypted);
   return JSON.parse(base64DecryptedMessage);
 };
 */
