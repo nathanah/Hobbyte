@@ -86,6 +86,30 @@ export default class PhoneNumberVerification extends React.Component {
         return "Enter Text Verification Code"
       }
     }
+    handelAWSError(authType, errorCode) {
+      let errorType;
+      if(authType == 'signup') {
+        errorType = 'New User Confirmation'
+      } else if(authType == 'signin') {
+         errorType = "Login"
+      } else if(authType == 'verify_email') {
+        errorType = 'Email Verification'
+      } else {
+        errorType = 'Unknown Type'
+      }
+      
+      let errorMessage;
+      if(errorCode =='NotAuthorizedException') {
+        return
+      } else if(errorCode == 'CodeMismatchException') {
+        errorMessage = "Invalid Verification Code Entered!"
+      } else {
+        errorMessage = 'An Unknown Error Has Occurred!'
+      }
+      Alert.alert(errorType + " Error!", errorMessage)
+      return
+
+    }
     _loginAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
@@ -105,6 +129,8 @@ export default class PhoneNumberVerification extends React.Component {
            errorType = "Login"
         } else if(authType == 'verify_email') {
           errorType = 'Email Verification'
+        } else {
+          errorType = 'Unknown Type'
         }
         Alert.alert(errorType + " Error!",'The Verification Code Field Can Not Be Empty!')
         return
@@ -124,7 +150,7 @@ export default class PhoneNumberVerification extends React.Component {
         .catch(
           (err) => {
             console.log('error confirming signing up!: ', err);
-                alert('error confirming signing up!: '+ err.message);
+            handelAWSError(authType, err.code)
           }
         )
       } else if(authType == 'signin') {
@@ -176,8 +202,12 @@ export default class PhoneNumberVerification extends React.Component {
               )
           }
         )
-        .catch(err => {console.log('error confirming signing in!: ', err);
-                alert('error confirming signing in!: '+err.message);});
+        .catch(
+          err => {
+                console.log('error confirming signing in!: ', err);
+                handelAWSError(authType, err.code)
+              }
+        );
 
       } else if(authType == 'verify_email') {
         console.log("------------Verifying the email-----------------")
@@ -191,7 +221,7 @@ export default class PhoneNumberVerification extends React.Component {
 
             }
         ).catch((err)=>{
-            console.log("Error verifing Email, comming form: ", err)
+          handelAWSError(authType, err.code)
         })
       }
     };
@@ -204,8 +234,9 @@ export default class PhoneNumberVerification extends React.Component {
     };
 }
 
-// error name: NotAuthorizedException - happens when you press submite twicec
+// error name:  - happens when you press submite twicec
 // when code field is empty, app chashes. add check to see that it is not empty. White spage is not an empty string.
 // CodeMismatchException - when the code is incorrect.
 
 //Clear username / password upon submit loginy
+//Want to add resend code button.
