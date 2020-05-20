@@ -19,21 +19,26 @@ API.configure(awsconfig);
 
 
 async function generateKeys(user) {
-  const keyPair = await nacl.box.keyPair() 
-  const {publicKey, secretKey} = keyPair 
-  const key = nacl.util.encodeBase64(publicKey);
-  const privatekey = nacl.util.encodeBase64(secretKey);
-  
+  //const keyPair = await nacl.box.keyPair() 
+  //const {publicKey, secretKey} = keyPair 
+  //const key = nacl.util.encodeBase64(publicKey);
+  //const privatekey = nacl.util.encodeBase64(secretKey);
+  //const aliceKeyPair = await nacl.box.keyPair()
+  //const {alicepublicKey, alicesecretKey} = aliceKeyPair 
+  //const apublicKey = nacl.util.encodeBase64(alicepublicKey);
+  //const asecretKey = nacl.util.encodeBase64(alicesecretKey);
 
   // generate keys
   // store keys in local storage
-  await AsyncStorage.setItem('publickey',key);
-  await AsyncStorage.setItem('privatekey',privatekey);
+  /*
+  await AsyncStorage.setItem('publickey',publicKey);
+  await AsyncStorage.setItem('privatekey',secretKey);
+  await AsyncStorage.setItem('apublicKey',alicepublicKey);
+  await AsyncStorage.setItem('asecretKey',alicesecretKey);
+*/
   
-  // check if key exists on AWS 
-    // if key exists, update 
-    // else store as a new message 
-  //key = "xxxx dummy keyxxxx"; 
+
+  key = "xxxx dummy keyxxxx"; 
   // store keys in local storage
  
 
@@ -124,7 +129,7 @@ export default class PhoneNumberVerification extends React.Component {
             keyboardType="phone-pad"
             autoFocus={true}
             onSubmitEditing = {this._loginAsync}
-            onSubmitEditing = {generateKeys(this.state.user)}
+            //onSubmitEditing = {generateKeys(this.state.user)}
             autoCapitalize='none'
             autoCorrect={false}
             value={this.state.verificationCode}

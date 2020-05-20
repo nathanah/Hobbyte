@@ -34,12 +34,47 @@ async function sendMessage(payload) {
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
 
+  /*
+    //const {publicKey, secretKey} = keyPair 
+  //const key = nacl.util.encodeBase64(publicKey);
+  //const privatekey = nacl.util.encodeBase64(secretKey);
+  //const {alicepublicKey, alicesecretKey} = aliceKeyPair 
   const publickey = await AsyncStorage.getItem('publickey');
   const privatekey = await AsyncStorage.getItem('privatekey');
+  const apublickey = await AsyncStorage.getItem('apublicKey');
+  const aprivatekey = await AsyncStorage.getItem('asecretKey');
+  */
 
-  console.log("public key" + JSON.stringify(publickey));
-  console.log("private key" + JSON.stringify(privatekey));
-   
+  //generate keys
+  const keyPair = await nacl.box.keyPair() 
+  const aliceKeyPair = await nacl.box.keyPair()
+  
+
+  //shared key for both receiver and sender
+  const mySharedKey = nacl.box.before(aliceKeyPair.publicKey, keyPair.secretKey)
+  const herkey = nacl.box.before(keyPair.publicKey, aliceKeyPair.secretKey)
+  console.log("\n");
+  console.log("Our shared key: " + mySharedKey);
+  
+  //Decoded UTF8 string
+  const str = "Hello! This is a secret message"
+  console.log("Un encrypted string: " + str);
+  const strDecoded = new Uint8Array(nacl.util.decodeUTF8(str))
+  
+  //generate nonce and encrypt 
+  const nonce = await nacl.randomBytes(24)
+  const bobEncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
+  const bobBase64EncryptedStr = nacl.util.encodeBase64(bobEncryptedStr)
+  console.log("Encrypted string to be sent: " + bobBase64EncryptedStr);
+
+  //Decrypt
+  const messageFromBobDecoded = nacl.util.decodeBase64(bobBase64EncryptedStr) // same as bobEncryptedStr
+  const messageFromBobDecrypted = nacl.box.open.after(messageFromBobDecoded, nonce, herkey) // same as strDecoded
+  const messageFromBobEncoded = nacl.util.encodeUTF8(messageFromBobDecrypted)
+  console.log("Decrypted string: " + messageFromBobEncoded);
+  console.log("\n");
+
+
 
   for (var i = 0; i < roomMembers.length ; i++){
     if(roomMembers[i] != payload.sender){
@@ -68,14 +103,14 @@ async function sendMessage(payload) {
   }
 }
 
-
+/*
 const encrypt = (json, key) => {
   const keyUint8Array = nacl.util.decodeBase64(key);
 
-  // const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
-  const nonce = nacl.randomBytes(24); 
-  // const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
-  const messageUint8 = nacl.util.decodeUTF8(json);
+  const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
+  //const nonce = nacl.randomBytes(24); 
+  const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
+  //const messageUint8 = nacl.util.decodeUTF8(json);
   const box = nacl.secretbox(messageUint8, nonce, keyUint8Array);
 
   const fullMessage = new Uint8Array(nonce.length + box.length);
@@ -85,7 +120,7 @@ const encrypt = (json, key) => {
   const base64FullMessage = nacl.util.encodeBase64(fullMessage);
   return base64FullMessage;
 };
-/*
+
 const decrypt = (messageWithNonce, key) => {
   const keyUint8Array = nacl.util.decodeBase64(key);
   const messageWithNonceAsUint8Array = nacl.util.decodeBase64(messageWithNonce);
