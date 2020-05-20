@@ -4,6 +4,7 @@ import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView,
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import Icon from 'react-native-vector-icons/Ionicons'
+import nacl from 'tweet-nacl-react-native-expo'
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {ActionType, Payload} from '../../src/payload';
@@ -18,8 +19,22 @@ API.configure(awsconfig);
 
 
 async function generateKeys(user) {
+  const keyPair = await nacl.box.keyPair() 
+  const {publicKey, secretKey} = keyPair 
+  const key = nacl.util.encodeBase64(publicKey);
+  const privatekey = nacl.util.encodeBase64(secretKey);
+  
+
   // generate keys
-  const key = "xxxx dummy keyxxxx"; 
+  // store keys in local storage
+  await AsyncStorage.setItem('publickey',JSON.stringify(key));
+  await AsyncStorage.setItem('privatekey',JSON.stringify(privatekey));
+  console.log("public key" + await AsyncStorage.getItem('publickey'));
+  console.log("private key" + await AsyncStorage.getItem('privatekey'));
+  // check if key exists on AWS 
+    // if key exists, update 
+    // else store as a new message 
+  //key = "xxxx dummy keyxxxx"; 
   // store keys in local storage
  
 
