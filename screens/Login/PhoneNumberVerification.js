@@ -67,7 +67,10 @@ export default class PhoneNumberVerification extends React.Component {
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text style={styles.texts}
-                  onPress={this._resetAsync}>Changed phone number?</Text>
+                  onPress={()=>{this.props.navigation.navigate("SignIn")}}>
+                    Verification code not working?
+                    Click to return to the Login page and try to login again!
+                </Text>
         </TouchableOpacity>
 
           </ScrollView>
@@ -80,13 +83,18 @@ export default class PhoneNumberVerification extends React.Component {
 
   /*--------------------Async------------------------*/
     getPromptMessage(){
-      if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
-        return "Enter Email Verification Code"
+      let authType = this.props.navigation.getParam('authType', 'none')
+      if(authType == 'verify_email') {
+        return "Enter Email Verification Code To Verify Your Email"
+      } else if (authType == 'signin'){
+        return "Enter Text Verification Code To Login"
+      } else if(authType == 'signup'){
+        return "Enter Text Verification Code To Verify Your Phone Number"
       } else {
-        return "Enter Text Verification Code"
+        return "Enter Unknown Code For Unkown Reason"
       }
     }
-    handelAWSError(authType, errorCode) {
+    handelAWSError(authType, error) {
       let errorType;
       if(authType == 'signup') {
         errorType = 'New User Confirmation'
@@ -99,12 +107,18 @@ export default class PhoneNumberVerification extends React.Component {
       }
       
       let errorMessage;
-      if(errorCode =='NotAuthorizedException') {
+      console.log("This is error code: ", error.code)
+      if(error.code =='NotAuthorizedException') {
         return
-      } else if(errorCode == 'CodeMismatchException') {
+      } else if(error.code == 'CodeMismatchException') {
         errorMessage = "Invalid Verification Code Entered!"
-      } else {
-        errorMessage = 'An Unknown Error Has Occurred!'
+      } else if(error.code == 'LimitExceededException') {
+        errorMessage = 'You Have Exceeded The Verification Code Limit. Please Wait A While And Then Try Again.'
+      } //else if (error.message == "Invalid session for the user, session is expired."){
+      //   errorMessage = "Your Verification Code Has Expired. Please Resend The Code."
+      // } 
+      else {
+        errorMessage = error.message
       }
       Alert.alert(errorType + " Error!", errorMessage)
       return
@@ -150,7 +164,7 @@ export default class PhoneNumberVerification extends React.Component {
         .catch(
           (err) => {
             console.log('error confirming signing up!: ', err);
-            handelAWSError(authType, err.code)
+            this.handelAWSError(authType, err)
           }
         )
       } else if(authType == 'signin') {
@@ -187,7 +201,7 @@ export default class PhoneNumberVerification extends React.Component {
                       )
                       .catch(
                         (err)=>{
-                          console.log("Error in init email verification: ", err)
+                          this.handelAWSError(authType, err)
                         }
                       )
 
@@ -205,7 +219,7 @@ export default class PhoneNumberVerification extends React.Component {
         .catch(
           err => {
                 console.log('error confirming signing in!: ', err);
-                handelAWSError(authType, err.code)
+                this.handelAWSError(authType, err)
               }
         );
 
@@ -221,22 +235,39 @@ export default class PhoneNumberVerification extends React.Component {
 
             }
         ).catch((err)=>{
-          handelAWSError(authType, err.code)
+          this.handelAWSError(authType, err)
         })
       }
     };
 
-    _resetAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Redirecting to phone reset page");
-      this.props.navigation.navigate('PhoneReset');
-    };
 }
 
-// error name:  - happens when you press submite twicec
-// when code field is empty, app chashes. add check to see that it is not empty. White spage is not an empty string.
-// CodeMismatchException - when the code is incorrect.
+// error name:  - happens when you press submite twicec DONE
+// when code field is empty, app chashes. add check to see that it is not empty. 
+// White spage is not an empty string. DONE
+// CodeMismatchException - when the code is incorrect. DONE
 
 //Clear username / password upon submit loginy
 //Want to add resend code button.
+
+/*
+Happend when you wait too longe before submittiong the code.
+error confirming signing in!:  Object {
+  "code": "NotAuthorizedException",
+  "message": "Invalid session for the user, session is expired.",
+  "name": "NotAuthorizedException",
+}
+*/ 
+
+
+//Too many email reset codes sent code: LimitExceededException DONE
+
+
+/*
+When you enter the same code twice.
+error confirming signing in!:  Object {
+  "code": "NotAuthorizedException",
+  "message": "Invalid session for the user, session can only be used once.",
+  "name": "NotAuthorizedException",
+}
+*/
