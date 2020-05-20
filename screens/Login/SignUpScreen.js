@@ -75,8 +75,8 @@ const validationSchema = yup.object().shape({
     .string()
     .label('Password')
     .required()
-    .min(5, 'Password must be over 5 characters')
-    .max(10, 'Password must be under 10 characters'),
+    .min(8, 'Password must be over 8 characters')
+    .max(100, 'Password must be under 100 characters'),
   confirmPassword: yup
     .string()
     .required()
@@ -96,18 +96,18 @@ const validationSchema = yup.object().shape({
 
 
 function signInError(err){
-  console.log(err); 
+  console.log(err);
   switch(err.message){
-    case "Invalid phone number format.": 
+    case "Invalid phone number format.":
       alert("Invalid phone number entered. Please enter phone number in the following format: +14445556666");
       break;
 
-    case "User already exists": 
-      alert("Sorry, this username is already taken."); 
-      break; 
-    default: 
-      Alert.alert("Sign In Error:", err); 
-      break; 
+    case "User already exists":
+      alert("Sorry, this username is already taken.");
+      break;
+    default:
+      Alert.alert("Sign In Error:", err.message);
+      break;
   }
 }
 export default class SignUpScreen extends React.Component{
@@ -247,11 +247,11 @@ _submitAsync = async () => {
   console.log("password:" + this.state.password);
 
   if ( this.state.username == null ||this.state.username== '' ){
-    Alert.alert("Sign Up Error:","Please enter a username. "); 
+    Alert.alert("Sign Up Error:","Please enter a username. ");
   } else if(this.state.email == null || this.state.email == ''){
-    Alert.alert("Sign Up Error:","Please enter an email."); 
+    Alert.alert("Sign Up Error:","Please enter an email.");
   } else if (this.state.phoneNumber == null || this.state.phoneNumber== ''){
-    Alert.alert("Sign Up Error:","Please enter a phone number with the following format: +14445556666"); 
+    Alert.alert("Sign Up Error:","Please enter a phone number with the following format: +14445556666");
   } else if (this.state.password == null || this.state.password== ''){
     Alert.alert("Sign Up Error:","Please enter a password.");
   } else {
@@ -269,10 +269,9 @@ _submitAsync = async () => {
         this.props.navigation.navigate('PNV',
               {username: this.state.username, authType: 'signup'})
       })
-      // .catch(err => console.log('error signing up!: ', err));
       .catch(err => signInError(err));
-  
-  
+
+
   }
 
 };
