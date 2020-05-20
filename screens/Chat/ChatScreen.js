@@ -2,7 +2,22 @@ import React, { Component } from 'react'
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import {AsyncStorage} from "react-native";
 import {Icon} from 'react-native-elements';
-import {nacl} from 'tweet-nacl-react-native-expo'
+import nacl from 'tweet-nacl-react-native-expo'
+// import { secretbox, randomBytes } from "tweetnacl";
+// import {
+//   decodeUTF8,
+//   encodeUTF8,
+//   encodeBase64,
+//   decodeBase64
+// } from "tweetnacl-util";
+
+import { secretbox, randomBytes } from "tweetnacl";
+import {
+  decodeUTF8,
+  encodeUTF8,
+  encodeBase64,
+  decodeBase64
+} from "tweetnacl-util";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage, deleteMessage} from '../../src/graphql/mutations';
 import {OnCreateMessageByRecipient} from '../../src/graphql/subscriptions';
@@ -29,12 +44,13 @@ async function sendMessage(payload) {
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
 
-  /*
+  
   //generate key
-  const key = nacl.util.encodeBase64(nacl.randomBytes(nacl.secretbox.keyLength))
+  const key = nacl.util.encodeBase64(randomBytes(nacl.secretBox.keyLength))
   //encrypted receives the 
   const encrypted = encrypt(payload, key);
-  */
+  console.log("key" + key);
+  console.log("encrypted: " + encrypted); 
 
   for (var i = 0; i < roomMembers.length ; i++){
     if(roomMembers[i] != payload.sender){
@@ -544,9 +560,9 @@ class ChatScreen extends React.Component {
         keyboardShouldPersistTaps = 'never'
         isTyping={this.state.isTyping}
         onSend={messages => this.onSend(messages)}
-        alwaysShowSend = 'true'
-        renderUsernameOnMessage = 'true'
-        showAvatarForEveryMessage = 'true'
+        alwaysShowSend = {true}
+        renderUsernameOnMessage = {true}
+        showAvatarForEveryMessage = {true}
         user={{
           _id: 1,
         }}
