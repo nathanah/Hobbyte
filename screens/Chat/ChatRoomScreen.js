@@ -394,7 +394,7 @@ export default class ChatRoom extends Component {
   render() {
     const {rooms} = this.state;
     return (
-      <View>
+      <View height="100%">
         {
           rooms &&
           <SwipeListView
