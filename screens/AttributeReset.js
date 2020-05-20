@@ -17,6 +17,7 @@ import {
   View,
   Button,
   AsyncStorage,
+  Alert,
 } from 'react-native';
 
 // import Login from './Login/';
@@ -114,9 +115,13 @@ export default class AttributeReset extends React.Component {
   handelChangeError = (err, callingFunction, attribute, nextPage) => {
     console.log("ERROR in, ", callingFunction, ": ", attribute)
     console.log('error: ', err)
-    alert("ERROR: " + err["message"])
-    this.props.navigation.navigate("AR")
 
+    if(err.code == 'LimitExceededException') {
+      Alert.alert("You Requested Too Many Email Verification Codes!", "Please Wait A While Before Trying Again")
+    } else {
+      Alert.alert("An Unspecified Error Has Occured!", "Please Try Again Some Other Time :(")
+    }
+    this.props.navigation.navigate("AR")
   }
 
   verifyCurrentUserAttribute(attribute) {
@@ -173,3 +178,11 @@ export default class AttributeReset extends React.Component {
 AttributeReset.navigationOptions = {
   header: null,
 };
+
+
+
+/*
+Make special error message for tooManyAtempts
+
+make generic message for all other errors.
+*/
