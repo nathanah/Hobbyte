@@ -16,6 +16,7 @@ import {
   View,
   Button,
   AsyncStorage,
+  Alert,
 } from 'react-native';
 
 // import Login from './Login/';
@@ -52,7 +53,7 @@ export default class HomeScreen extends React.Component {
 <TouchableOpacity
         style={styles.ButtonContainer}
         activeOpacity = { .8 }
-        onPress={this._signOutAsync}
+        onPress={this.confirmSignOutAsync}
         >
                 <Text style={styles.signoutbuttonText}>Sign out</Text>
         </TouchableOpacity>
@@ -99,16 +100,33 @@ export default class HomeScreen extends React.Component {
 
 
   /*--------------------Async------------------------*/
+
+  confirmSignOutAsync = async () => {
+    Alert.alert(
+      'Confirm Sign Out',
+      'Are you sure you want to sign out? This will wipe all locally stored files including all conversation history.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => this._signOutAsync() },
+      ],
+      { cancelable: false }
+    );
+  }
+
   _signOutAsync = async () => {
     // TODO - clear Async storage
-    // await AsyncStorage.clear();
+    await AsyncStorage.clear();
     Auth.signOut()
     .then(() => {
       console.log("Signed Out");
       AsyncStorage.clear();
       this.props.navigation.navigate('SignIn'); // not redirecting for some reason
     })
-    .catch(err => console.log('error confirming signing in!: ', err));
+    .catch(err => console.log('error confirming signing out!: ', err));
   };
 
 
