@@ -143,8 +143,9 @@ export default class RoomSettings extends Component {
                 keyboardType="default"
                 autoCapitalize='none'
                 autoCorrect={false}
-                value={this.newMember}
-                onChange ={event => this.newMember = event.nativeEvent.text}
+                value={this.state.newMember}
+                // onChange ={event => {this.newMember = event.nativeEvent.text;}}
+                onChange ={event => this.setState({newMember: event.nativeEvent.text })}
                 underlineColorAndroid = "transparent"
               />
               <TouchableOpacity
@@ -228,10 +229,12 @@ export default class RoomSettings extends Component {
     //TODO: add input verification
     if(newMember !== ""){
       var newMembers = this.state.members;
-      newMembers.push(this.newMember);
+      newMembers.push(this.state.newMember);
       newMembers.sort();
-      await this.setState({members: newMembers});
-      this.newMember = "";
+      await this.setState({members: newMembers, newMember: ""});
+      // this.newMember = "";
+      delete this.state.newMember;
+      console.log(this.state);
 
       this.submitChange();
     }
@@ -251,16 +254,8 @@ export default class RoomSettings extends Component {
   }
 
   submitChange = async () => {
+    console.log("load rooms from local storage");
     var rooms = await AsyncStorage.getItem("rooms");
-    console.log("load rooms from local storage")
-
-    // //convert members from string to array
-    // var tempMembers = this.state.members;
-    // var members = tempMembers.split(",").map(function(item) {
-    //   return item.trim();
-    // });
-    // members.sort();
-    // await this.setState({members: members});
 
     //change room name in "rooms"
     if(rooms != null){
@@ -276,10 +271,7 @@ export default class RoomSettings extends Component {
 
       if(idx != -1){
         var room = parsed[idx]
-        // console.log(room)
-        // console.log(this.state.name)
         room.name = this.state.name;
-        // console.log(room.name)
         parsed[idx] = room;
 
         AsyncStorage.setItem("rooms", JSON.stringify(parsed));
@@ -294,6 +286,10 @@ export default class RoomSettings extends Component {
     }
 
     console.log("rooms updated");
+
+    //remove unwanted state variables
+    delete this.state.newMember;
+
     AsyncStorage.setItem(this.state.id+"settings", JSON.stringify(this.state))
     this.sendSettingsChange(this.state);
   }
