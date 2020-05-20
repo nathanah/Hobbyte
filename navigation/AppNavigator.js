@@ -150,7 +150,7 @@ const RootStack = createStackNavigator({
       gesturesEnabled: false,
       headerShown: true,
     }
-  } ,
+  },
 
   ChatPage: {
     screen: ChatScreen,

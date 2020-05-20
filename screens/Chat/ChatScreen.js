@@ -492,9 +492,9 @@ class ChatScreen extends React.Component {
         keyboardShouldPersistTaps = 'never'
         isTyping={this.state.isTyping}
         onSend={messages => this.onSend(messages)}
-        alwaysShowSend = 'true'
-        renderUsernameOnMessage = 'true'
-        showAvatarForEveryMessage = 'true'
+        alwaysShowSend = {true}
+        renderUsernameOnMessage = {true}
+        showAvatarForEveryMessage = {true}
         user={{
           _id: 1,
         }}
