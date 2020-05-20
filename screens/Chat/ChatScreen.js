@@ -19,7 +19,7 @@ async function deleteMessageAfterRead(messageId) {
   return await API.graphql(graphqlOperation(deleteMessage, { input: { id: messageId }}))
 }
 
-const generateKey = () => nacl.util.encodeBase64(nacl.randomBytes(nacl.secretbox.keyLength));
+const generateKey = () => nacl.util.encodeBase64(nacl.randomBytes(24));
 
 /*
 Requires a payload object as defined in payload.js.
@@ -36,10 +36,15 @@ async function sendMessage(payload) {
 
   
   //generate key
-  const key = generateKey();
-  //encrypted receives the 
-  const encrypted = encrypt(payload, key);
-console.log("Key" +   key);
+  const keyPair = await nacl.box.keyPair() 
+  const {publicKey, secretKey} = keyPair 
+
+  console.log("Trying to generate key"); 
+  const key = nacl.util.encodeBase64(publicKey);
+  console.log("public key" + JSON.stringify(key)); 
+  //encrypt has a b64.charCodeAt error
+  // const encrypted = encrypt(payload, publicKey);
+// console.log("Key" +   key);
   console.log("encrypted: " + encrypted); 
 
   for (var i = 0; i < roomMembers.length ; i++){
@@ -73,8 +78,10 @@ console.log("Key" +   key);
 const encrypt = (json, key) => {
   const keyUint8Array = nacl.util.decodeBase64(key);
 
-  const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
-  const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
+  // const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
+  const nonce = nacl.randomBytes(24); 
+  // const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
+  const messageUint8 = nacl.util.decodeUTF8(json);
   const box = nacl.secretbox(messageUint8, nonce, keyUint8Array);
 
   const fullMessage = new Uint8Array(nonce.length + box.length);
