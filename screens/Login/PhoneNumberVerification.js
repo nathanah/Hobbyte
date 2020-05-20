@@ -8,6 +8,17 @@ import Icon from 'react-native-vector-icons/Ionicons'
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
+
+
+async function generateKeys() {
+  // generate keys
+  // store keys in local storage
+
+  // check if key exists on AWS 
+    // if key exists, update 
+    // else store as a new message 
+
+}
 export default class PhoneNumberVerification extends React.Component {
 
 
@@ -143,6 +154,7 @@ export default class PhoneNumberVerification extends React.Component {
                       )
 
                   } else {
+                    await generateKeys(); 
                     this.props.navigation.navigate('Home' );
                   }
                 })
