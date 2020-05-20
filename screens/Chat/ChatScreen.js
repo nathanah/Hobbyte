@@ -34,18 +34,12 @@ async function sendMessage(payload) {
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
 
-  
-  //generate key
-  const keyPair = await nacl.box.keyPair() 
-  const {publicKey, secretKey} = keyPair 
+  const publickey = await AsyncStorage.getItem('publickey');
+  const privatekey = await AsyncStorage.getItem('privatekey');
 
-  console.log("Trying to generate key"); 
-  const key = nacl.util.encodeBase64(publicKey);
-  console.log("public key" + JSON.stringify(key)); 
-  //encrypt has a b64.charCodeAt error
-  // const encrypted = encrypt(payload, publicKey);
-// console.log("Key" +   key);
-  console.log("encrypted: " + encrypted); 
+  console.log("public key" + JSON.stringify(publickey));
+  console.log("private key" + JSON.stringify(privatekey));
+   
 
   for (var i = 0; i < roomMembers.length ; i++){
     if(roomMembers[i] != payload.sender){

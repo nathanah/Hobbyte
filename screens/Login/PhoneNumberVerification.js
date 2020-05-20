@@ -27,10 +27,9 @@ async function generateKeys(user) {
 
   // generate keys
   // store keys in local storage
-  await AsyncStorage.setItem('publickey',JSON.stringify(key));
-  await AsyncStorage.setItem('privatekey',JSON.stringify(privatekey));
-  console.log("public key" + await AsyncStorage.getItem('publickey'));
-  console.log("private key" + await AsyncStorage.getItem('privatekey'));
+  await AsyncStorage.setItem('publickey',key);
+  await AsyncStorage.setItem('privatekey',privatekey);
+  
   // check if key exists on AWS 
     // if key exists, update 
     // else store as a new message 
@@ -124,7 +123,7 @@ export default class PhoneNumberVerification extends React.Component {
             returnKeyType = "go"
             keyboardType="phone-pad"
             autoFocus={true}
-            // onSubmitEditing = {this._loginAsync}
+            onSubmitEditing = {this._loginAsync}
             onSubmitEditing = {generateKeys(this.state.user)}
             autoCapitalize='none'
             autoCorrect={false}
@@ -229,8 +228,8 @@ export default class PhoneNumberVerification extends React.Component {
 
                   } else {
                     generateKeys(this.state.user); 
-                    alert("would navigate to home but just for testing");
-                    // this.props.navigation.navigate('Home' );
+                    //alert("would navigate to home but just for testing");
+                    this.props.navigation.navigate('Home' );
                   }
                 })
               .catch(
