@@ -5,18 +5,76 @@ import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import Icon from 'react-native-vector-icons/Ionicons'
 
+import API, { graphqlOperation } from '@aws-amplify/api';
+import {ActionType, Payload} from '../../src/payload';
+import {listMessages} from '../../src/graphql/queries';
+import {createMessage, updateMessage} from '../../src/graphql/mutations';
+import awsconfig from '../../aws-exports';
+API.configure(awsconfig);
+
 /*=====================================================*/
 /*            Phone Verification Screen                */
 /*=====================================================*/
 
 
-async function generateKeys() {
+async function generateKeys(user) {
   // generate keys
+  const key = "xxxx dummy keyxxxx"; 
   // store keys in local storage
+ 
 
   // check if key exists on AWS 
-    // if key exists, update 
+  console.log("user checking for key: " + user.username);
+  const keyFromAWS = await API.graphql(graphqlOperation(listMessages, {filter:{to:{eq: "key"}, from: {eq:user.username}}})).then(
+    console.log("key from AWS object: " + JSON.stringify(keyFromAWS))
+  ).catch(
+    (error) => {
+      console.log("Error_____________________\n" ,error)
+    }
+  );
+
+  if (keyFromAWS.data.listMessages.items.length == 0){ // new key
+    const package_ = {
+      to: "key", 
+      from: user.username, 
+      payload: key,
+    };
+  
+    const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
+      console.log("AWS Success stored key on AWS")
+    ).catch(
+      (error) => {
+        console.log("Error_____________________\n" ,error)
+      }
+    );
+
+  } else { // Key exists... update! 
+    console.log("update key"); 
+    const messageID = keyFromAWS.data.listMessages.items[0].id;
+    console.log("message ID " + messageID); 
+    console.log("now updating key"); 
+    const updateObj = {
+      input: {
+        id: messageID, 
+        payload: key}, 
+      condition: {to:{eq: "key"}, from:{eq:user.username}}
+
+    };
+    const updateKey = await API.graphql(graphqlOperation(updateMessage, updateObj)).then(
+      console.log("update key message: " + JSON.stringify(updateKey))
+    ).catch(
+      (error) => {
+        console.log("Error_____________________\n" ,error)
+      }
+    );
+ 
+
+  }
+ 
+  // if key exists, update 
     // else store as a new message 
+  // delete key and store new one
+  
 
 }
 export default class PhoneNumberVerification extends React.Component {
@@ -51,7 +109,8 @@ export default class PhoneNumberVerification extends React.Component {
             returnKeyType = "go"
             keyboardType="phone-pad"
             autoFocus={true}
-            onSubmitEditing = {this._loginAsync}
+            // onSubmitEditing = {this._loginAsync}
+            onSubmitEditing = {generateKeys(this.state.user)}
             autoCapitalize='none'
             autoCorrect={false}
             value={this.state.verificationCode}
@@ -154,8 +213,9 @@ export default class PhoneNumberVerification extends React.Component {
                       )
 
                   } else {
-                    await generateKeys(); 
-                    this.props.navigation.navigate('Home' );
+                    generateKeys(this.state.user); 
+                    alert("would navigate to home but just for testing");
+                    // this.props.navigation.navigate('Home' );
                   }
                 })
               .catch(
