@@ -27,10 +27,12 @@ async function sendMessage(payload) {
   var roomMembers = payload.roomMembers;
   console.log("roomMembers: ", roomMembers)
   console.log("from: "  + payload.sender);
-  //let payloadStr = JSON.stringify(payload);
+  let payloadStr = JSON.stringify(payload);
 
   /*
-  const key = nacl.util.encodeBase64(nacl.randomBytes(secretbox.keyLength))
+  //generate key
+  const key = nacl.util.encodeBase64(nacl.randomBytes(nacl.secretbox.keyLength))
+  //encrypted receives the 
   const encrypted = encrypt(payload, key);
   */
 
@@ -41,7 +43,7 @@ async function sendMessage(payload) {
         to: roomMembers[i],
         from: payload.sender,
         
-        //payload: payloadStr,
+        payload: payloadStr,
 
         /*
         payload: encrypted,
@@ -65,7 +67,7 @@ async function sendMessage(payload) {
 const encrypt = (json, key) => {
   const keyUint8Array = nacl.util.decodeBase64(key);
 
-  const nonce = randomBytes(secretbox.nonceLength);
+  const nonce = randomBytes(nacl.secretbox.nonceLength);
   const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
   const box = nacl.secretbox(messageUint8, nonce, keyUint8Array);
 
@@ -472,11 +474,11 @@ class ChatScreen extends React.Component {
       /// parse incomingMessageItem payload and save into new variable
       var messageObj = messageObject.onCreateMessageByRecipient;
       
-      var payload = messageObj.payload;
+      
       /*
       const decrypted = decrypt(payload, messageObj.key);
       */
-      payload = JSON.parse(decrypted);
+      payload = JSON.parse(messageObj.payload);
 
       //sort message into correct room
       var roomObj = await AsyncStorage.getItem(payload.roomId);
