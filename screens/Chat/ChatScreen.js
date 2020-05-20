@@ -34,48 +34,62 @@ async function sendMessage(payload) {
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
 
-  /*
-    //const {publicKey, secretKey} = keyPair 
-  //const key = nacl.util.encodeBase64(publicKey);
-  //const privatekey = nacl.util.encodeBase64(secretKey);
-  //const {alicepublicKey, alicesecretKey} = aliceKeyPair 
-  const publickey = await AsyncStorage.getItem('publickey');
-  const privatekey = await AsyncStorage.getItem('privatekey');
-  const apublickey = await AsyncStorage.getItem('apublicKey');
-  const aprivatekey = await AsyncStorage.getItem('asecretKey');
-  */
-
-  //generate keys
   const keyPair = await nacl.box.keyPair() 
-  const aliceKeyPair = await nacl.box.keyPair()
+  const {publicKey, secretKey} = keyPair 
+
+  console.log("Keys genererated: Public - " + publicKey); 
+  console.log("Keys generated: Private " + secretKey); 
+
+  const keys = {
+    public: "'" + publicKey + "'", 
+    secret: "'" + secretKey + "'", 
+  };
+  console.log("keys: " + JSON.stringify(keys)); 
+  await AsyncStorage.setItem('keys',JSON.stringify(keys));
+  const myKeys = await AsyncStorage.getItem('keys');
+
+  console.log("Keys genererated: Public - " + myKeys);
+  const keysObj = JSON.parse(myKeys);
+  var returnedSecretKey= keysObj.secret.replace(/^'(.*)'$/, '$1');
+  console.log("private" + returnedSecretKey);
+
+  // console.log("Keys generated: Private " + secret); 
+  // const apublickey = await AsyncStorage.getItem('apublicKey');
+  // const aprivatekey = await AsyncStorage.getItem('asecretKey');
   
 
-  //shared key for both receiver and sender
-  const mySharedKey = nacl.box.before(aliceKeyPair.publicKey, keyPair.secretKey)
-  const herkey = nacl.box.before(keyPair.publicKey, aliceKeyPair.secretKey)
-  console.log("\n");
-  console.log("Our shared key: " + mySharedKey);
+  // --- 
+  // //generate keys
+  // const keyPair = await nacl.box.keyPair() 
+  // const aliceKeyPair = await nacl.box.keyPair()
   
-  //Decoded UTF8 string
-  const str = "Hello! This is a secret message"
-  console.log("Un encrypted string: " + str);
-  const strDecoded = new Uint8Array(nacl.util.decodeUTF8(str))
+
+  // //shared key for both receiver and sender
+  // const mySharedKey = nacl.box.before(aliceKeyPair.publicKey, keyPair.secretKey)
+  // const herkey = nacl.box.before(keyPair.publicKey, aliceKeyPair.secretKey)
+  // console.log("\n");
+  // console.log("Our shared key: " + mySharedKey);
   
-  //generate nonce and encrypt 
-  const nonce = await nacl.randomBytes(24)
-  const bobEncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
-  const bobBase64EncryptedStr = nacl.util.encodeBase64(bobEncryptedStr)
-  console.log("Encrypted string to be sent: " + bobBase64EncryptedStr);
+  // //Decoded UTF8 string
+  // const str = "Hello! This is a secret message"
+  // console.log("Un encrypted string: " + str);
+  // const strDecoded = new Uint8Array(nacl.util.decodeUTF8(str))
+  
+  // //generate nonce and encrypt 
+  // const nonce = await nacl.randomBytes(24)
+  // const bobEncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
+  // const bobBase64EncryptedStr = nacl.util.encodeBase64(bobEncryptedStr)
+  // console.log("Encrypted string to be sent: " + bobBase64EncryptedStr);
 
-  //Decrypt
-  const messageFromBobDecoded = nacl.util.decodeBase64(bobBase64EncryptedStr) // same as bobEncryptedStr
-  const messageFromBobDecrypted = nacl.box.open.after(messageFromBobDecoded, nonce, herkey) // same as strDecoded
-  const messageFromBobEncoded = nacl.util.encodeUTF8(messageFromBobDecrypted)
-  console.log("Decrypted string: " + messageFromBobEncoded);
-  console.log("\n");
+  // //Decrypt
+  // const messageFromBobDecoded = nacl.util.decodeBase64(bobBase64EncryptedStr) // same as bobEncryptedStr
+  // const messageFromBobDecrypted = nacl.box.open.after(messageFromBobDecoded, nonce, herkey) // same as strDecoded
+  // const messageFromBobEncoded = nacl.util.encodeUTF8(messageFromBobDecrypted)
+  // console.log("Decrypted string: " + messageFromBobEncoded);
+  // console.log("\n");
 
 
-
+ // --- 
   for (var i = 0; i < roomMembers.length ; i++){
     if(roomMembers[i] != payload.sender){
       console.log("other users: " + roomMembers[i]);
