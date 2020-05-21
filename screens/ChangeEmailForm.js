@@ -122,7 +122,7 @@ export default class ChangePasswordForm extends React.Component {
         console.log('error: ', err)
         if(err.code == 'LimitExceededException') {
             Alert.alert("You Requested Too Many Email Verification Codes!", "Please Wait A While Before Trying Again.")
-          } if(err.code == 'CodeMismatchException') {
+        } else if(err.code == 'CodeMismatchException') {
             if(attribute == 'email') {
                 Alert.alert("The Email Verification Code That Was Entered Was Incorrect!",
                                         "Please Enter And Submit The Correct Verification Code!")
@@ -130,10 +130,10 @@ export default class ChangePasswordForm extends React.Component {
                 Alert.alert("The Phone Number Verification Code That Was Entered Was Incorrect!",
                                         "Resend The Verification Codes And Try Again!")
             }
-          } else {
+        } else {
             Alert.alert("An Unspecified Error Has Occured!", 
-            "Please Resend The Codes. If That Does Not Work, Try Again Some Other Time :(")
-          }
+                "Please Resend The Codes. If That Does Not Work, Try Again Some Other Time :(")
+        }
     }
 
     resendCodes = () => {
@@ -227,18 +227,10 @@ export default class ChangePasswordForm extends React.Component {
                         "email")
                 }
             )
-
-        // let recp;
-        // recp = this.verifyCurrentUserAttributeSubmit('email', this.state.emailVerificationCode)
-        // if(!recp) return;
-        // recp = this.verifyCurrentUserAttributeSubmit('phone_number', this.state.phoneVerificationCode)
-        // if(!recp) return;
-        // let user = this.currentAuthenticatedUser()
-        // if(user == false) return;
-        // recp = this.updateUserAttributes(user, attribute)
-        // if(!recp) return;          
-        // recp = this.verifyCurrentUserAttribute(attribute)
-        // if(!recp) return;
-        // this.props.navigation.navigate('PNV',{authType: attribute});   
     }
 };
+
+// Error message for tooManyAtemptss
+// Error for invalid code
+// Catch All error.
+// I want to add a check to the new field attribure to insure that it meets the requirements
