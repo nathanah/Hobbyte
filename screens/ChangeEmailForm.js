@@ -171,7 +171,7 @@ export default class ChangePasswordForm extends React.Component {
         console.log("___________________we are changing ", attribute, "______________________")
         if(this.state.emailVerificationCode == '' ||
         this.state.phoneVerificationCode == '') {
-            alert('Verification codes cannot be empty!')
+            Alert.alert('A Verification Code Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
             return;
         }
         Auth.verifyCurrentUserAttributeSubmit('email',this.state.emailVerificationCode)
