@@ -120,7 +120,20 @@ export default class ChangePasswordForm extends React.Component {
     handelChangeError = (err, callingFunction, attribute, nextPage) => {
         console.log("ERROR in, ", callingFunction, ": ", attribute)
         console.log('error: ', err)
-        alert("ERROR: " + err["message"])
+        if(err.code == 'LimitExceededException') {
+            Alert.alert("You Requested Too Many Email Verification Codes!", "Please Wait A While Before Trying Again.")
+          } if(err.code == 'CodeMismatchException') {
+            if(attribute == 'email') {
+                Alert.alert("The Email Verification Code That Was Entered Was Incorrect!",
+                                        "Please Enter And Submit The Correct Verification Code!")
+            } else if(attribute == 'phone_number'){
+                Alert.alert("The Phone Number Verification Code That Was Entered Was Incorrect!",
+                                        "Resend The Verification Codes And Try Again!")
+            }
+          } else {
+            Alert.alert("An Unspecified Error Has Occured!", 
+            "Please Resend The Codes. If That Does Not Work, Try Again Some Other Time :(")
+          }
     }
 
     resendCodes = () => {

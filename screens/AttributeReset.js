@@ -112,12 +112,12 @@ export default class AttributeReset extends React.Component {
     )
   }
 
-  handelChangeError = (err, callingFunction, attribute, nextPage) => {
+  handelChangeError = (err, callingFunction, attribute) => {
     console.log("ERROR in, ", callingFunction, ": ", attribute)
     console.log('error: ', err)
 
     if(err.code == 'LimitExceededException') {
-      Alert.alert("You Requested Too Many Email Verification Codes!", "Please Wait A While Before Trying Again")
+      Alert.alert("You Requested Too Many Email Verification Codes!", "Please Wait A While Before Trying Again.")
     } else {
       Alert.alert("An Unspecified Error Has Occured!", "Please Try Again Some Other Time :(")
     }

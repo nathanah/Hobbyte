@@ -156,7 +156,7 @@ export default class PhoneNumberVerification extends React.Component {
         .then(
             ()=>{
               console.log('successful confirm sign up!')
-              AsyncStorage.setItem("userToken", JSON.stringify(Auth))
+              //AsyncStorage.setItem("userToken", JSON.stringify(Auth))
               //Need to sign in so that the user is authenticated
               this.props.navigation.navigate("SignIn");
             }
@@ -181,7 +181,7 @@ export default class PhoneNumberVerification extends React.Component {
         .then(
           () => {
             console.log('successful confirm sign in!');
-            AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+            //AsyncStorage.setItem("userToken",JSON.stringify(Auth))
 
             Auth.currentAuthenticatedUser()
               //Check if email is verified, if not verify it, else go to main
@@ -206,6 +206,7 @@ export default class PhoneNumberVerification extends React.Component {
                       )
 
                   } else {
+                    AsyncStorage.setItem("userToken",JSON.stringify(Auth))
                     this.props.navigation.navigate('Home' );
                   }
                 })
@@ -231,6 +232,7 @@ export default class PhoneNumberVerification extends React.Component {
             ()=>{
               console.log("email has been verified.")
               //We came form signup so we want to go to signin...
+              AsyncStorage.setItem("userToken",JSON.stringify(Auth))
               this.props.navigation.navigate("Home");
 
             }
