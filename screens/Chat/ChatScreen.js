@@ -21,6 +21,24 @@ async function deleteMessageAfterRead(messageId) {
 
 const generateKey = () => nacl.util.encodeBase64(nacl.randomBytes(24));
 
+
+async function getPublicKey(member){
+
+  console.log("getting public key for: " + member);
+  const keyFromAWS = await API.graphql(graphqlOperation(listMessages, {filter:{to:{eq: "key"}, from: {eq: member}}})).then(
+    console.log("retrieved key")
+  ).catch(
+    (error) => {
+      console.log("Error_____________________\n" ,error)
+    }
+  );
+  const keyString = JSON.stringify(keyFromAWS.data.listMessages.items[0].payload); 
+  // var key = keyString.replace(/^{(.*)}$/, '$1');
+  var key = keyString.replace(/[{"()"}]/g, '');
+  console.log("Key from AWS: " + key); 
+  return keyString;
+
+}
 /*
 Requires a payload object as defined in payload.js.
 TODO: add encrypion, add from field once schema is updated
@@ -51,7 +69,7 @@ async function sendMessage(payload) {
   // await AsyncStorage.setItem('keys',JSON.stringify(keys));
   */
 
-  
+  await getPublicKey(payload.sender); 
   const myKeys = await AsyncStorage.getItem('keys');
 
   console.log("Keys genererated: Public - " + myKeys);
