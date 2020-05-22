@@ -102,14 +102,7 @@ export default class AttributeReset extends React.Component {
 
   /*--------------------Async------------------------*/
   changePassword = () => {
-    Auth.verifyCurrentUserAttribute("phone_number").then(
       this.props.navigation.navigate("ChangePasswordForm")
-    ).catch(
-      (err)=>{
-        console.log("error in AttribureReset: resetPassword: could not verifyCurrentUserAttribute: phone number")
-        console.log("error: ", err)
-      }
-    )
   }
 
   handelChangeError = (err, callingFunction, attribute) => {
@@ -146,31 +139,19 @@ export default class AttributeReset extends React.Component {
     next['attribute'] = attribute
     console.log("going to change: ", attribute)
 
-    Auth.verifyCurrentUserAttribute('email')
+    Auth.verifyCurrentUserAttribute(attribute)
         .then(
             ()=>{
-                console.log("changeEmail scuess!! Going to verify emial")
-                Auth.verifyCurrentUserAttribute('phone_number')
-                  .then(
-                      ()=>{
-                          console.log("changeEmail scuess!! Going to verify emial")
-                          this.props.navigation.navigate("ChangeEmailForm", next)
-                      }
-                  )
-                  .catch(
-                      (err) => {
-                          this.handelChangeError(err,
-                              "verifyCurrentUserAttribute",
-                              'phone_number')
-                      }
-                  )
+              console.log("Going to change attribure form")
+              this.props.navigation.navigate("ChangeEmailForm", next)
             }
+        
         )
         .catch(
             (err) => {
                  this.handelChangeError(err,
                     "verifyCurrentUserAttribute",
-                    'emial')
+                    attribute)
             }
         )
   }
