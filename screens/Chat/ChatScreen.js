@@ -34,18 +34,24 @@ async function sendMessage(payload) {
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
 
-  const keyPair = await nacl.box.keyPair() 
-  const {publicKey, secretKey} = keyPair 
 
-  console.log("Keys genererated: Public - " + publicKey); 
-  console.log("Keys generated: Private " + secretKey); 
+/*MOVED TO PHONE NUMBER VERIFICATION
+  THIS CODE WORKS 
+  // const keyPair = await nacl.box.keyPair() 
+  // const {publicKey, secretKey} = keyPair 
 
-  const keys = {
-    public: "'" + publicKey + "'", 
-    secret: "'" + secretKey + "'", 
-  };
-  console.log("keys: " + JSON.stringify(keys)); 
-  await AsyncStorage.setItem('keys',JSON.stringify(keys));
+  // console.log("Keys genererated: Public - " + publicKey); 
+  // console.log("Keys generated: Private " + secretKey); 
+
+  // const keys = {
+  //   public: "'" + publicKey + "'", 
+  //   secret: "'" + secretKey + "'", 
+  // };
+  // console.log("keys: " + JSON.stringify(keys)); 
+  // await AsyncStorage.setItem('keys',JSON.stringify(keys));
+  */
+
+  
   const myKeys = await AsyncStorage.getItem('keys');
 
   console.log("Keys genererated: Public - " + myKeys);

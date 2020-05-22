@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
+import { Button, 
+        View, 
+        Text, 
+        TouchableOpacity, 
+        StyleSheet, 
+        KeyboardAvoidingView, 
+        TextInput, 
+        Image, 
+        Keyboard, 
+        ScrollView, 
+        AsyncStorage } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -19,26 +29,22 @@ API.configure(awsconfig);
 
 
 async function generateKeys(user) {
-  //const keyPair = await nacl.box.keyPair() 
-  //const {publicKey, secretKey} = keyPair 
-  //const key = nacl.util.encodeBase64(publicKey);
-  //const privatekey = nacl.util.encodeBase64(secretKey);
-  //const aliceKeyPair = await nacl.box.keyPair()
-  //const {alicepublicKey, alicesecretKey} = aliceKeyPair 
-  //const apublicKey = nacl.util.encodeBase64(alicepublicKey);
-  //const asecretKey = nacl.util.encodeBase64(alicesecretKey);
 
-  // generate keys
-  // store keys in local storage
-  /*
-  await AsyncStorage.setItem('publickey',publicKey);
-  await AsyncStorage.setItem('privatekey',secretKey);
-  await AsyncStorage.setItem('apublicKey',alicepublicKey);
-  await AsyncStorage.setItem('asecretKey',alicesecretKey);
-*/
-  
+  // key = "xxxx dummy keyxxxx"; 
 
-  key = "xxxx dummy keyxxxx"; 
+  // create and store keys in local storage 
+  const keyPair = await nacl.box.keyPair() 
+  const {publicKey, secretKey} = keyPair 
+
+  console.log("Keys genererated: Public - " + publicKey); 
+  console.log("Keys generated: Private " + secretKey); 
+
+  const keys = {
+    public: "'" + publicKey + "'", 
+    secret: "'" + secretKey + "'", 
+  };
+  console.log("keys: " + JSON.stringify(keys)); 
+  await AsyncStorage.setItem('keys',JSON.stringify(keys));
   // store keys in local storage
  
 
@@ -56,7 +62,7 @@ async function generateKeys(user) {
     const package_ = {
       to: "key", 
       from: user.username, 
-      payload: key,
+      payload: publicKey,
     };
   
     const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
