@@ -33,9 +33,10 @@ async function getPublicKey(member){
     }
   );
   const keyString = JSON.stringify(keyFromAWS.data.listMessages.items[0].payload); 
-  // var key = keyString.replace(/^{(.*)}$/, '$1');
   var key = keyString.replace(/[{"()"}]/g, '');
-  console.log("Key from AWS: " + key); 
+  console.log("Key from AWS: <" + key + ">");
+  key = nacl.util.decodeBase64(key); 
+  console.log("key: " + key); 
   return keyString;
 
 }
@@ -52,35 +53,13 @@ async function sendMessage(payload) {
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
 
-
-/*MOVED TO PHONE NUMBER VERIFICATION
-  THIS CODE WORKS 
-  // const keyPair = await nacl.box.keyPair() 
-  // const {publicKey, secretKey} = keyPair 
-
-  // console.log("Keys genererated: Public - " + publicKey); 
-  // console.log("Keys generated: Private " + secretKey); 
-
-  // const keys = {
-  //   public: "'" + publicKey + "'", 
-  //   secret: "'" + secretKey + "'", 
-  // };
-  // console.log("keys: " + JSON.stringify(keys)); 
-  // await AsyncStorage.setItem('keys',JSON.stringify(keys));
-  */
-
   await getPublicKey(payload.sender); 
   const myKeys = await AsyncStorage.getItem('keys');
 
   console.log("Keys genererated: Public - " + myKeys);
   const keysObj = JSON.parse(myKeys);
-  var returnedSecretKey= keysObj.secret.replace(/^'(.*)'$/, '$1');
-  console.log("private" + returnedSecretKey);
+  console.log("private" + keysObj);
 
-  // console.log("Keys generated: Private " + secret); 
-  // const apublickey = await AsyncStorage.getItem('apublicKey');
-  // const aprivatekey = await AsyncStorage.getItem('asecretKey');
-  
 
   // --- 
   // //generate keys

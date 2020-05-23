@@ -35,13 +35,15 @@ async function generateKeys(user) {
   // create and store keys in local storage 
   const keyPair = await nacl.box.keyPair() 
   const {publicKey, secretKey} = keyPair 
+  var pKey = nacl.util.encodeBase64(publicKey); 
+  var sKey = nacl.util.encodeBase64(secretKey); 
 
-  console.log("Keys genererated: Public - " + publicKey); 
-  console.log("Keys generated: Private " + secretKey); 
+  console.log("Keys genererated: Public - " + pKey); 
+  console.log("Keys generated: Private " + sKey); 
 
   const keys = {
-    public: "'" + publicKey + "'", 
-    secret: "'" + secretKey + "'", 
+    public: pKey, 
+    secret: sKey, 
   };
   console.log("keys: " + JSON.stringify(keys)); 
   await AsyncStorage.setItem('keys',JSON.stringify(keys));
@@ -62,7 +64,7 @@ async function generateKeys(user) {
     const package_ = {
       to: "key", 
       from: user.username, 
-      payload: publicKey,
+      payload: pKey,
     };
   
     const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
@@ -81,7 +83,7 @@ async function generateKeys(user) {
     const updateObj = {
       input: {
         id: messageID, 
-        payload: key}, 
+        payload: pKey}, 
       condition: {to:{eq: "key"}, from:{eq:user.username}}
 
     };
