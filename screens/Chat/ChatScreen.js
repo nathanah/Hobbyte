@@ -19,9 +19,6 @@ async function deleteMessageAfterRead(messageId) {
   return await API.graphql(graphqlOperation(deleteMessage, { input: { id: messageId }}))
 }
 
-const generateKey = () => nacl.util.encodeBase64(nacl.randomBytes(24));
-
-
 async function getPublicKey(member){
 
   console.log("getting public key for: " + member);
@@ -53,46 +50,74 @@ async function sendMessage(payload) {
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
 
-  await getPublicKey(payload.sender); 
+  /*
+  
+  let payloadStr = JSON.stringify(payload.encryptedtext);
+  
+  //Decoded string to be encrypted
+  const strDecoded = new Uint8Array(nacl.util.decodeUTF8(payloadStr))
+
+  //new nonce being generated
+  const nonce = await nacl.randomBytes(24)
+  
+  //If the conversation is between 2 (box)
+  if (roomMembers.length==2){
+
+
+    for (var i = 0; i < roomMembers.length ; i++){
+
+      //If the member is not the sender (recipient)
+      if(roomMembers[i] != payload.sender){
+
+        //Retrieve decoded public key
+        var recipient_keystring = await getPublicKey(roomMembers[i]);
+        var key = recipient_keystring.replace(/[{"()"}]/g, '');
+        const recipient_public_key = nacl.util.decodeBase64(key);    
+
+        //Retrieve sender's private key
+        const myKeys = await AsyncStorage.getItem('keys');
+        const keysObj = JSON.parse(myKeys);
+        var sender_private_key = nacl.util.decodeBase64(keysObj.secret);
+
+        //Create shared key
+        const mySharedKey = nacl.box.before(recipient_public_key, sender_private_key)
+
+        //Encrypt the message and convert to Base64 format. Base64EncryptedStr is message to be sent.
+        const EncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
+        const Base64EncryptedStr = nacl.util.encodeBase64(bobEncryptedStr)
+      }
+    }
+
+     
+    
+  }
+  //If the conversation is between multiple users (secretbox)
+  else{
+
+    //Generate random key
+    const symmetrickey = nacl.randomBytes(nacl.secretbox.keyLength)
+
+    //encrypt decoded string with nonce and key
+    const EncryptedStr = nacl.secretbox(strDecoded, nonce, symmetrickey)
+
+    //Encrypted string encoded to base 64
+    const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
+
+    //Encoded key prepared to be sent
+    const key_encoded = nacl.util.encodeBase64(symmetrickey)
+
+
+  }
+  */
+
+  await getPublicKey(payload.roomMembers[0]); 
   const myKeys = await AsyncStorage.getItem('keys');
 
   console.log("Keys genererated: Public - " + myKeys);
-  const keysObj = JSON.parse(myKeys);
+          const keysObj = JSON.parse(myKeys);
+
   console.log("private" + keysObj);
 
-
-  // --- 
-  // //generate keys
-  // const keyPair = await nacl.box.keyPair() 
-  // const aliceKeyPair = await nacl.box.keyPair()
-  
-
-  // //shared key for both receiver and sender
-  // const mySharedKey = nacl.box.before(aliceKeyPair.publicKey, keyPair.secretKey)
-  // const herkey = nacl.box.before(keyPair.publicKey, aliceKeyPair.secretKey)
-  // console.log("\n");
-  // console.log("Our shared key: " + mySharedKey);
-  
-  // //Decoded UTF8 string
-  // const str = "Hello! This is a secret message"
-  // console.log("Un encrypted string: " + str);
-  // const strDecoded = new Uint8Array(nacl.util.decodeUTF8(str))
-  
-  // //generate nonce and encrypt 
-  // const nonce = await nacl.randomBytes(24)
-  // const bobEncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
-  // const bobBase64EncryptedStr = nacl.util.encodeBase64(bobEncryptedStr)
-  // console.log("Encrypted string to be sent: " + bobBase64EncryptedStr);
-
-  // //Decrypt
-  // const messageFromBobDecoded = nacl.util.decodeBase64(bobBase64EncryptedStr) // same as bobEncryptedStr
-  // const messageFromBobDecrypted = nacl.box.open.after(messageFromBobDecoded, nonce, herkey) // same as strDecoded
-  // const messageFromBobEncoded = nacl.util.encodeUTF8(messageFromBobDecrypted)
-  // console.log("Decrypted string: " + messageFromBobEncoded);
-  // console.log("\n");
-
-
- // --- 
   for (var i = 0; i < roomMembers.length ; i++){
     if(roomMembers[i] != payload.sender){
       console.log("other users: " + roomMembers[i]);
@@ -101,10 +126,12 @@ async function sendMessage(payload) {
         from: payload.sender,
         
         payload: payloadStr,
-
-        /*
-        payload: encrypted,
-        key:key,
+/*
+        payload: {
+          nonce: nonce,
+          key:key_encoded
+          encryptedtext:payloadStr,
+        }
         */
       };
       console.log("package: " + JSON.stringify(package_));
@@ -120,43 +147,7 @@ async function sendMessage(payload) {
   }
 }
 
-/*
-const encrypt = (json, key) => {
-  const keyUint8Array = nacl.util.decodeBase64(key);
 
-  const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
-  //const nonce = nacl.randomBytes(24); 
-  const messageUint8 = nacl.util.decodeUTF8(JSON.stringify(json));
-  //const messageUint8 = nacl.util.decodeUTF8(json);
-  const box = nacl.secretbox(messageUint8, nonce, keyUint8Array);
-
-  const fullMessage = new Uint8Array(nonce.length + box.length);
-  fullMessage.set(nonce);
-  fullMessage.set(box, nonce.length);
-
-  const base64FullMessage = nacl.util.encodeBase64(fullMessage);
-  return base64FullMessage;
-};
-
-const decrypt = (messageWithNonce, key) => {
-  const keyUint8Array = nacl.util.decodeBase64(key);
-  const messageWithNonceAsUint8Array = nacl.util.decodeBase64(messageWithNonce);
-  const nonce = messageWithNonceAsUint8Array.slice(0, secretbox.nonceLength);
-  const message = messageWithNonceAsUint8Array.slice(
-    secretbox.nonceLength,
-    messageWithNonce.length
-  );
-
-  const decrypted = secretbox.open(message, nonce, keyUint8Array);
-
-  if (!decrypted) {
-    throw new Error("Could not decrypt message");
-  }
-
-  const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
-  return JSON.parse(base64DecryptedMessage);
-};
-*/
 
 async function getAuthObject() {
   // obtains userToken and parses it to access username
@@ -525,13 +516,70 @@ class ChatScreen extends React.Component {
 
   onReceive = async(messageObject) => {
     try{
+      
+      var messageObj = messageObject.onCreateMessageByRecipient;
+/*
+      // If the conversation is between 2
+      if (roomMembers.length==2){
+
+        for (var i = 0; i < roomMembers.length ; i++){
+
+          //If the roommember is the sender
+          if(roomMembers[i] == messageObj.from){
+
+            //Acquire sender public key
+            var sender_keystring = await getPublicKey(roomMembers[i]);
+            var key = sender_keystring.replace(/[{"()"}]/g, '');
+            const sender_public_key = nacl.util.decodeBase64(key); 
+               
+            //Acquire recipient private key
+            const myKeys = await AsyncStorage.getItem('keys');
+            const keysObj = JSON.parse(myKeys);
+            var recipient_private_key = nacl.util.decodeBase64(keysObj.public);
+
+            //Make shared key
+            const recipientSharedKey = nacl.box.before(recipient_private_key, sender_public_key)
+
+            //Decoded payload
+            const decoded_payload_message = nacl.util.decodeBase64(messageObj.payload.encryptedtext) 
+
+            //Decrypt the payload with nonce and shared key
+            const decoded_decrypted_payload = nacl.box.open.after(decoded_payload_message, messageObj.payload.nonce, recipientSharedKey) 
+
+            //Encode back to UTF8. Final decrypted payload
+            const decrypted_payload = nacl.util.encodeUTF8(decoded_decrypted_payload)
+          }
+        }
     
+         
+        
+      }else{
+        
+        //Decode the provided key (in payload)
+        const keyUint8Array = nacl.util.decodeBase64(messageObj.payload.key);
+
+        //decoded message to be decrypted
+        const decoded_payload_message = nacl.util.decodeBase64(messageObj.payload.encryptedtext);
+      
+      
+        const decrypted = secretbox.open(decoded_payload_message, messageObj.payload.nonce, keyUint8Array);
+      
+        if (!decrypted) {
+          throw new Error("Could not decrypt message");
+        }
+      
+        const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
+        return JSON.parse(base64DecryptedMessage);
+    
+      }
+      */
       //Decrypt
+      
       console.log("TODO: Implement decrypt");
 
 
       /// parse incomingMessageItem payload and save into new variable
-      var messageObj = messageObject.onCreateMessageByRecipient;
+      
       
       
       /*
