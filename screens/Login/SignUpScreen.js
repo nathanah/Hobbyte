@@ -110,6 +110,18 @@ function signInError(err){
       break;
   }
 }
+
+function ValidateEmail(mail) 
+{
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
+}
+/*=====================================================*/
+/*       SIGNUPSCREEN CLASS                            */
+/*=====================================================*/
 export default class SignUpScreen extends React.Component{
   state = {
     username: '',
@@ -246,6 +258,8 @@ _submitAsync = async () => {
   console.log("phone # :" + this.state.phoneNumber);
   console.log("password:" + this.state.password);
 
+  // todo check email
+
   if ( this.state.username == null ||this.state.username== '' ){
     Alert.alert("Sign Up Error:","Please enter a username. ");
   } else if(this.state.email == null || this.state.email == ''){
@@ -254,6 +268,8 @@ _submitAsync = async () => {
     Alert.alert("Sign Up Error:","Please enter a phone number with the following format: +14445556666");
   } else if (this.state.password == null || this.state.password== ''){
     Alert.alert("Sign Up Error:","Please enter a password.");
+  } else if (!ValidateEmail(this.state.email)){
+    Alert.alert ("Sign Up Error:", "Please enter a valid email. Accepted formats:\nmyEmail@hobbyte.com\nmy.site@hobbyte.org\nmysite@you.me.net")
   } else {
 
     Auth.signUp({
