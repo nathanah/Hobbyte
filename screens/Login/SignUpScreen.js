@@ -209,6 +209,7 @@ export default class SignUpScreen extends React.Component{
             formikProps={formikProps}
             formikKey="confirmPassword"
             placeholder="confirm password"
+            value = {this.state.confirmPassword}
             secureTextEntry
           />
 
@@ -270,6 +271,8 @@ _submitAsync = async () => {
     Alert.alert("Sign Up Error:","Please enter a password.");
   } else if (!ValidateEmail(this.state.email)){
     Alert.alert ("Sign Up Error:", "Please enter a valid email. Accepted formats:\nmyEmail@hobbyte.com\nmy.site@hobbyte.org\nmysite@you.me.net")
+  } else if (this.state.password != this.state.confirmPassword){
+    Alert.alert("Sign Up Error:", "Passwords don't match. Please try again");
   } else {
 
     Auth.signUp({
