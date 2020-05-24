@@ -49,30 +49,38 @@ async function sendMessage(payload) {
   console.log("roomMembers: ", roomMembers)
   console.log("from: "  + payload.sender);
   let payloadStr = JSON.stringify(payload);
-
-  /*
+  console.log("payloadStr " + payloadStr); 
   
-  let payloadStr = JSON.stringify(payload.encryptedtext);
+  const fullPayload = {
+    nonce: '',
+    key: '',
+    payloadEncrypted: '',
+  };
   
   //Decoded string to be encrypted
   const strDecoded = new Uint8Array(nacl.util.decodeUTF8(payloadStr))
+  console.log("strDecoded " + strDecoded); 
 
   //new nonce being generated
   const nonce = await nacl.randomBytes(24)
+  var encryptedNonce = nacl.util.encodeBase64(nonce);
+  
+  fullPayload.nonce = encryptedNonce; 
   
   //If the conversation is between 2 (box)
   if (roomMembers.length==2){
-
+    console.log("using box");
 
     for (var i = 0; i < roomMembers.length ; i++){
-
       //If the member is not the sender (recipient)
       if(roomMembers[i] != payload.sender){
 
         //Retrieve decoded public key
-        var recipient_keystring = await getPublicKey(roomMembers[i]);
-        var key = recipient_keystring.replace(/[{"()"}]/g, '');
-        const recipient_public_key = nacl.util.decodeBase64(key);    
+        var recipient_public_key = await getPublicKey(roomMembers[i]);
+        // console.log("recipient_keystring" + recipient_keystring); 
+        // var key = recipient_keystring.replace(/[{"()"}]/g, '');
+        // console.log("key" + key); 
+        // const recipient_public_key = nacl.util.decodeBase64(recipient_keystirng);    
 
         //Retrieve sender's private key
         const myKeys = await AsyncStorage.getItem('keys');
@@ -84,7 +92,10 @@ async function sendMessage(payload) {
 
         //Encrypt the message and convert to Base64 format. Base64EncryptedStr is message to be sent.
         const EncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
-        const Base64EncryptedStr = nacl.util.encodeBase64(bobEncryptedStr)
+        const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
+        console.og("trying to print encrypted string"); 
+        console.log("Base64EncryptedStr " + Base64EncryptedStr); 
+        fullPayload.payloadEncrypted = Base64EncryptedStr;
       }
     }
 
@@ -93,28 +104,33 @@ async function sendMessage(payload) {
   }
   //If the conversation is between multiple users (secretbox)
   else{
-
+    console.log("using secret box");
     //Generate random key
     const symmetrickey = nacl.randomBytes(nacl.secretbox.keyLength)
+    
 
     //encrypt decoded string with nonce and key
     const EncryptedStr = nacl.secretbox(strDecoded, nonce, symmetrickey)
 
     //Encrypted string encoded to base 64
     const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
+    fullPayload.payloadEncrypted = Base64EncryptedStr;
+    console.log("Base64EncryptedStr " + Base64EncryptedStr); 
 
     //Encoded key prepared to be sent
     const key_encoded = nacl.util.encodeBase64(symmetrickey)
-
+    fullPayload.key = key_encoded; 
 
   }
-  */
+  
 
   await getPublicKey(payload.roomMembers[0]); 
   const myKeys = await AsyncStorage.getItem('keys');
 
   console.log("Keys genererated: Public - " + myKeys);
           const keysObj = JSON.parse(myKeys);
+
+  console.log("Full payload:" + JSON.stringify(fullPayload)); 
 
   console.log("private" + keysObj);
 
@@ -124,15 +140,7 @@ async function sendMessage(payload) {
       const package_ = {
         to: roomMembers[i],
         from: payload.sender,
-        
-        payload: payloadStr,
-/*
-        payload: {
-          nonce: nonce,
-          key:key_encoded
-          encryptedtext:payloadStr,
-        }
-        */
+        payload: fullPayload,
       };
       console.log("package: " + JSON.stringify(package_));
       const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
@@ -586,6 +594,10 @@ class ChatScreen extends React.Component {
       const decrypted = decrypt(payload, messageObj.key);
       */
       payload = JSON.parse(messageObj.payload);
+
+      // var nonce = payload.nonce; 
+      // var key = payload.key; 
+      // var encryptedPayload = payload.payload;
 
       //sort message into correct room
       var roomObj = await AsyncStorage.getItem(payload.roomId);
