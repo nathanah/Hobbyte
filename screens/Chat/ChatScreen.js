@@ -101,12 +101,14 @@ async function sendMessage(payload) {
     console.log("using secret box");
     fullPayload.box = false; 
     //Generate random key
-    const symmetrickey = nacl.randomBytes(nacl.secretbox.keyLength)
-    
+  
+    const symmetrickey = await nacl.randomBytes(32)
+    console.log("sym key" + symmetrickey); 
+    // var symKey = nacl.util.decodeUTF8(symmetrickey);    
 
     //encrypt decoded string with nonce and key
     const EncryptedStr = nacl.secretbox(strDecoded, nonce, symmetrickey)
-
+    console.log("Encrypted STring" + EncryptedStr); 
     //Encrypted string encoded to base 64
     const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
     fullPayload.payloadEncrypted = Base64EncryptedStr;
