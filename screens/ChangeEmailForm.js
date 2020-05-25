@@ -21,6 +21,7 @@ export default class ChangePasswordForm extends React.Component {
 
   state = {
     newAttributeValue: '',
+    confirmNewAttribureValue: '',
     verificationCode:'',
     //username: this.props.navigation.getParam('username','none'),
   };
@@ -57,26 +58,42 @@ export default class ChangePasswordForm extends React.Component {
           />
           </View>
     
-          <View>
-            <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+    <View>
+        <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
           
-          
-          
-          <TextInput
-            placeholder="new attribute value"
-            style={styles.formBox}
-            placeholderTextColor = "#000000"
-            returnKeyType = "go"
-            autoFocus={true}
-            onSubmitEditing = {this.changeAttribute}
-            autoCapitalize='none'
-            autoCorrect={false}
-            value={this.state.newAttributeValue}
-            onChange ={event => this.setState({newAttributeValue:event.nativeEvent.text})}
-            underlineColorAndroid = "transparent"
-            ref="newAttribute"
-          />
-</View>
+        <TextInput
+        placeholder="new attribute value"
+        style={styles.formBox}
+        placeholderTextColor = "#000000"
+        returnKeyType = "next"
+        autoFocus={true}
+        onSubmitEditing = {() => {this.refs.confirmNewAttribute.focus();}}
+        autoCapitalize='none'
+        autoCorrect={false}
+        value={this.state.newAttributeValue}
+        onChange ={event => this.setState({newAttributeValue:event.nativeEvent.text})}
+        underlineColorAndroid = "transparent"
+        ref="newAttribute"
+        />
+    </View>
+    <View>
+        <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+
+        <TextInput
+        placeholder="confirm new attribute"
+        style={styles.formBox}
+        placeholderTextColor = "#000000"
+        returnKeyType = "go"
+        autoFocus={true}
+        onSubmitEditing = {this.changeAttribute}
+        autoCapitalize='none'
+        autoCorrect={false}
+        value={this.state.confirmNewAttribureValue}
+        onChange ={event => this.setState({confirmNewAttribureValue:event.nativeEvent.text})}
+        underlineColorAndroid = "transparent"
+        ref="confirmNewAttribute"
+        />
+    </View>
 
         <TouchableOpacity style={styles.ButtonContainer}
         onPress={this.changeAttribute}
@@ -106,17 +123,16 @@ export default class ChangePasswordForm extends React.Component {
       }
   }
     handelChangeError = (err) => {
-        // console.log("ERROR in, ", callingFunction, ": ", attribute)
-        // console.log('error: ', err)
-        // if(err.code == 'LimitExceededException') {
-        //     Alert.alert("You Requested Too Many Verification Codes!", "Please Wait A While Before Trying Again.")
-        // } else if(err.code == 'CodeMismatchException') {
-        //     Alert.alert("The Verification Code That Was Entered Was Incorrect!",
-        //                                 "Please Enter And Submit The Correct Verification Code!")
-        // } else {
-        //     Alert.alert(err.code, err.message)
-        // }
-        Alert.alert(err.code, err.message)
+        console.log('error: ', err)
+        if(err.code == 'LimitExceededException') {
+            Alert.alert("You Requested Too Many Verification Codes!", "Please Wait A While Before Trying Again.")
+        } else if(err.code == 'CodeMismatchException') {
+            Alert.alert("The Verification Code That Was Entered Was Incorrect!",
+                                        "Please Enter And Submit The Correct Verification Code!")
+        } else {
+            Alert.alert(err.code, err.message)
+        }
+        // Alert.alert(err.code, err.message)
     }
 
     resendCode = () => {
@@ -125,6 +141,8 @@ export default class ChangePasswordForm extends React.Component {
         .then(
             ()=>{
                 console.log(attribute + " code has been resent")
+                Alert.alert("A new " + attribute + " verification code has been sent!",
+                     "Please enter it and try again!")
             }
         )
         .catch(
@@ -140,13 +158,26 @@ export default class ChangePasswordForm extends React.Component {
         console.log("--------------This is changeAttribute reset form--------------------------")
         console.log("___________________we are changing ", attribute, "______________________")
         if(this.state.verificationCode == '') {
-            Alert.alert('A Verification Code Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
+            Alert.alert('A Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
             return;
         }
         if(this.state.newAttributeValue == ''){
             Alert.alert('New Attribure Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
+            return
         }
+        if(this.state.confirmNewAttribureValue == ''){
+            Alert.alert('New Attribure Confirmation Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
+            return
+        }
+        console.log("new attribure: ", this.state.newAttributeValue)
+        console.log("new attribure confirm: ", this.state.confirmNewAttribureValue)
 
+        if(this.state.newAttributeValue != this.state.confirmNewAttribureValue) {
+            Alert.alert("New " + attribute + "/New " + attribute + " Confirmation Mis-Match!", 
+            "Please Enter The Same " + attribute +" In Both Locations And Try Again!") 
+            return
+        }
+        console.log("Starting verification")
         Auth.verifyCurrentUserAttributeSubmit(attribute,this.state.verificationCode)
             .then(
                 ()=>{
@@ -159,6 +190,11 @@ export default class ChangePasswordForm extends React.Component {
                                 Auth.updateUserAttributes(user, attributeUpdate)
                                     .then(
                                         () => {
+                                            Alert.alert("Success!","Your " + attribute + " has been reset!")
+                                            this.setState({
+                                                newAttributeValue: '',
+                                                verificationCode:'',
+                                              })
                                             this.props.navigation.navigate('AR');
                                         }
                                     )

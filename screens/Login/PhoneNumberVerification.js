@@ -103,7 +103,7 @@ export default class PhoneNumberVerification extends React.Component {
       } else if(authType == 'verify_email') {
         errorType = 'Email Verification'
       } else {
-        errorType = 'Unknown Type'
+        errorType = error.code
       }
       
       let errorMessage;

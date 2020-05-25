@@ -105,7 +105,7 @@ export default class LoginScreen extends React.Component {
             underlineColorAndroid = "transparent"
           />
 </View>
-<View>
+  <View>
 <Icon name = {'ios-lock'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
 
           <TextInput
@@ -120,9 +120,9 @@ export default class LoginScreen extends React.Component {
             onSubmitEditing = {this._loginAsync}
             underlineColorAndroid = "transparent"
           />
-<TouchableOpacity style = {styles.btnEye}
+           <TouchableOpacity style = {styles.btnEye}
           onPress = {this.showPass.bind(this)}>
-            <Icon name = {this.state.press == false ? 'ios-eye':'ios-eye-off'} size = {26} color = {'rgba(255,255,255,0.7)'}/>
+          <Icon name = {this.state.press == false ? 'ios-eye':'ios-eye-off'} size = {26} color = {'rgba(255,255,255,0.7)'}/>
           </TouchableOpacity>
 </View>
         <TouchableOpacity
@@ -212,6 +212,7 @@ export default class LoginScreen extends React.Component {
         console.log("Must login before going to home screen")
       }
     };
+    
     _goToPasswordReset = async () => {
       console.log("Going to reset screen.")
       this.props.navigation.navigate('PRS');

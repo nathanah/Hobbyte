@@ -14,9 +14,23 @@ export default class ChangePasswordForm extends React.Component {
   state = {
     oldPassword:'',
     newPassword:'',
+    confirmNewPassword:'',
     minPasswordLenght: 8,
   };
-
+  constructor(){
+    super()
+    this.state = {
+      showPass: true,
+      press: false
+    }
+  }
+  showPass = () => {
+    if (this.state.press == false){
+      this.setState({showPass:false, press:true})
+    }else{
+      this.setState({showPass:true, press:false})
+    }
+  }
   render() {
     return (
       <View style={{backgroundColor: "#19b7bf", flex: 1}}>
@@ -28,16 +42,17 @@ export default class ChangePasswordForm extends React.Component {
             source={require('../assets/images/white_logo_notext.png')}
             />
           <Text style={styles.title}>Enter your SMS verification code below, old and new password!</Text>
+
+
          <View>
             <Icon name = {'ios-lock'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
-          
            
             <TextInput
             placeholder="old password"
             style={styles.formBox}
             placeholderTextColor = "#000000"
-            returnKeyType = "go"
-            secureTextEntry
+            returnKeyType = "next"
+            secureTextEntry = {this.state.showPass}
             autoFocus={true}
             onSubmitEditing = {() => {this.refs.newPassword.focus();}}
             autoCapitalize='none'
@@ -46,28 +61,67 @@ export default class ChangePasswordForm extends React.Component {
             onChange ={event => this.setState({oldPassword:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
             ref="oldPassword"
-          />
-</View>
-<View>
+            />
+            <TouchableOpacity style = {styles.btnEye}
+              onPress = {this.showPass.bind(this)}>
+              <Icon name = {this.state.press == false ? 'ios-eye':'ios-eye-off'} size = {26} color = {'rgba(255,255,255,0.7)'}/>
+            </TouchableOpacity>
+          </View>
+
+    
+
+
+
+
+
+
+          <View>
             <Icon name = {'ios-lock'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
           
-          
-          <TextInput
+            <TextInput
             placeholder="new password"
             style={styles.formBox}
             placeholderTextColor = "#000000"
-            returnKeyType = "go"
-            secureTextEntry
+            returnKeyType = "next"
+            secureTextEntry = {this.state.showPass}
             autoFocus={true}
-            onSubmitEditing = {this.changePassword}
+            onSubmitEditing = {() => {this.refs.confirmPassword.focus();}}
             autoCapitalize='none'
             autoCorrect={false}
             value={this.state.newPassword}
             onChange ={event => this.setState({newPassword:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
             ref="newPassword"
-          />
-</View>
+            />
+            <TouchableOpacity style = {styles.btnEye}
+              onPress = {this.showPass.bind(this)}>
+              <Icon name = {this.state.press == false ? 'ios-eye':'ios-eye-off'} size = {26} color = {'rgba(255,255,255,0.7)'}/>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <Icon name = {'ios-lock'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+            
+            <TextInput
+            placeholder="confirm new password"
+            style={styles.formBox}
+            placeholderTextColor = "#000000"
+            returnKeyType = "go"
+            secureTextEntry = {this.state.showPass}
+            autoFocus={true}
+            onSubmitEditing = {this.changePassword}
+            autoCapitalize='none'
+            autoCorrect={false}
+            value={this.state.confirmNewPassword}
+            onChange ={event => this.setState({confirmNewPassword:event.nativeEvent.text})}
+            underlineColorAndroid = "transparent"
+            ref="confirmPassword"
+            />
+            <TouchableOpacity style = {styles.btnEye}
+              onPress = {this.showPass.bind(this)}>
+              <Icon name = {this.state.press == false ? 'ios-eye':'ios-eye-off'} size = {26} color = {'rgba(255,255,255,0.7)'}/>
+            </TouchableOpacity>
+          </View>
 
         <TouchableOpacity style={styles.ButtonContainer}
         onPress={this.changePassword}
@@ -96,7 +150,7 @@ export default class ChangePasswordForm extends React.Component {
  */
   handelChangeError = (err) => {
     console.log('error: ', err)
-    if(err.message == 'NotAuthorizedException') {
+    if(err.code == 'NotAuthorizedException') {
       Alert.alert("Old Password Is Incorrect!", "Please Enter The Correct Password And Try Again!")
       return
     }
@@ -104,9 +158,9 @@ export default class ChangePasswordForm extends React.Component {
       Alert.alert("Your New Password Is Too Short!", "Please A Password That Is At Least 8 Characters Long!")
       return
     }
-
     if(err.code == 'LimitExceededException') {
       Alert.alert('You Have Made Too Many Attempts To Change Your Password!', 'Please Try Again After Some Time!')
+      return
     }
     Alert.alert(err.code, err.message)
 }
@@ -114,13 +168,19 @@ export default class ChangePasswordForm extends React.Component {
         console.log(this.state)
         console.log("--------------This is password reset form--------------------------")
 
-        if(this.state.newPassword == ''|| 
-          this.state.newPassword == ''){
+        if(this.state.oldPassword == ''|| 
+          this.state.newPassword == ''||
+          this.state.confirmNewPassword == ''){
             Alert.alert("One Of The Fields Is Empty!", "Please Fill Out ALL Fields!")
             return
         }
         if(this.state.oldPassword.length < this.state.minPasswordLenght) {
           Alert.alert("Old Password Is Incorrect!", "Please Enter The Correct Password And Try Again!")
+          return
+        }
+        if(this.state.newPassword != this.state.confirmNewPassword){
+          Alert.alert("New Password/Comfirmation Password Mis-Match!",
+          "Please Enter The Same Password In Both Fields!")
           return
         }
         Auth.currentAuthenticatedUser().then(
@@ -131,7 +191,9 @@ export default class ChangePasswordForm extends React.Component {
                         this.setState({
                           oldPassword:'',
                           newPassword:'',
+                          confirmNewPassword:'',
                         })
+                        Alert.alert("Success!","Your password has been changed!")
                         this.props.navigation.navigate('AR');
                     }
                 ).catch(

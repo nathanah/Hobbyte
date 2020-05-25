@@ -110,9 +110,10 @@ export default class AttributeReset extends React.Component {
     console.log('error: ', err)
 
     if(err.code == 'LimitExceededException') {
-      Alert.alert("You Requested Too Many Email Verification Codes!", "Please Wait A While Before Trying Again.")
+      Alert.alert("Attempt Limit Reached!", "Please Wait A While Before Trying Again.")
     } else {
-      Alert.alert("An Unspecified Error Has Occured!", "Please Try Again Some Other Time :(")
+      Alert.alert(err.code, err.message)
+      //Alert.alert("An Unspecified Error Has Occured!", "Please Try Again Some Other Time :(")
     }
     this.props.navigation.navigate("AR")
   }
