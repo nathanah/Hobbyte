@@ -34,7 +34,7 @@ async function getPublicKey(member){
   console.log("Key from AWS: <" + key + ">");
   key = nacl.util.decodeBase64(key); 
   console.log("key: " + key); 
-  return keyString;
+  return key;
 
 }
 /*
@@ -77,24 +77,16 @@ async function sendMessage(payload) {
 
         //Retrieve decoded public key
         var recipient_public_key = await getPublicKey(roomMembers[i]);
-        // console.log("recipient_keystring" + recipient_keystring); 
-        // var key = recipient_keystring.replace(/[{"()"}]/g, '');
-        // console.log("key" + key); 
-        // const recipient_public_key = nacl.util.decodeBase64(recipient_keystirng);    
-
         //Retrieve sender's private key
         const myKeys = await AsyncStorage.getItem('keys');
         const keysObj = JSON.parse(myKeys);
+        console.log("myKeys" + myKeys); 
         var sender_private_key = nacl.util.decodeBase64(keysObj.secret);
-
         //Create shared key
         const mySharedKey = nacl.box.before(recipient_public_key, sender_private_key)
-
         //Encrypt the message and convert to Base64 format. Base64EncryptedStr is message to be sent.
         const EncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
         const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
-        console.og("trying to print encrypted string"); 
-        console.log("Base64EncryptedStr " + Base64EncryptedStr); 
         fullPayload.payloadEncrypted = Base64EncryptedStr;
       }
     }
