@@ -519,50 +519,49 @@ class ChatScreen extends React.Component {
   }
 
   onReceive = async(messageObject) => {
-   var roomMembers = this.state.members;
+    
     try{
       
+      // parse incomingMessageItem payload and save into new variable
       var messageObj = messageObject.onCreateMessageByRecipient;
-      console.log("message Obj" + messageObj); 
+      var payload = messageObj.payload;
+      payload = JSON.parse(payload);
+      console.log("payload after parse  " + JSON.stringify(payload )); 
+         //If the roommember is the sender
+         if(payload.box){
 
-      // If the conversation is between 2
-      if (roomMembers.length==2){
+          //Acquire sender public key
+          var sender_public_key= await getPublicKey(messageObj.from);
+             
+          //Acquire recipient private key
+          const myKeys = await AsyncStorage.getItem('keys');
+          const keysObj = JSON.parse(myKeys);
+          var recipient_private_key = nacl.util.decodeBase64(keysObj.secret);
+          console.log("recipient_ private key: "  + recipient_private_key); 
 
-        for (var i = 0; i < roomMembers.length ; i++){
+          //Make shared key
+          // const recipientSharedKey = nacl.box.before(recipient_private_key, sender_public_key)
+          const recipientSharedKey = nacl.box.before(sender_public_key, recipient_private_key); 
+          console.log("shared key: " + recipientSharedKey); 
 
-          //If the roommember is the sender
-          if(roomMembers[i] == messageObj.from){
+          //Decoded payload
+          const decoded_payload_message = nacl.util.decodeBase64(payload.payloadEncrypted)
+          console.log("decoded payload " + decoded_payload_message)
 
-            //Acquire sender public key
-            var sender_public_key= await getPublicKey(roomMembers[i]);
-            // var key = sender_keystring.replace(/[{"()"}]/g, '');
-            // const sender_public_key = nacl.util.decodeBase64(key); 
-               
-            //Acquire recipient private key
-            const myKeys = await AsyncStorage.getItem('keys');
-            const keysObj = JSON.parse(myKeys);
-            var recipient_private_key = nacl.util.decodeBase64(keysObj.secret);
+          const nonceDecrypted = nacl.util.decodeBase64(payload.nonce);
+          console.log("nonce decrypted: " + nonceDecrypted); 
+          //Decrypt the payload with nonce and shared key
+          const decoded_decrypted_payload = nacl.box.open.after(decoded_payload_message, nonceDecrypted, recipientSharedKey) 
+          console.log("decoded decrypted " + decoded_decrypted_payload); 
+          //Encode back to UTF8. Final decrypted payload
+          const decrypted_payload = nacl.util.encodeUTF8(decoded_decrypted_payload)
+          console.log("decrypted payload" + decrypted_payload);
 
-            //Make shared key
-            const recipientSharedKey = nacl.box.before(recipient_private_key, sender_public_key)
-
-            //Decoded payload
-            const decoded_payload_message = nacl.util.decodeBase64(messageObj.payload.encryptedtext) 
-
-            //Decrypt the payload with nonce and shared key
-            const decoded_decrypted_payload = nacl.box.open.after(decoded_payload_message, messageObj.payload.nonce, recipientSharedKey) 
-
-            //Encode back to UTF8. Final decrypted payload
-            const decrypted_payload = nacl.util.encodeUTF8(decoded_decrypted_payload)
-            console.log("decrypted payload" + decrypted_payload);
-
-            var final_decoded_message = JSON.parse(decrypted_payload);
-            console.log("final decrypted "+ final_decoded_message); 
-          }
+          var final_decoded_message = JSON.parse(decrypted_payload);
+          console.log("final decrypted "+ final_decoded_message); 
         }
-    
-         
-      }
+      
+      
       // }else{
         
       //   //Decode the provided key (in payload)
@@ -590,10 +589,7 @@ class ChatScreen extends React.Component {
       // console.log("TODO: Implement decrypt");
 
 
-      // /// parse incomingMessageItem payload and save into new variable
-      
-      
-      
+      payload = final_decoded_message;
       // /*
       // const decrypted = decrypt(payload, messageObj.key);
       // */
@@ -603,45 +599,45 @@ class ChatScreen extends React.Component {
       // // var key = payload.key; 
       // // var encryptedPayload = payload.payload;
 
-      // //sort message into correct room
-      // var roomObj = await AsyncStorage.getItem(payload.roomId);
-      // //make room if room does not exist locally
-      // if(roomObj == null){
-      //   await this.makeRoom(payload);
-      //   roomObj = await AsyncStorage.getItem(payload.roomId);
-      // }
+      //sort message into correct room
+      var roomObj = await AsyncStorage.getItem(payload.roomId);
+      //make room if room does not exist locally
+      if(roomObj == null){
+        await this.makeRoom(payload);
+        roomObj = await AsyncStorage.getItem(payload.roomId);
+      }
 
-      // console.log("payload: " + JSON.stringify(payload));
-      // console.log("action type" + payload.actionType);
-      // switch(payload.actionType){
-      //   //Incoming text message
-      //   case ActionType.TEXT_MESSAGE:{
-      //     if (payload.roomId == this.state.id){
-      //       displayOneMessage(messageObj, payload, this);
-      //     }
-      //     break;
-      //   }
-      //   //settings change
-      //   case ActionType.SETTINGS_CHANGE:{
-      //     await settingsChange(payload);
-      //     this.loadSettings(this.state.id);
-      //     console.log("TODO: Implement settings change");
-      //     break;
-      //   }
-      //   //Backup Requested
-      //   case ActionType.BACKUP:{
-      //     AsyncStorage.setItem(payload.roomId,payload.textContent);
-      //     break;
-      //   }
-      //   //id collision fix?
-      //   case 6:{
-      //     console.log("TODO: ? ") ;
-      //     break;
-      //   }
-      //   //Case not recognized (version not up to date or )
-      //   default:
-      //     console.log("Message id not recognized");
-      // }
+      console.log("payload: " + JSON.stringify(payload));
+      console.log("action type" + payload.actionType);
+      switch(payload.actionType){
+        //Incoming text message
+        case ActionType.TEXT_MESSAGE:{
+          if (payload.roomId == this.state.id){
+            displayOneMessage(messageObj, payload, this);
+          }
+          break;
+        }
+        //settings change
+        case ActionType.SETTINGS_CHANGE:{
+          await settingsChange(payload);
+          this.loadSettings(this.state.id);
+          console.log("TODO: Implement settings change");
+          break;
+        }
+        //Backup Requested
+        case ActionType.BACKUP:{
+          AsyncStorage.setItem(payload.roomId,payload.textContent);
+          break;
+        }
+        //id collision fix?
+        case 6:{
+          console.log("TODO: ? ") ;
+          break;
+        }
+        //Case not recognized (version not up to date or )
+        default:
+          console.log("Message id not recognized");
+      }
     }
     catch(err){
       console.log("message receive error: " + err)

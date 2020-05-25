@@ -444,10 +444,6 @@ export default class ChatRoom extends Component {
 
   onReceive = async(messageObject) => {
     try{
-      //Decrypt
-      console.log("TODO: Implement decrypt from ChatRoomScreen");
-
-
       // parse incomingMessageItem payload and save into new variable
       var messageObj = messageObject.onCreateMessageByRecipient;
       var payload = messageObj.payload;
