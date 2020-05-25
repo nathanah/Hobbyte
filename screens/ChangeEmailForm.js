@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 
-import { Button, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, Keyboard, ScrollView, AsyncStorage } from 'react-native';
+import {View, 
+        Text, 
+        TouchableOpacity,
+        KeyboardAvoidingView, 
+        TextInput, 
+        Image,
+        ScrollView, 
+        Alert } from 'react-native';
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../styles/styles'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -14,8 +21,8 @@ export default class ChangePasswordForm extends React.Component {
 
   state = {
     newAttributeValue: '',
-    emailVerificationCode:'',
-    phoneVerificationCode:''
+    confirmNewAttribureValue: '',
+    verificationCode:'',
     //username: this.props.navigation.getParam('username','none'),
   };
 
@@ -36,59 +43,57 @@ export default class ChangePasswordForm extends React.Component {
           
           
           <TextInput
-            placeholder="Text Message Code"
+            placeholder="Confirmation Code"
             style={styles.formBox}
             placeholderTextColor = "#000000"
-            returnKeyType = "go"
+            returnKeyType = "next"
             keyboardType="phone-pad"
             autoFocus={true}
-            onSubmitEditing = {() => {this.passwordInput.focus();}}
+            onSubmitEditing = {() => {this.refs.newAttribute.focus();}}
             autoCapitalize='none'
             autoCorrect={false}
-            value={this.state.phoneVerificationCode}
-            onChange ={event => this.setState({phoneVerificationCode:event.nativeEvent.text})}
+            value={this.state.verificationCode}
+            onChange ={event => this.setState({verificationCode:event.nativeEvent.text})}
             underlineColorAndroid = "transparent"
           />
           </View>
-          <View>
-            <Icon name = {'ios-mail'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+    
+    <View>
+        <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
           
-          
-          
-          <TextInput
-            placeholder="Email Code"
-            style={styles.formBox}
-            placeholderTextColor = "#000000"
-            returnKeyType = "go"
-            keyboardType="phone-pad"
-            autoFocus={true}
-            onSubmitEditing = {() => {this.passwordInput.focus();}}
-            autoCapitalize='none'
-            autoCorrect={false}
-            value={this.state.emailVerificationCode}
-            onChange ={event => this.setState({emailVerificationCode:event.nativeEvent.text})}
-            underlineColorAndroid = "transparent"
-          />
-          </View>
-          <View>
-            <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
-          
-          
-          
-          <TextInput
-            placeholder="new attribute value"
-            style={styles.formBox}
-            placeholderTextColor = "#000000"
-            returnKeyType = "go"
-            autoFocus={true}
-            onSubmitEditing = {this.changeAttribute}
-            autoCapitalize='none'
-            autoCorrect={false}
-            value={this.state.newAttributeValue}
-            onChange ={event => this.setState({newAttributeValue:event.nativeEvent.text})}
-            underlineColorAndroid = "transparent"
-          />
-</View>
+        <TextInput
+        placeholder="new attribute value"
+        style={styles.formBox}
+        placeholderTextColor = "#000000"
+        returnKeyType = "next"
+        autoFocus={true}
+        onSubmitEditing = {() => {this.refs.confirmNewAttribute.focus();}}
+        autoCapitalize='none'
+        autoCorrect={false}
+        value={this.state.newAttributeValue}
+        onChange ={event => this.setState({newAttributeValue:event.nativeEvent.text})}
+        underlineColorAndroid = "transparent"
+        ref="newAttribute"
+        />
+    </View>
+    <View>
+        <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.inputIcon} />
+
+        <TextInput
+        placeholder="confirm new attribute"
+        style={styles.formBox}
+        placeholderTextColor = "#000000"
+        returnKeyType = "go"
+        autoFocus={true}
+        onSubmitEditing = {this.changeAttribute}
+        autoCapitalize='none'
+        autoCorrect={false}
+        value={this.state.confirmNewAttribureValue}
+        onChange ={event => this.setState({confirmNewAttribureValue:event.nativeEvent.text})}
+        underlineColorAndroid = "transparent"
+        ref="confirmNewAttribute"
+        />
+    </View>
 
         <TouchableOpacity style={styles.ButtonContainer}
         onPress={this.changeAttribute}
@@ -97,9 +102,9 @@ export default class ChangePasswordForm extends React.Component {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.ButtonContainer}
-        onPress={this.resendCodes}
+        onPress={this.resendCode}
         activeOpacity = { .8 }>
-                <Text style={styles.buttonText}>Resend Codes</Text>
+                <Text style={styles.buttonText}>Resend Verification Code</Text>
         </TouchableOpacity>
           </ScrollView>
 
@@ -112,119 +117,104 @@ export default class ChangePasswordForm extends React.Component {
   /*--------------------Async------------------------*/
   getTitleMessage(){
       if(this.props.navigation.getParam('attribute', 'none') == 'email') {
-          return "Fill Out The Form To Change Your Email!"
+          return "Enter The Verification Code That Was Sent To Your Email, And Enter A New Email Address!"
       } else {
-        return "Fill Out The Form To Change Your Phone Number!"
+         return "Enter The Verification Code That Was Sent To Your Phone, And Enter A New Phone Number!"
       }
   }
-    handelChangeError = (err, callingFunction, attribute, nextPage) => {
-        console.log("ERROR in, ", callingFunction, ": ", attribute)
+    handelChangeError = (err) => {
         console.log('error: ', err)
         if(err.code == 'LimitExceededException') {
-            Alert.alert("You Requested Too Many Email Verification Codes!", "Please Wait A While Before Trying Again.")
+            Alert.alert("You Requested Too Many Verification Codes!", "Please Wait A While Before Trying Again.")
         } else if(err.code == 'CodeMismatchException') {
-            if(attribute == 'email') {
-                Alert.alert("The Email Verification Code That Was Entered Was Incorrect!",
+            Alert.alert("The Verification Code That Was Entered Was Incorrect!",
                                         "Please Enter And Submit The Correct Verification Code!")
-            } else if(attribute == 'phone_number'){
-                Alert.alert("The Phone Number Verification Code That Was Entered Was Incorrect!",
-                                        "Resend The Verification Codes And Try Again!")
-            }
         } else {
-            Alert.alert("An Unspecified Error Has Occured!", 
-                "Please Resend The Codes. If That Does Not Work, Try Again Some Other Time :(")
+            Alert.alert(err.code, err.message)
         }
+        // Alert.alert(err.code, err.message)
     }
 
-    resendCodes = () => {
-        Auth.verifyCurrentUserAttribute('email')
+    resendCode = () => {
+        let attribute = this.props.navigation.getParam('attribute', 'none');
+        Auth.verifyCurrentUserAttribute(attribute)
         .then(
             ()=>{
-                console.log("changeEmail scuess!! Going to verify emial")    
-                Auth.verifyCurrentUserAttribute('phone_number')
-                  .then(
-                      ()=>{
-                          console.log("CODES HAVE BEEN RESENT")
-                      }
-                  )
-                  .catch(
-                      (err) => {
-                          this.handelChangeError(err, 
-                              "verifyCurrentUserAttribute", 
-                              'phone_number')
-                      }
-                  )
+                console.log(attribute + " code has been resent")
+                Alert.alert("A new " + attribute + " verification code has been sent!",
+                     "Please enter it and try again!")
             }
         )
         .catch(
             (err) => {
-                 this.handelChangeError(err, 
-                    "verifyCurrentUserAttribute", 
-                    'emial')
+                 this.handelChangeError(err)
             }
         ) 
     }
+
     changeAttribute = () => {
         let attribute = this.props.navigation.getParam('attribute', 'none');
         console.log(this.state)
         console.log("--------------This is changeAttribute reset form--------------------------")
         console.log("___________________we are changing ", attribute, "______________________")
-        if(this.state.emailVerificationCode == '' ||
-        this.state.phoneVerificationCode == '') {
-            Alert.alert('A Verification Code Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
+        if(this.state.verificationCode == '') {
+            Alert.alert('A Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
             return;
         }
-        Auth.verifyCurrentUserAttributeSubmit('email',this.state.emailVerificationCode)
+        if(this.state.newAttributeValue == ''){
+            Alert.alert('New Attribure Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
+            return
+        }
+        if(this.state.confirmNewAttribureValue == ''){
+            Alert.alert('New Attribure Confirmation Field Is Empty!', "Please Fill Out All Fields Before Submitting.")
+            return
+        }
+        console.log("new attribure: ", this.state.newAttributeValue)
+        console.log("new attribure confirm: ", this.state.confirmNewAttribureValue)
+
+        if(this.state.newAttributeValue != this.state.confirmNewAttribureValue) {
+            Alert.alert("New " + attribute + "/New " + attribute + " Confirmation Mis-Match!", 
+            "Please Enter The Same " + attribute +" In Both Locations And Try Again!") 
+            return
+        }
+        console.log("Starting verification")
+        Auth.verifyCurrentUserAttributeSubmit(attribute,this.state.verificationCode)
             .then(
                 ()=>{
-                    console.log("email", " verification SUCCESS!")
-                    Auth.verifyCurrentUserAttributeSubmit('phone_number',this.state.phoneVerificationCode)
+                    console.log(attribute, " verification SUCCESS!")
+                    Auth.currentAuthenticatedUser()
                         .then(
-                            ()=>{
-                                console.log("phone_number", " verification SUCCESS!")
-                                Auth.currentAuthenticatedUser()
+                            (user)=>{
+                                var attributeUpdate = {}
+                                attributeUpdate[attribute] = this.state.newAttributeValue
+                                Auth.updateUserAttributes(user, attributeUpdate)
                                     .then(
-                                        (user)=>{
-                                            var attributeUpdate = {}
-                                            attributeUpdate[attribute] = this.state.newAttributeValue
-                                            Auth.updateUserAttributes(user, attributeUpdate)
-                                                .then(
-                                                    () => {
-                                                        this.props.navigation.navigate('AR');
-                                                    }
-                                                )
-                                                .catch(
-                                                    (err) => {
-                                                        this.handelChangeError(err, 
-                                                            "updateUserAttributes", 
-                                                            attribute)
-                                                    }
-                                                )
+                                        () => {
+                                            Alert.alert("Success!","Your " + attribute + " has been reset!")
+                                            this.setState({
+                                                newAttributeValue: '',
+                                                verificationCode:'',
+                                              })
+                                            this.props.navigation.navigate('AR');
                                         }
                                     )
                                     .catch(
                                         (err) => {
-                                            this.handelChangeError(err, 
-                                                "currentAuthenticatedUser", 
-                                                attribute)
+                                            this.handelChangeError(err)
                                         }
                                     )
                             }
                         )
                         .catch(
                             (err) => {
-                                this.handelChangeError(err, 
-                                    "verifyCurrentUserAttributeSubmit", 
-                                    "phone_number")
+                                this.handelChangeError(err)
                             }
                         )
                 }
             )
             .catch(
                 (err) => {
-                    this.handelChangeError(err, 
-                        "verifyCurrentUserAttributeSubmit", 
-                        "email")
+                    this.handelChangeError(err)
                 }
             )
     }

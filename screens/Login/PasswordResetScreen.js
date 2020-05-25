@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import {styles} from '../../styles/styles'
-import {View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TextInput, Image, ScrollView,Keyboard } from 'react-native';
+import {View, 
+        Text, 
+        TouchableOpacity, 
+        KeyboardAvoidingView, 
+        TextInput, 
+        Image, 
+        ScrollView,
+        Alert } from 'react-native';
 import {Auth} from 'aws-amplify';
 
 /*=====================================================*/
@@ -23,21 +30,38 @@ export default class PasswordResetScreen extends React.Component {
             source={require('../../assets/images/white_logo_notext.png')}	 
             />
         <Text style={styles.title}>Reset Password</Text>
-
         <TextInput
-                placeholder="Username"
-                style={styles.formBox}
-                placeholderTextColor = "#FFFFFF"
-                returnKeyType = "next"
-                autoFocus={true}
-                onSubmitEditing = {() => {this.phoneInput.focus();}}
-                keyboardType="email-address"
-                autoCapitalize='none'
-                autoCorrect={false}
-                value={this.state.email}
-                onChange ={event => this.setState({username:event.nativeEvent.text})}
-                underlineColorAndroid = "transparent"
-            />
+          placeholder="username"
+          style={styles.formBox}
+          underlineColorAndroid = {'transparent'}
+          placeholderTextColor = "#FFFFFF"
+          returnKeyType = "go"
+          onSubmitEditing = {this._submitAsync}
+          keyboardType="email-address"
+          autoCapitalize='none'
+          autoCorrect={false}
+          value={this.state.username}
+          onChange ={event => this.setState({username:event.nativeEvent.text})}
+          underlineColorAndroid = "transparent"
+        />
+
+        {/* <TextInput
+          placeholder="Username"
+          style={styles.formBox}
+          placeholderTextColor = "#FFFFFF"
+          returnKeyType = "submit"
+          autoFocus={true}
+          onSubmitEditing = {this._submitAsync}
+          keyboardType="email-address"
+          autoCapitalize='none'
+          autoCorrect={false}
+          value={this.state.username}
+          onChange ={(event) => {
+            this.setState({username:event.nativeEvent.text})
+            console.log("Username: ", this.state.username)
+          }}
+          underlineColorAndroid = "transparent"
+        /> */}
 
 
         <TouchableOpacity style={styles.ButtonContainer}
@@ -55,10 +79,56 @@ export default class PasswordResetScreen extends React.Component {
   }
 
   /*--------------------Async------------------------*/
+
+    handelError(error) {
+      if(error.code == 'UserNotFoundException') {
+        Alert.alert("User Name Does Not Exist!"
+        ,"Please Enter The Correct Username!")
+      } else if(error.code == 'InvalidParameterException'){
+        Alert.alert("Unverified Email!",
+        "Your Password Can Only Be Recovered If You Have Verified Your Email :(")
+      } else if(error.code == 'LimitExceededException') {
+        Alert.alert("Attempt Limit Reached!", 
+        "Please Wait A While And Try Again!")
+      } else {
+        Alert.alert(error.code, error.message)
+      }
+      /**
+ * 
+ *  Email not Verified
+ * Object {
+  "code": "InvalidParameterException",
+  "message": "Cannot reset password for the user as there is no registered/verified email or phone_number",
+  "name": "InvalidParameterException",
+}
+
+
+
+//User name not found
+Object {
+  "code": "UserNotFoundException",
+  "message": "Username/client id combination not found.",
+  "name": "UserNotFoundException",
+}
+
+//Too many atempts
+THis is username:  user
+Object {
+  "code": "LimitExceededException",
+  "message": "Attempt limit exceeded, please try after some time.",
+  "name": "LimitExceededException",
+}
+
+ */
+    }
     _submitAsync = async () => {
       // TODO - fetch user token and verify user identity
       // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("currentUserInfo", await Auth.currentUserInfo())
+      if(this.state.username == ''){
+        Alert.alert("You Did Not Enter Your User Name!", "Please Enter Your User Name And Try Again!")
+        return
+      }
+      console.log("THis is username: ", this.state.username)
       Auth.forgotPassword(this.state.username).then(
         ()=> {
           console.log("init password reset.. going to PRF")
@@ -66,7 +136,8 @@ export default class PasswordResetScreen extends React.Component {
         }
      ).catch(
        (err)=>{
-         console.log("PRS ERROR: ", err)
+         console.log(err)
+         this.handelError(err)
          this.props.navigation.navigate('PRR')
        }
      )
@@ -74,3 +145,30 @@ export default class PasswordResetScreen extends React.Component {
 }
 
 
+/**
+ * 
+ *  Email not Verified
+ * Object {
+  "code": "InvalidParameterException",
+  "message": "Cannot reset password for the user as there is no registered/verified email or phone_number",
+  "name": "InvalidParameterException",
+}
+
+
+
+//User name not found
+Object {
+  "code": "UserNotFoundException",
+  "message": "Username/client id combination not found.",
+  "name": "UserNotFoundException",
+}
+
+//Too many atempts
+THis is username:  user
+Object {
+  "code": "LimitExceededException",
+  "message": "Attempt limit exceeded, please try after some time.",
+  "name": "LimitExceededException",
+}
+
+ */
