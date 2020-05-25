@@ -515,10 +515,11 @@ class ChatScreen extends React.Component {
   }
 
   onReceive = async(messageObject) => {
+   var roomMembers = this.state.members;
     try{
       
       var messageObj = messageObject.onCreateMessageByRecipient;
-/*
+
       // If the conversation is between 2
       if (roomMembers.length==2){
 
@@ -528,9 +529,9 @@ class ChatScreen extends React.Component {
           if(roomMembers[i] == messageObj.from){
 
             //Acquire sender public key
-            var sender_keystring = await getPublicKey(roomMembers[i]);
-            var key = sender_keystring.replace(/[{"()"}]/g, '');
-            const sender_public_key = nacl.util.decodeBase64(key); 
+            var sender_public_key= await getPublicKey(roomMembers[i]);
+            // var key = sender_keystring.replace(/[{"()"}]/g, '');
+            // const sender_public_key = nacl.util.decodeBase64(key); 
                
             //Acquire recipient private key
             const myKeys = await AsyncStorage.getItem('keys');
@@ -548,6 +549,7 @@ class ChatScreen extends React.Component {
 
             //Encode back to UTF8. Final decrypted payload
             const decrypted_payload = nacl.util.encodeUTF8(decoded_decrypted_payload)
+            console.log("decrypted payload" + decrypted_payload);
           }
         }
     
@@ -572,7 +574,7 @@ class ChatScreen extends React.Component {
         return JSON.parse(base64DecryptedMessage);
     
       }
-      */
+      
       //Decrypt
       
       console.log("TODO: Implement decrypt");
@@ -585,7 +587,7 @@ class ChatScreen extends React.Component {
       /*
       const decrypted = decrypt(payload, messageObj.key);
       */
-      payload = JSON.parse(messageObj.payload);
+      payload = decrypted_payload;
 
       // var nonce = payload.nonce; 
       // var key = payload.key; 
