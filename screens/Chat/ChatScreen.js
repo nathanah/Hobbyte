@@ -51,7 +51,7 @@ async function sendMessage(payload) {
   let payloadStr = JSON.stringify(payload);
   console.log("payloadStr " + payloadStr); 
   
-  const fullPayload = {
+  var fullPayload = {
     nonce: '',
     key: '',
     payloadEncrypted: '',
@@ -87,7 +87,8 @@ async function sendMessage(payload) {
         //Encrypt the message and convert to Base64 format. Base64EncryptedStr is message to be sent.
         const EncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)
         const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
-        fullPayload.payloadEncrypted = Base64EncryptedStr;
+        fullPayload.payloadEncrypted =  Base64EncryptedStr ;
+        fullPayload = JSON.stringify(fullPayload);
       }
     }
 
@@ -122,8 +123,8 @@ async function sendMessage(payload) {
   console.log("Keys genererated: Public - " + myKeys);
           const keysObj = JSON.parse(myKeys);
 
-  console.log("Full payload:" + JSON.stringify(fullPayload)); 
-
+  // console.log("Full payload:" + JSON.stringify(fullPayload)); 
+console.log("full payload" + fullPayload); 
   console.log("private" + keysObj);
 
   for (var i = 0; i < roomMembers.length ; i++){
@@ -519,6 +520,7 @@ class ChatScreen extends React.Component {
     try{
       
       var messageObj = messageObject.onCreateMessageByRecipient;
+      console.log("message Obj" + messageObj); 
 
       // If the conversation is between 2
       if (roomMembers.length==2){
@@ -550,88 +552,93 @@ class ChatScreen extends React.Component {
             //Encode back to UTF8. Final decrypted payload
             const decrypted_payload = nacl.util.encodeUTF8(decoded_decrypted_payload)
             console.log("decrypted payload" + decrypted_payload);
+
+            var final_decoded_message = JSON.parse(decrypted_payload);
+            console.log("final decrypted "+ final_decoded_message); 
           }
         }
     
          
+      }
+      // }else{
         
-      }else{
-        
-        //Decode the provided key (in payload)
-        const keyUint8Array = nacl.util.decodeBase64(messageObj.payload.key);
+      //   //Decode the provided key (in payload)
+      //   const keyUint8Array = nacl.util.decodeBase64(messageObj.payload.key);
 
-        //decoded message to be decrypted
-        const decoded_payload_message = nacl.util.decodeBase64(messageObj.payload.encryptedtext);
+      //   //decoded message to be decrypted
+      //   const decoded_payload_message = nacl.util.decodeBase64(messageObj.payload.encryptedtext);
       
       
-        const decrypted = secretbox.open(decoded_payload_message, messageObj.payload.nonce, keyUint8Array);
+      //   const decrypted = secretbox.open(decoded_payload_message, messageObj.payload.nonce, keyUint8Array);
       
-        if (!decrypted) {
-          throw new Error("Could not decrypt message");
-        }
+      //   if (!decrypted) {
+      //     throw new Error("Could not decrypt message");
+      //   }
       
-        const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
-        return JSON.parse(base64DecryptedMessage);
+      //   const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
+      //   // return JSON.parse(base64DecryptedMessage);
+      //   var final_decoded_message = JSON.parse(base64DecryptedMessage);
+      //   console.log("final decrypted "+ final_decoded_message); 
     
-      }
+      // }
       
-      //Decrypt
+      // //Decrypt
       
-      console.log("TODO: Implement decrypt");
+      // console.log("TODO: Implement decrypt");
 
 
-      /// parse incomingMessageItem payload and save into new variable
+      // /// parse incomingMessageItem payload and save into new variable
       
       
       
-      /*
-      const decrypted = decrypt(payload, messageObj.key);
-      */
-      payload = decrypted_payload;
+      // /*
+      // const decrypted = decrypt(payload, messageObj.key);
+      // */
+      // payload = final_decoded_message;
 
-      // var nonce = payload.nonce; 
-      // var key = payload.key; 
-      // var encryptedPayload = payload.payload;
+      // // var nonce = payload.nonce; 
+      // // var key = payload.key; 
+      // // var encryptedPayload = payload.payload;
 
-      //sort message into correct room
-      var roomObj = await AsyncStorage.getItem(payload.roomId);
-      //make room if room does not exist locally
-      if(roomObj == null){
-        await this.makeRoom(payload);
-        roomObj = await AsyncStorage.getItem(payload.roomId);
-      }
+      // //sort message into correct room
+      // var roomObj = await AsyncStorage.getItem(payload.roomId);
+      // //make room if room does not exist locally
+      // if(roomObj == null){
+      //   await this.makeRoom(payload);
+      //   roomObj = await AsyncStorage.getItem(payload.roomId);
+      // }
 
-      console.log("payload: " + JSON.stringify(payload));
-      console.log("action type" + payload.actionType);
-      switch(payload.actionType){
-        //Incoming text message
-        case ActionType.TEXT_MESSAGE:{
-          if (payload.roomId == this.state.id){
-            displayOneMessage(messageObj, payload, this);
-          }
-          break;
-        }
-        //settings change
-        case ActionType.SETTINGS_CHANGE:{
-          await settingsChange(payload);
-          this.loadSettings(this.state.id);
-          console.log("TODO: Implement settings change");
-          break;
-        }
-        //Backup Requested
-        case ActionType.BACKUP:{
-          AsyncStorage.setItem(payload.roomId,payload.textContent);
-          break;
-        }
-        //id collision fix?
-        case 6:{
-          console.log("TODO: ? ") ;
-          break;
-        }
-        //Case not recognized (version not up to date or )
-        default:
-          console.log("Message id not recognized");
-      }
+      // console.log("payload: " + JSON.stringify(payload));
+      // console.log("action type" + payload.actionType);
+      // switch(payload.actionType){
+      //   //Incoming text message
+      //   case ActionType.TEXT_MESSAGE:{
+      //     if (payload.roomId == this.state.id){
+      //       displayOneMessage(messageObj, payload, this);
+      //     }
+      //     break;
+      //   }
+      //   //settings change
+      //   case ActionType.SETTINGS_CHANGE:{
+      //     await settingsChange(payload);
+      //     this.loadSettings(this.state.id);
+      //     console.log("TODO: Implement settings change");
+      //     break;
+      //   }
+      //   //Backup Requested
+      //   case ActionType.BACKUP:{
+      //     AsyncStorage.setItem(payload.roomId,payload.textContent);
+      //     break;
+      //   }
+      //   //id collision fix?
+      //   case 6:{
+      //     console.log("TODO: ? ") ;
+      //     break;
+      //   }
+      //   //Case not recognized (version not up to date or )
+      //   default:
+      //     console.log("Message id not recognized");
+      // }
     }
     catch(err){
       console.log("message receive error: " + err)
