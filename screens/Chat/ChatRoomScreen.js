@@ -483,7 +483,31 @@ export default class ChatRoom extends Component {
 
           var final_decoded_message = JSON.parse(decrypted_payload);
           console.log("final decrypted "+ final_decoded_message); 
+      
+
+      }else{
+        console.log("using secret box"); 
+        //Decode the provided key (in payload)
+        const keyUint8Array = nacl.util.decodeBase64(payload.key);
+
+        //decoded message to be decrypted
+        const decoded_payload_message = nacl.util.decodeBase64(payload.payloadEncrypted);
+        const nonceDecrypted = nacl.util.decodeBase64(payload.nonce);
+        console.log("nonce decrypted: " + nonceDecrypted); 
+      
+        const decrypted = nacl.secretbox.open(decoded_payload_message, nonceDecrypted, keyUint8Array);
+      
+        if (!decrypted) {
+          throw new Error("Could not decrypt message");
         }
+      
+        const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
+        // return JSON.parse(base64DecryptedMessage);
+        var final_decoded_message = JSON.parse(base64DecryptedMessage);
+        console.log("final decrypted "+ JSON.stringify(final_decoded_message)); 
+    
+      }
+
       
         payload = final_decoded_message;
 

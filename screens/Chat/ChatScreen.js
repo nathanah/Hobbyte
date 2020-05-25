@@ -561,47 +561,42 @@ class ChatScreen extends React.Component {
 
           var final_decoded_message = JSON.parse(decrypted_payload);
           console.log("final decrypted "+ final_decoded_message); 
-        }
       
-      
-      // }else{
+        }else{
+          console.log("using secret box"); 
+          //Decode the provided key (in payload)
+          const keyUint8Array = nacl.util.decodeBase64(payload.key);
+  
+          //decoded message to be decrypted
+          const decoded_payload_message = nacl.util.decodeBase64(payload.payloadEncrypted);
+          const nonceDecrypted = nacl.util.decodeBase64(payload.nonce);
+          console.log("nonce decrypted: " + nonceDecrypted); 
         
-      //   //Decode the provided key (in payload)
-      //   const keyUint8Array = nacl.util.decodeBase64(messageObj.payload.key);
-
-      //   //decoded message to be decrypted
-      //   const decoded_payload_message = nacl.util.decodeBase64(messageObj.payload.encryptedtext);
+          const decrypted = nacl.secretbox.open(decoded_payload_message, nonceDecrypted, keyUint8Array);
+        
+          if (!decrypted) {
+            throw new Error("Could not decrypt message");
+          }
+        
+          const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
+          // return JSON.parse(base64DecryptedMessage);
+          var final_decoded_message = JSON.parse(base64DecryptedMessage);
+          console.log("final decrypted "+ JSON.stringify(final_decoded_message)); 
       
-      
-      //   const decrypted = secretbox.open(decoded_payload_message, messageObj.payload.nonce, keyUint8Array);
-      
-      //   if (!decrypted) {
-      //     throw new Error("Could not decrypt message");
-      //   }
-      
-      //   const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
-      //   // return JSON.parse(base64DecryptedMessage);
-      //   var final_decoded_message = JSON.parse(base64DecryptedMessage);
-      //   console.log("final decrypted "+ final_decoded_message); 
-    
-      // }
-      
-      // //Decrypt
-      
-      // console.log("TODO: Implement decrypt");
+        }
 
 
       payload = final_decoded_message;
-      // /*
-      // const decrypted = decrypt(payload, messageObj.key);
-      // */
-      // payload = final_decoded_message;
+      /*
+      const decrypted = decrypt(payload, messageObj.key);
+      */
+      payload = final_decoded_message;
 
-      // // var nonce = payload.nonce; 
-      // // var key = payload.key; 
-      // // var encryptedPayload = payload.payload;
+      // var nonce = payload.nonce; 
+      // var key = payload.key; 
+      // var encryptedPayload = payload.payload;
 
-      //sort message into correct room
+      // sort message into correct room
       var roomObj = await AsyncStorage.getItem(payload.roomId);
       //make room if room does not exist locally
       if(roomObj == null){
