@@ -19,6 +19,11 @@ import {ActionType, Payload} from '../../src/payload';
 // import PubSub from '@aws-amplify/pubsub';
 import {listMessages} from '../../src/graphql/queries';
 import awsconfig from '../../aws-exports';
+
+import nacl from 'tweet-nacl-react-native-expo'
+
+
+
 API.configure(awsconfig);
 
 
@@ -37,6 +42,26 @@ async function getAuthObject() {
   return username; // returns a promise
 }
 
+
+async function getPublicKey(member){
+
+  console.log("getting public key for: " + member);
+  const keyFromAWS = await API.graphql(graphqlOperation(listMessages, {filter:{to:{eq: "key"}, from: {eq: member}}})).then(
+    console.log("retrieved key")
+  ).catch(
+    (error) => {
+      console.log("Error_____________________\n" ,error)
+    }
+  );
+  console.log(keyFromAWS)
+  const keyString = JSON.stringify(keyFromAWS.data.listMessages.items[0].payload); 
+  var key = keyString.replace(/[{"()"}]/g, '');
+  console.log("Key from AWS: <" + key + ">");
+  key = nacl.util.decodeBase64(key); 
+  console.log("key: " + key); 
+  return key;
+
+}
 
 // todo add subscriber to onCreateMessage(filter)
 // todo remove this function
@@ -420,13 +445,51 @@ export default class ChatRoom extends Component {
   onReceive = async(messageObject) => {
     try{
       //Decrypt
-      console.log("TODO: Implement decrypt");
+      console.log("TODO: Implement decrypt from ChatRoomScreen");
 
 
       // parse incomingMessageItem payload and save into new variable
       var messageObj = messageObject.onCreateMessageByRecipient;
       var payload = messageObj.payload;
       payload = JSON.parse(payload);
+      console.log("payload after parse  " + JSON.stringify(payload )); 
+         //If the roommember is the sender
+         if(payload.box){
+
+          //Acquire sender public key
+          var sender_public_key= await getPublicKey(messageObj.from);
+          // var key = sender_keystring.replace(/[{"()"}]/g, '');
+          // const sender_public_key = nacl.util.decodeBase64(key); 
+             
+          //Acquire recipient private key
+          const myKeys = await AsyncStorage.getItem('keys');
+          const keysObj = JSON.parse(myKeys);
+          var recipient_private_key = nacl.util.decodeBase64(keysObj.secret);
+          console.log("recipient_ private key: "  + recipient_private_key); 
+
+          //Make shared key
+          // const recipientSharedKey = nacl.box.before(recipient_private_key, sender_public_key)
+          const recipientSharedKey = nacl.box.before(sender_public_key, recipient_private_key); 
+          console.log("shared key: " + recipientSharedKey); 
+
+          //Decoded payload
+          const decoded_payload_message = nacl.util.decodeBase64(payload.payloadEncrypted)
+          console.log("decoded payload " + decoded_payload_message)
+
+          const nonceDecrypted = nacl.util.decodeBase64(payload.nonce);
+          console.log("nonce decrypted: " + nonceDecrypted); 
+          //Decrypt the payload with nonce and shared key
+          const decoded_decrypted_payload = nacl.box.open.after(decoded_payload_message, nonceDecrypted, recipientSharedKey) 
+          console.log("decoded decrypted " + decoded_decrypted_payload); 
+          //Encode back to UTF8. Final decrypted payload
+          const decrypted_payload = nacl.util.encodeUTF8(decoded_decrypted_payload)
+          console.log("decrypted payload" + decrypted_payload);
+
+          var final_decoded_message = JSON.parse(decrypted_payload);
+          console.log("final decrypted "+ final_decoded_message); 
+        }
+      
+        payload = final_decoded_message;
 
       //sort message into correct room
       var roomObj = await AsyncStorage.getItem(payload.roomId);

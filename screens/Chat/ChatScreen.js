@@ -55,6 +55,7 @@ async function sendMessage(payload) {
     nonce: '',
     key: '',
     payloadEncrypted: '',
+    box: true,
   };
   
   //Decoded string to be encrypted
@@ -98,6 +99,7 @@ async function sendMessage(payload) {
   //If the conversation is between multiple users (secretbox)
   else{
     console.log("using secret box");
+    fullPayload.box = false; 
     //Generate random key
     const symmetrickey = nacl.randomBytes(nacl.secretbox.keyLength)
     
@@ -113,6 +115,7 @@ async function sendMessage(payload) {
     //Encoded key prepared to be sent
     const key_encoded = nacl.util.encodeBase64(symmetrickey)
     fullPayload.key = key_encoded; 
+    fullPayload = JSON.stringify(fullPayload);
 
   }
   
@@ -379,7 +382,7 @@ class ChatScreen extends React.Component {
           let recpt = deleteMessageAfterRead(messageId)
           // console.log("delete: ", recpt)
           const newMessage = JSON.stringify(event.value.data, null, 2);
-          console.log("New Message: " + newMessage);
+          console.log("New Message on ChatScreen: " + newMessage);
           this.onReceive(event.value.data);
 
       }
@@ -538,7 +541,7 @@ class ChatScreen extends React.Component {
             //Acquire recipient private key
             const myKeys = await AsyncStorage.getItem('keys');
             const keysObj = JSON.parse(myKeys);
-            var recipient_private_key = nacl.util.decodeBase64(keysObj.public);
+            var recipient_private_key = nacl.util.decodeBase64(keysObj.secret);
 
             //Make shared key
             const recipientSharedKey = nacl.box.before(recipient_private_key, sender_public_key)
