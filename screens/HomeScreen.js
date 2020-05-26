@@ -74,8 +74,24 @@ export default class HomeScreen extends React.Component {
                 <Text style={styles.signoutbuttonText}>Reset User Information</Text>
         </TouchableOpacity>
         </View>
+
+        <View>
+          <Icon name = {'ios-mail'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
+
+          <TouchableOpacity
+          style={styles.ButtonContainer}
+          activeOpacity = { .8 }
+          onPress={
+            this.verifyEmail
+        }>
+        <Text style={styles.signoutbuttonText}>Verify Email</Text>
+        </TouchableOpacity>
+        </View>
+
         </View>
       </View>
+
+      
     );
   }
 
@@ -98,6 +114,22 @@ export default class HomeScreen extends React.Component {
     );
   }
 
+
+
+  verifyEmail = () => {
+    Auth.verifyCurrentUserAttribute('email')
+      .then(
+        ()=>{
+          console.log("init email verification")
+          this.props.navigation.navigate('PNV', {authType: 'verify_email'})
+        }
+      )
+      .catch(
+        (err)=>{
+          Alert.alert(err.code, err.message)
+        }
+      )
+  }
   _signOutAsync = async () => {
     // TODO - clear Async storage
     await AsyncStorage.clear();

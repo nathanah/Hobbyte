@@ -67,7 +67,12 @@ export default class PhoneNumberVerification extends React.Component {
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text style={styles.texts}
-                  onPress={()=>{this.props.navigation.navigate("SignIn")}}>
+                  onPress={
+                    ()=>{
+                      this.setState({verificationCode:''})
+                      this.props.navigation.navigate("SignIn")
+                    }
+                  }>
                     Verification code not working?
                     Click to return to the Login page and try to login again!
                 </Text>
@@ -158,6 +163,7 @@ export default class PhoneNumberVerification extends React.Component {
               console.log('successful confirm sign up!')
               //AsyncStorage.setItem("userToken", JSON.stringify(Auth))
               //Need to sign in so that the user is authenticated
+              this.setState({verificationCode:''})
               this.props.navigation.navigate("SignIn");
             }
           )
@@ -207,6 +213,7 @@ export default class PhoneNumberVerification extends React.Component {
 
                   } else {
                     AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+                    this.setState({verificationCode:''})
                     this.props.navigation.navigate('Home' );
                   }
                 })
@@ -233,6 +240,7 @@ export default class PhoneNumberVerification extends React.Component {
               console.log("email has been verified.")
               //We came form signup so we want to go to signin...
               AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+              this.setState({verificationCode:''})
               this.props.navigation.navigate("Home");
 
             }
