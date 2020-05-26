@@ -432,6 +432,9 @@ export default class ChatRoom extends Component {
       payload = JSON.parse(payload);
 
       //sort message into correct room
+      console.log("This is payload: ", payload)
+
+      console.log("This is payload.roomId: ", payload.roomId)
       var roomObj = await AsyncStorage.getItem(payload.roomId);
       //make room if room does not exist locally
       if(roomObj == null){
