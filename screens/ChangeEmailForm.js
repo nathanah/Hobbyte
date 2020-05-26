@@ -190,7 +190,14 @@ export default class ChangePasswordForm extends React.Component {
                                 Auth.updateUserAttributes(user, attributeUpdate)
                                     .then(
                                         () => {
-                                            Alert.alert("Success!","Your " + attribute + " has been reset!")
+                                            let message;
+                                            if(attribute == 'email') {
+                                                message = "Your Email Has Been Changed! Please Verify It Or You Will Not Be Able To Recover Your Password!"
+                                            }
+                                            else{
+                                                message = "Your Phone Number Has Been Changed!"
+                                            }
+                                            Alert.alert("Success!", message)
                                             this.setState({
                                                 newAttributeValue: '',
                                                 verificationCode:'',
