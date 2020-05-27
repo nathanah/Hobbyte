@@ -105,25 +105,25 @@ async function storeIncomingMessage(messageObj, payload, room){
     },
     createdAt: payload.created
 
-  } ;
-  // message = JSON.stringify(message);
+  };
   console.log("message to be added:"     + JSON.stringify(message));
 
   if (chatHistory != null ){
     chatHistory.unshift(message);
-    console.log("Chat history string " + JSON.stringify(chatHistory))
-    // const sortedchatHistory = chatHistory.slice().sort((a,b)=> b.createdAt - a.createdAt);
+    // console.log("Chat history string " + JSON.stringify(chatHistory))
     const sortedchatHistory = chatHistory;
-    console.log("Printing rooms...");
+    // console.log("Printing rooms...");
     for (var j = 0; j < sortedchatHistory.length; j++){
-      console.log("room - " + JSON.stringify(sortedchatHistory[j].createdAt));
+      // console.log("room - " + JSON.stringify(sortedchatHistory[j].createdAt));
     }
     chatHistory = JSON.stringify(chatHistory);
     var rooms = room.state.rooms;
     for (var i = 0; i < rooms.length; i++){
         var roomItem = rooms[i];
       if (roomItem.id == payload.roomId){
-        rooms[i].unreadCount++;
+        if(roomItem.id != room.state.currRoomId){
+          rooms[i].unreadCount++;
+        }
         await AsyncStorage.setItem(payload.roomId, chatHistory).then(successMessage =>{console.log("Async store incoming message success")}).catch(fail => {console.log("fail")});
         await AsyncStorage.setItem("rooms", JSON.stringify(rooms));
         return;
@@ -183,6 +183,7 @@ export default class ChatRoom extends Component {
     this.loadRooms(this.roomsKey);
     this.state = {
       rooms: [],
+      currRoomId: "Not in room",
     };
   }
 
@@ -209,6 +210,7 @@ export default class ChatRoom extends Component {
   componentDidMount(){
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
       this.loadRooms(this.roomsKey);
+      this.setState({currRoomId: "Not in room"});
     });
     this.asyncMountFunctions();
   }
@@ -295,10 +297,11 @@ export default class ChatRoom extends Component {
           <Text style={styles.list_item_text}>{item.unreadCount}     {item.name}</Text>
           <Button title="Enter" color="#0064e1" onPress={
             () => {
+              this.setState({currRoomId: item.id});
               this.props.navigation.navigate('ChatPage',{ "name": item.name.toString(),
                                                               "id": item.id,
                                                               "members": item.members  }
-                                                              )
+                                                            );
             }
             } />
         </View>
@@ -419,7 +422,7 @@ export default class ChatRoom extends Component {
   render() {
     const {rooms} = this.state;
     return (
-      <View>
+      <View height="100%">
         {
           rooms &&
           <SwipeListView

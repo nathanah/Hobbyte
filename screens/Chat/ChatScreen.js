@@ -380,7 +380,7 @@ class ChatScreen extends React.Component {
       error: err => console.log("______________ERROR__________", err),
       next: event => {
 
-          messageId = event.value.data.onCreateMessageByRecipient.id
+          var messageId = event.value.data.onCreateMessageByRecipient.id
           let recpt = deleteMessageAfterRead(messageId)
           // console.log("delete: ", recpt)
           const newMessage = JSON.stringify(event.value.data, null, 2);

@@ -53,16 +53,16 @@ export default class AttributeReset extends React.Component {
         style={styles.ButtonContainer}
         activeOpacity = { .8 }
         onPress={() => this.changePassword()}
-        ><View>            
+        ><View>
         <Icon name = {'ios-lock'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
 
         <Text style={styles.signoutbuttonText}>Reset Password</Text></View>
-                
+
         </TouchableOpacity>
         </View>
         <View>
             <Icon name = {'ios-mail'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
-        
+
         <TouchableOpacity
         style={styles.ButtonContainer}
         activeOpacity = { .8 }
@@ -73,7 +73,7 @@ export default class AttributeReset extends React.Component {
         </View>
         <View>
             <Icon name = {'ios-phone-portrait'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
-        
+
         <TouchableOpacity
         style={styles.ButtonContainer}
         activeOpacity = { .8 }
@@ -84,11 +84,11 @@ export default class AttributeReset extends React.Component {
         </View>
         <View>
             <Icon name = {'ios-home'} size = {28} color = {'rgba(255,255,255,0.7)'} style = {styles.buttonIcon} />
-        
+
         <TouchableOpacity
         style={styles.ButtonContainer}
         activeOpacity = { .8 }
-        onPress={() => this.props.navigation.navigate('Main')}
+        onPress={() => this.props.navigation.navigate('Home')}
         >
                 <Text style={styles.signoutbuttonText}>Return to Home Page</Text>
         </TouchableOpacity>
@@ -116,24 +116,24 @@ export default class AttributeReset extends React.Component {
     console.log('error: ', err)
     alert("ERROR: " + err["message"])
     this.props.navigation.navigate("AR")
-    
+
   }
 
   verifyCurrentUserAttribute(attribute) {
         Auth.verifyCurrentUserAttribute(attribute)
         .then(
             ()=>{
-                console.log("changeEmail scuess!! Going to verify emial")    
+                console.log("changeEmail scuess!! Going to verify emial")
                 // return true;
             }
         )
         .catch(
             (err) => {
-                 this.handelChangeError(err, 
-                    "verifyCurrentUserAttribute", 
+                 this.handelChangeError(err,
+                    "verifyCurrentUserAttribute",
                     attribute)
             }
-        )  
+        )
     }
 
   changeAttribure = (attribute) => {
@@ -144,18 +144,18 @@ export default class AttributeReset extends React.Component {
     Auth.verifyCurrentUserAttribute('email')
         .then(
             ()=>{
-                console.log("changeEmail scuess!! Going to verify emial")    
+                console.log("changeEmail scuess!! Going to verify emial")
                 Auth.verifyCurrentUserAttribute('phone_number')
                   .then(
                       ()=>{
-                          console.log("changeEmail scuess!! Going to verify emial")    
+                          console.log("changeEmail scuess!! Going to verify emial")
                           this.props.navigation.navigate("ChangeEmailForm", next)
                       }
                   )
                   .catch(
                       (err) => {
-                          this.handelChangeError(err, 
-                              "verifyCurrentUserAttribute", 
+                          this.handelChangeError(err,
+                              "verifyCurrentUserAttribute",
                               'phone_number')
                       }
                   )
@@ -163,15 +163,13 @@ export default class AttributeReset extends React.Component {
         )
         .catch(
             (err) => {
-                 this.handelChangeError(err, 
-                    "verifyCurrentUserAttribute", 
+                 this.handelChangeError(err,
+                    "verifyCurrentUserAttribute",
                     'emial')
             }
-        ) 
+        )
   }
 };
 AttributeReset.navigationOptions = {
   header: null,
 };
-
-
