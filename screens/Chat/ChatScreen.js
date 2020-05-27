@@ -590,7 +590,7 @@ class ChatScreen extends React.Component {
       /*
       const decrypted = decrypt(payload, messageObj.key);
       */
-      payload = final_decoded_message;
+      
 
       // var nonce = payload.nonce; 
       // var key = payload.key; 
