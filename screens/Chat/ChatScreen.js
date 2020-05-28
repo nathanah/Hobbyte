@@ -653,7 +653,7 @@ class ChatScreen extends React.Component {
         messages={this.state.messages}
         scrollToBottom
         renderBubble = {this.renderBubble}
-        loadEarlier = {this.state.loadEarlier}
+        loadEarlier = {false}
         isLoadingEarlier = {this.state.isLoadingEarlier}
         onLongPressAvatar = {user => alert(JSON.stringify(user))}
         onPressAvatar = {() => alert('short press')}

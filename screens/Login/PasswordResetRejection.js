@@ -37,9 +37,8 @@ export default class PasswordResetRejection extends React.Component {
         <KeyboardAvoidingView behavior="height" style={styles.container}>
           <ScrollView keyboardShouldPersistTaps='never'>
         <Text>
-            You either entered an invalid username or you never verified your email!!!
-            If you never verified your account is mine now!! Hahahaha...
-            So sorry, you can't have it back unless you remember your password.
+            Having Trouble Resetting Your Password?
+            Choose One Of The Options Below!
         </Text>
         <Button
           title="try to enter username again"

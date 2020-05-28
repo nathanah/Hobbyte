@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+<<<<<<< HEAD
 import { Button, 
         View, 
         Text, 
@@ -11,6 +12,17 @@ import { Button,
         Keyboard, 
         ScrollView, 
         AsyncStorage } from 'react-native';
+=======
+import { View,
+         Text, 
+         TouchableOpacity, 
+         KeyboardAvoidingView, 
+         TextInput, 
+         Image, 
+         ScrollView, 
+         AsyncStorage,
+         Alert } from 'react-native';
+>>>>>>> master
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -156,7 +168,15 @@ export default class PhoneNumberVerification extends React.Component {
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text style={styles.texts}
-                  onPress={this._resetAsync}>Changed phone number?</Text>
+                  onPress={
+                    ()=>{
+                      this.setState({verificationCode:''})
+                      this.props.navigation.navigate("SignIn")
+                    }
+                  }>
+                    Verification code not working?
+                    Click to return to the Login page and try to login again!
+                </Text>
         </TouchableOpacity>
 
           </ScrollView>
@@ -169,11 +189,46 @@ export default class PhoneNumberVerification extends React.Component {
 
   /*--------------------Async------------------------*/
     getPromptMessage(){
-      if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
-        return "Enter Email Verification Code"
+      let authType = this.props.navigation.getParam('authType', 'none')
+      if(authType == 'verify_email') {
+        return "Enter Email Verification Code To Verify Your Email"
+      } else if (authType == 'signin'){
+        return "Enter Text Verification Code To Login"
+      } else if(authType == 'signup'){
+        return "Enter Text Verification Code To Verify Your Phone Number"
       } else {
-        return "Enter Text Verification Code"
+        return "Enter Unknown Code For Unkown Reason"
       }
+    }
+    handelAWSError(authType, error) {
+      let errorType;
+      if(authType == 'signup') {
+        errorType = 'New User Confirmation'
+      } else if(authType == 'signin') {
+         errorType = "Login"
+      } else if(authType == 'verify_email') {
+        errorType = 'Email Verification'
+      } else {
+        errorType = error.code
+      }
+      
+      let errorMessage;
+      console.log("This is error code: ", error.code)
+      if(error.code =='NotAuthorizedException') {
+        return
+      } else if(error.code == 'CodeMismatchException') {
+        errorMessage = "Invalid Verification Code Entered!"
+      } else if(error.code == 'LimitExceededException') {
+        errorMessage = 'You Have Exceeded The Verification Code Limit. Please Wait A While And Then Try Again.'
+      } //else if (error.message == "Invalid session for the user, session is expired."){
+      //   errorMessage = "Your Verification Code Has Expired. Please Resend The Code."
+      // } 
+      else {
+        errorMessage = error.message
+      }
+      Alert.alert(errorType + " Error!", errorMessage)
+      return
+
     }
     _loginAsync = async () => {
       // TODO - fetch user token and verify user identity
@@ -184,24 +239,42 @@ export default class PhoneNumberVerification extends React.Component {
       console.log("Varification type: ", this.state.authType)
       console.log("this is AuthType: ", this.props.navigation.getParam('authType'))
 
-      if(this.props.navigation.getParam('authType', 'none') == 'signup') {
+      let authType = this.props.navigation.getParam('authType', 'none');
+      if(this.state.verificationCode == '') {
+        
+        let errorType;
+        if(authType == 'signup') {
+          errorType = 'New User Confirmation'
+        } else if(authType == 'signin') {
+           errorType = "Login"
+        } else if(authType == 'verify_email') {
+          errorType = 'Email Verification'
+        } else {
+          errorType = 'Unknown Type'
+        }
+        Alert.alert(errorType + " Error!",'The Verification Code Field Can Not Be Empty!')
+        return
+      } 
+
+      if(authType == 'signup') {
         console.log("------------This is signup-----------------")
         Auth.confirmSignUp(this.state.username, this.state.verificationCode)
         .then(
             ()=>{
               console.log('successful confirm sign up!')
-              AsyncStorage.setItem("userToken", JSON.stringify(Auth))
+              //AsyncStorage.setItem("userToken", JSON.stringify(Auth))
               //Need to sign in so that the user is authenticated
+              this.setState({verificationCode:''})
               this.props.navigation.navigate("SignIn");
             }
           )
         .catch(
           (err) => {
             console.log('error confirming signing up!: ', err);
-                alert('error confirming signing up!: '+ err.message);
+            this.handelAWSError(authType, err)
           }
         )
-      } else if(this.props.navigation.getParam('authType', 'none') == 'signin') {
+      } else if(authType == 'signin') {
         console.log("------------This is signin-----------------")
         // remove from final version
         // if (this.state.verificationCode==1111){
@@ -215,7 +288,7 @@ export default class PhoneNumberVerification extends React.Component {
         .then(
           () => {
             console.log('successful confirm sign in!');
-            AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+            //AsyncStorage.setItem("userToken",JSON.stringify(Auth))
 
             Auth.currentAuthenticatedUser()
               //Check if email is verified, if not verify it, else go to main
@@ -235,13 +308,18 @@ export default class PhoneNumberVerification extends React.Component {
                       )
                       .catch(
                         (err)=>{
-                          console.log("Error in init email verification: ", err)
+                          this.handelAWSError(authType, err)
                         }
                       )
 
                   } else {
+<<<<<<< HEAD
                     generateKeys(this.state.user); 
                     //alert("would navigate to home but just for testing");
+=======
+                    AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+                    this.setState({verificationCode:''})
+>>>>>>> master
                     this.props.navigation.navigate('Home' );
                   }
                 })
@@ -252,10 +330,14 @@ export default class PhoneNumberVerification extends React.Component {
               )
           }
         )
-        .catch(err => {console.log('error confirming signing in!: ', err);
-                alert('error confirming signing in!: '+err.message);});
+        .catch(
+          err => {
+                console.log('error confirming signing in!: ', err);
+                this.handelAWSError(authType, err)
+              }
+        );
 
-      } else if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
+      } else if(authType == 'verify_email') {
         console.log("------------Verifying the email-----------------")
         console.log("comming from: ", this.props.navigation.getParam('authType', 'none'))
 
@@ -263,19 +345,45 @@ export default class PhoneNumberVerification extends React.Component {
             ()=>{
               console.log("email has been verified.")
               //We came form signup so we want to go to signin...
-              this.props.navigation.navigate("SignIn");
+              AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+              this.setState({verificationCode:''})
+              this.props.navigation.navigate("Home");
 
             }
         ).catch((err)=>{
-            console.log("Error verifing Email, comming form: ", err)
+          this.handelAWSError(authType, err)
         })
       }
     };
 
-    _resetAsync = async () => {
-      // TODO - fetch user token and verify user identity
-      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
-      console.log("Redirecting to phone reset page");
-      this.props.navigation.navigate('PhoneReset');
-    };
 }
+
+// error name:  - happens when you press submite twicec DONE
+// when code field is empty, app chashes. add check to see that it is not empty. 
+// White spage is not an empty string. DONE
+// CodeMismatchException - when the code is incorrect. DONE
+
+//Clear username / password upon submit loginy
+//Want to add resend code button.
+
+/*
+Happend when you wait too longe before submittiong the code.
+error confirming signing in!:  Object {
+  "code": "NotAuthorizedException",
+  "message": "Invalid session for the user, session is expired.",
+  "name": "NotAuthorizedException",
+}
+*/ 
+
+
+//Too many email reset codes sent code: LimitExceededException DONE
+
+
+/*
+When you enter the same code twice.
+error confirming signing in!:  Object {
+  "code": "NotAuthorizedException",
+  "message": "Invalid session for the user, session can only be used once.",
+  "name": "NotAuthorizedException",
+}
+*/
