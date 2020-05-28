@@ -31,9 +31,9 @@ async function getPublicKey(member){
   );
   const keyString = JSON.stringify(keyFromAWS.data.listMessages.items[0].payload); 
   var key = keyString.replace(/[{"()"}]/g, '');
-  //console.log("Key from AWS: <" + key + ">");
+  console.log("Key from AWS: <" + key + ">");
   key = nacl.util.decodeBase64(key); 
-  //console.log("key: " + key); 
+  console.log("key: " + key); 
   return key;
 
 }
@@ -60,7 +60,7 @@ async function sendMessage(payload) {
   
   //Decoded string to be encrypted
   const strDecoded = new Uint8Array(nacl.util.decodeUTF8(payloadStr))
-  //console.log("strDecoded " + strDecoded); 
+  console.log("strDecoded " + strDecoded); 
 
   //new nonce being generated
   const nonce = await nacl.randomBytes(24)
@@ -81,7 +81,7 @@ async function sendMessage(payload) {
         //Retrieve sender's private key
         const myKeys = await AsyncStorage.getItem('keys');
         const keysObj = JSON.parse(myKeys);
-        //console.log("myKeys" + myKeys); 
+        console.log("myKeys" + myKeys); 
         var sender_private_key = nacl.util.decodeBase64(keysObj.secret);
         //Create shared key
         const mySharedKey = nacl.box.before(recipient_public_key, sender_private_key)
@@ -103,16 +103,16 @@ async function sendMessage(payload) {
     //Generate random key
   
     const symmetrickey = await nacl.randomBytes(32)
-    //console.log("sym key" + symmetrickey); 
+    console.log("sym key" + symmetrickey); 
     // var symKey = nacl.util.decodeUTF8(symmetrickey);    
 
     //encrypt decoded string with nonce and key
     const EncryptedStr = nacl.secretbox(strDecoded, nonce, symmetrickey)
-    //console.log("Encrypted STring" + EncryptedStr); 
+    console.log("Encrypted STring" + EncryptedStr); 
     //Encrypted string encoded to base 64
     const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)
     fullPayload.payloadEncrypted = Base64EncryptedStr;
-    //console.log("Base64EncryptedStr " + Base64EncryptedStr); 
+    console.log("Base64EncryptedStr " + Base64EncryptedStr); 
 
     //Encoded key prepared to be sent
     const key_encoded = nacl.util.encodeBase64(symmetrickey)
@@ -528,7 +528,7 @@ class ChatScreen extends React.Component {
       var messageObj = messageObject.onCreateMessageByRecipient;
       var payload = messageObj.payload;
       payload = JSON.parse(payload);
-      //console.log("payload after parse  " + JSON.stringify(payload )); 
+      console.log("payload after parse  " + JSON.stringify(payload )); 
          //If the roommember is the sender
          if(payload.box){
 
@@ -539,28 +539,28 @@ class ChatScreen extends React.Component {
           const myKeys = await AsyncStorage.getItem('keys');
           const keysObj = JSON.parse(myKeys);
           var recipient_private_key = nacl.util.decodeBase64(keysObj.secret);
-          //console.log("recipient_ private key: "  + recipient_private_key); 
+          console.log("recipient_ private key: "  + recipient_private_key); 
 
           //Make shared key
           // const recipientSharedKey = nacl.box.before(recipient_private_key, sender_public_key)
           const recipientSharedKey = nacl.box.before(sender_public_key, recipient_private_key); 
-          //console.log("shared key: " + recipientSharedKey); 
+          console.log("shared key: " + recipientSharedKey); 
 
           //Decoded payload
           const decoded_payload_message = nacl.util.decodeBase64(payload.payloadEncrypted)
-          //console.log("decoded payload " + decoded_payload_message)
+          console.log("decoded payload " + decoded_payload_message)
 
           const nonceDecrypted = nacl.util.decodeBase64(payload.nonce);
-          //console.log("nonce decrypted: " + nonceDecrypted); 
+          console.log("nonce decrypted: " + nonceDecrypted); 
           //Decrypt the payload with nonce and shared key
           const decoded_decrypted_payload = nacl.box.open.after(decoded_payload_message, nonceDecrypted, recipientSharedKey) 
-          //console.log("decoded decrypted " + decoded_decrypted_payload); 
+          console.log("decoded decrypted " + decoded_decrypted_payload); 
           //Encode back to UTF8. Final decrypted payload
           const decrypted_payload = nacl.util.encodeUTF8(decoded_decrypted_payload)
-          //console.log("decrypted payload" + decrypted_payload);
+          console.log("decrypted payload" + decrypted_payload);
 
           var final_decoded_message = JSON.parse(decrypted_payload);
-          //console.log("final decrypted "+ final_decoded_message); 
+          console.log("final decrypted "+ final_decoded_message); 
       
         }else{
           console.log("using secret box"); 
@@ -570,7 +570,7 @@ class ChatScreen extends React.Component {
           //decoded message to be decrypted
           const decoded_payload_message = nacl.util.decodeBase64(payload.payloadEncrypted);
           const nonceDecrypted = nacl.util.decodeBase64(payload.nonce);
-          //console.log("nonce decrypted: " + nonceDecrypted); 
+          console.log("nonce decrypted: " + nonceDecrypted); 
         
           const decrypted = nacl.secretbox.open(decoded_payload_message, nonceDecrypted, keyUint8Array);
         
@@ -581,7 +581,7 @@ class ChatScreen extends React.Component {
           const base64DecryptedMessage = nacl.util.encodeUTF8(decrypted);
           // return JSON.parse(base64DecryptedMessage);
           var final_decoded_message = JSON.parse(base64DecryptedMessage);
-          //console.log("final decrypted "+ JSON.stringify(final_decoded_message)); 
+          console.log("final decrypted "+ JSON.stringify(final_decoded_message)); 
       
         }
 
@@ -653,7 +653,7 @@ class ChatScreen extends React.Component {
         messages={this.state.messages}
         scrollToBottom
         renderBubble = {this.renderBubble}
-        loadEarlier = {false}
+        loadEarlier = {this.state.loadEarlier}
         isLoadingEarlier = {this.state.isLoadingEarlier}
         onLongPressAvatar = {user => alert(JSON.stringify(user))}
         onPressAvatar = {() => alert('short press')}

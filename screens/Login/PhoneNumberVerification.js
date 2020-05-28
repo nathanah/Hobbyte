@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-<<<<<<< HEAD
 import { Button, 
         View, 
         Text, 
@@ -12,17 +11,6 @@ import { Button,
         Keyboard, 
         ScrollView, 
         AsyncStorage } from 'react-native';
-=======
-import { View,
-         Text, 
-         TouchableOpacity, 
-         KeyboardAvoidingView, 
-         TextInput, 
-         Image, 
-         ScrollView, 
-         AsyncStorage,
-         Alert } from 'react-native';
->>>>>>> master
 import Amplify, { Auth } from 'aws-amplify';
 import {styles} from '../../styles/styles'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -50,22 +38,22 @@ async function generateKeys(user) {
   var pKey = nacl.util.encodeBase64(publicKey); 
   var sKey = nacl.util.encodeBase64(secretKey); 
 
-  //console.log("Keys genererated: Public - " + pKey); 
-  //console.log("Keys generated: Private " + sKey); 
+  console.log("Keys genererated: Public - " + pKey); 
+  console.log("Keys generated: Private " + sKey); 
 
   const keys = {
     public: pKey, 
     secret: sKey, 
   };
-  //console.log("keys: " + JSON.stringify(keys)); 
+  console.log("keys: " + JSON.stringify(keys)); 
   await AsyncStorage.setItem('keys',JSON.stringify(keys));
   // store keys in local storage
  
 
   // check if key exists on AWS 
-  //console.log("user checking for key: " + user.username);
+  console.log("user checking for key: " + user.username);
   const keyFromAWS = await API.graphql(graphqlOperation(listMessages, {filter:{to:{eq: "key"}, from: {eq:user.username}}})).then(
-    //console.log("key from AWS object: " + JSON.stringify(keyFromAWS))
+    console.log("key from AWS object: " + JSON.stringify(keyFromAWS))
   ).catch(
     (error) => {
       console.log("Error_____________________\n" ,error)
@@ -90,7 +78,7 @@ async function generateKeys(user) {
   } else { // Key exists... update! 
     console.log("update key"); 
     const messageID = keyFromAWS.data.listMessages.items[0].id;
-    //console.log("message ID " + messageID); 
+    console.log("message ID " + messageID); 
     console.log("now updating key"); 
     const updateObj = {
       input: {
@@ -168,15 +156,7 @@ export default class PhoneNumberVerification extends React.Component {
 
         <TouchableOpacity style={styles.resetContainer}>
                 <Text style={styles.texts}
-                  onPress={
-                    ()=>{
-                      this.setState({verificationCode:''})
-                      this.props.navigation.navigate("SignIn")
-                    }
-                  }>
-                    Verification code not working?
-                    Click to return to the Login page and try to login again!
-                </Text>
+                  onPress={this._resetAsync}>Changed phone number?</Text>
         </TouchableOpacity>
 
           </ScrollView>
@@ -189,46 +169,11 @@ export default class PhoneNumberVerification extends React.Component {
 
   /*--------------------Async------------------------*/
     getPromptMessage(){
-      let authType = this.props.navigation.getParam('authType', 'none')
-      if(authType == 'verify_email') {
-        return "Enter Email Verification Code To Verify Your Email"
-      } else if (authType == 'signin'){
-        return "Enter Text Verification Code To Login"
-      } else if(authType == 'signup'){
-        return "Enter Text Verification Code To Verify Your Phone Number"
+      if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
+        return "Enter Email Verification Code"
       } else {
-        return "Enter Unknown Code For Unkown Reason"
+        return "Enter Text Verification Code"
       }
-    }
-    handelAWSError(authType, error) {
-      let errorType;
-      if(authType == 'signup') {
-        errorType = 'New User Confirmation'
-      } else if(authType == 'signin') {
-         errorType = "Login"
-      } else if(authType == 'verify_email') {
-        errorType = 'Email Verification'
-      } else {
-        errorType = error.code
-      }
-      
-      let errorMessage;
-      console.log("This is error code: ", error.code)
-      if(error.code =='NotAuthorizedException') {
-        return
-      } else if(error.code == 'CodeMismatchException') {
-        errorMessage = "Invalid Verification Code Entered!"
-      } else if(error.code == 'LimitExceededException') {
-        errorMessage = 'You Have Exceeded The Verification Code Limit. Please Wait A While And Then Try Again.'
-      } //else if (error.message == "Invalid session for the user, session is expired."){
-      //   errorMessage = "Your Verification Code Has Expired. Please Resend The Code."
-      // } 
-      else {
-        errorMessage = error.message
-      }
-      Alert.alert(errorType + " Error!", errorMessage)
-      return
-
     }
     _loginAsync = async () => {
       // TODO - fetch user token and verify user identity
@@ -239,42 +184,24 @@ export default class PhoneNumberVerification extends React.Component {
       console.log("Varification type: ", this.state.authType)
       console.log("this is AuthType: ", this.props.navigation.getParam('authType'))
 
-      let authType = this.props.navigation.getParam('authType', 'none');
-      if(this.state.verificationCode == '') {
-        
-        let errorType;
-        if(authType == 'signup') {
-          errorType = 'New User Confirmation'
-        } else if(authType == 'signin') {
-           errorType = "Login"
-        } else if(authType == 'verify_email') {
-          errorType = 'Email Verification'
-        } else {
-          errorType = 'Unknown Type'
-        }
-        Alert.alert(errorType + " Error!",'The Verification Code Field Can Not Be Empty!')
-        return
-      } 
-
-      if(authType == 'signup') {
+      if(this.props.navigation.getParam('authType', 'none') == 'signup') {
         console.log("------------This is signup-----------------")
         Auth.confirmSignUp(this.state.username, this.state.verificationCode)
         .then(
             ()=>{
               console.log('successful confirm sign up!')
-              //AsyncStorage.setItem("userToken", JSON.stringify(Auth))
+              AsyncStorage.setItem("userToken", JSON.stringify(Auth))
               //Need to sign in so that the user is authenticated
-              this.setState({verificationCode:''})
               this.props.navigation.navigate("SignIn");
             }
           )
         .catch(
           (err) => {
             console.log('error confirming signing up!: ', err);
-            this.handelAWSError(authType, err)
+                alert('error confirming signing up!: '+ err.message);
           }
         )
-      } else if(authType == 'signin') {
+      } else if(this.props.navigation.getParam('authType', 'none') == 'signin') {
         console.log("------------This is signin-----------------")
         // remove from final version
         // if (this.state.verificationCode==1111){
@@ -288,7 +215,7 @@ export default class PhoneNumberVerification extends React.Component {
         .then(
           () => {
             console.log('successful confirm sign in!');
-            //AsyncStorage.setItem("userToken",JSON.stringify(Auth))
+            AsyncStorage.setItem("userToken",JSON.stringify(Auth))
 
             Auth.currentAuthenticatedUser()
               //Check if email is verified, if not verify it, else go to main
@@ -308,18 +235,13 @@ export default class PhoneNumberVerification extends React.Component {
                       )
                       .catch(
                         (err)=>{
-                          this.handelAWSError(authType, err)
+                          console.log("Error in init email verification: ", err)
                         }
                       )
 
                   } else {
-<<<<<<< HEAD
                     generateKeys(this.state.user); 
                     //alert("would navigate to home but just for testing");
-=======
-                    AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-                    this.setState({verificationCode:''})
->>>>>>> master
                     this.props.navigation.navigate('Home' );
                   }
                 })
@@ -330,14 +252,10 @@ export default class PhoneNumberVerification extends React.Component {
               )
           }
         )
-        .catch(
-          err => {
-                console.log('error confirming signing in!: ', err);
-                this.handelAWSError(authType, err)
-              }
-        );
+        .catch(err => {console.log('error confirming signing in!: ', err);
+                alert('error confirming signing in!: '+err.message);});
 
-      } else if(authType == 'verify_email') {
+      } else if(this.props.navigation.getParam('authType', 'none') == 'verify_email') {
         console.log("------------Verifying the email-----------------")
         console.log("comming from: ", this.props.navigation.getParam('authType', 'none'))
 
@@ -345,45 +263,19 @@ export default class PhoneNumberVerification extends React.Component {
             ()=>{
               console.log("email has been verified.")
               //We came form signup so we want to go to signin...
-              AsyncStorage.setItem("userToken",JSON.stringify(Auth))
-              this.setState({verificationCode:''})
-              this.props.navigation.navigate("Home");
+              this.props.navigation.navigate("SignIn");
 
             }
         ).catch((err)=>{
-          this.handelAWSError(authType, err)
+            console.log("Error verifing Email, comming form: ", err)
         })
       }
     };
 
+    _resetAsync = async () => {
+      // TODO - fetch user token and verify user identity
+      // await AsyncStorage.setItem('userToken', 'abc'); // comment back in when storage set up
+      console.log("Redirecting to phone reset page");
+      this.props.navigation.navigate('PhoneReset');
+    };
 }
-
-// error name:  - happens when you press submite twicec DONE
-// when code field is empty, app chashes. add check to see that it is not empty. 
-// White spage is not an empty string. DONE
-// CodeMismatchException - when the code is incorrect. DONE
-
-//Clear username / password upon submit loginy
-//Want to add resend code button.
-
-/*
-Happend when you wait too longe before submittiong the code.
-error confirming signing in!:  Object {
-  "code": "NotAuthorizedException",
-  "message": "Invalid session for the user, session is expired.",
-  "name": "NotAuthorizedException",
-}
-*/ 
-
-
-//Too many email reset codes sent code: LimitExceededException DONE
-
-
-/*
-When you enter the same code twice.
-error confirming signing in!:  Object {
-  "code": "NotAuthorizedException",
-  "message": "Invalid session for the user, session can only be used once.",
-  "name": "NotAuthorizedException",
-}
-*/
