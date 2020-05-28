@@ -38,22 +38,22 @@ async function generateKeys(user) {
   var pKey = nacl.util.encodeBase64(publicKey); 
   var sKey = nacl.util.encodeBase64(secretKey); 
 
-  console.log("Keys genererated: Public - " + pKey); 
-  console.log("Keys generated: Private " + sKey); 
+  //console.log("Keys genererated: Public - " + pKey); 
+  //console.log("Keys generated: Private " + sKey); 
 
   const keys = {
     public: pKey, 
     secret: sKey, 
   };
-  console.log("keys: " + JSON.stringify(keys)); 
+  //console.log("keys: " + JSON.stringify(keys)); 
   await AsyncStorage.setItem('keys',JSON.stringify(keys));
   // store keys in local storage
  
 
   // check if key exists on AWS 
-  console.log("user checking for key: " + user.username);
+  //console.log("user checking for key: " + user.username);
   const keyFromAWS = await API.graphql(graphqlOperation(listMessages, {filter:{to:{eq: "key"}, from: {eq:user.username}}})).then(
-    console.log("key from AWS object: " + JSON.stringify(keyFromAWS))
+    //console.log("key from AWS object: " + JSON.stringify(keyFromAWS))
   ).catch(
     (error) => {
       console.log("Error_____________________\n" ,error)
@@ -78,7 +78,7 @@ async function generateKeys(user) {
   } else { // Key exists... update! 
     console.log("update key"); 
     const messageID = keyFromAWS.data.listMessages.items[0].id;
-    console.log("message ID " + messageID); 
+    //console.log("message ID " + messageID); 
     console.log("now updating key"); 
     const updateObj = {
       input: {
