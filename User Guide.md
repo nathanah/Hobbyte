@@ -19,7 +19,7 @@
 
 
 ## Table of Contents
-- [Overview of the Product](#-overview-of-the-product)
+- [Overview of the Product](https://github.com/nathanah/Hobbyte/blob/master/User%20Guide.md#overview-of-the-product)
 - **Installation or Distribution** 
 - [Sign Up, Login, and User Information Changes](https://github.com/nathanah/Hobbyte/blob/master/User%20Guide.md#sign-up-login-and-user-information-changes)
 - **Local Storage** 
