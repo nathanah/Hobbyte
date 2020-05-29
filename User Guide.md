@@ -20,18 +20,18 @@
 
 ## Table of Contents
 - [Overview of the Product](#overview-of-the-product)
-- **Installation or Distribution** 
-- [Sign Up, Login, and User Information Changes](https://github.com/nathanah/Hobbyte/blob/master/User%20Guide.md#sign-up-login-and-user-information-changes)
-- **Local Storage** 
-- **Room List and Room Creation** 
-- **Chat** 
-- **Message Queue** 
-- **Room Settings**
-- [Encryption](##-encryption)
-- **Troubleshooting**
-- **Frequently Asked Questions**
-- **Contact Information**
-- **Glossary**
+- [Installation or Distribution](#installation-or-distribution)
+- [Sign Up, Login, and User Information Changes](#sign-up-login-and-user-information-changes)
+- [Local Storage](#local-storage)
+- [Room List and Room Creation](#room-list-and-room-creation)
+- [Chat](#chat)
+- [Message Queue](#message-queue)
+- [Room Settings](#room-settings)
+- [Encryption](#encryption)
+- [Troubleshooting](#troubleshooting)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [Contact Information](#contact-information)
+- [Glossary](#glossary)
 
 
 # Overview of the Product
