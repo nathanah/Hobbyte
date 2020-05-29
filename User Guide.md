@@ -16,10 +16,11 @@
 
 
 ## Preface
+Many contemporary social media platforms do not offer users with complete freedom and transparency on where user's metadata is stored nor with whom it is shared. Sanctuary is an open source, cross platform social media app that features two-factor authentication and end-to-end encryption, thereby providing users with optimal security and privacy. Sanctuary also strives to be transparent about data storage and collects minimal user information. 
 
 
 ## Table of Contents
-- [Overview of the Product](#overview-of-the-product)
+- [Overview of the Product](#overview-of-the-product) 
 - [Installation or Distribution](#installation-or-distribution)
 - [Sign Up, Login, and User Information Changes](#sign-up-login-and-user-information-changes)
 - [Local Storage](#local-storage)
@@ -28,6 +29,8 @@
 - [Message Queue](#message-queue)
 - [Room Settings](#room-settings)
 - [Encryption](#encryption)
+  - [Personal conversations](#personal-conversations)
+  - [Group conversations](#group-conversations)
 - [Troubleshooting](#troubleshooting)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Contact Information](#contact-information)
@@ -35,6 +38,8 @@
 
 
 ## Overview of the Product
+
+
 
 ## Installation or Distribution
 
@@ -79,7 +84,7 @@ Room creation requires a list of members (not including yourself) as a comma sep
 
 ## Chat
 
-Our chat interface utilizes "Gifted Chat by FaridSafi" (https://github.com/FaridSafi/react-native-gifted-chat). It's behavior and layout is similar to Apple's iMessage. It allows the user to enter a message in a discrete text box at the bottom of the screen and then send it. The sender's messages appear on the right and other member's messages appear on the left with a corresponding avatar and username.
+Our chat interface utilizes "[Gifted Chat](https://github.com/FaridSafi/react-native-gifted-chat) by FaridSafi". It's behavior and layout is similar to Apple's iMessage. It allows the user to enter a message in a discrete text box at the bottom of the screen and then send it. The sender's messages appear on the right and other member's messages appear on the left with a corresponding avatar and username.
 
 User's can scroll up to see previous messsages. 
 
@@ -111,7 +116,7 @@ The room settings page provides customizable room name and text or bubble colors
 
 ## Encryption
 
-To ensure messages are protected from MITM (Man in the Middle) attacks, we utitlize TweetNaCl (https://github.com/dchest/tweetnacl-js) for encrypting texts.
+To ensure messages are protected from MITM (Man in the Middle) attacks, we utitlize [TweetNaCl](https://github.com/dchest/tweetnacl-js) for encrypting texts.
 
 #### Peronsal conversations
 
@@ -215,15 +220,15 @@ Object {
 The API key needs to be updated. To do this, it navigate to the AWS AppSync Settings tab. Copy the "Primary auth mode - API KEY" listed and paste it in the 'aws-exports.js' file in the Sanctuary Chat project. 
 
 
-The following tutorial step 4 - GraphQL API Operations details the placement of API keys and how they are required for any mutation, query, or subscription requests to the AWS Dynamo database. When creating the API at the beginning, the APIkey's lifetime can be set so it doesn't expire every 7 days per default.
+The following [tutorial](https://aws-amplify.github.io/amplify-js/api/globals.html#graphqloperation) step 4 - GraphQL API Operations details the placement of API keys and how they are required for any mutation, query, or subscription requests to the AWS Dynamo database. When creating the API at the beginning, the APIkey's lifetime can be set so it doesn't expire every 7 days per default.
 
 
-https://aws-amplify.github.io/amplify-js/api/globals.html#graphqloperation
+
 
 **Stopped Receiving SMS codes**
-The AWS spending budget needs to be increased if the SMS text codes for authentication have stopped working. The following tutorial outlines the process: 
+The AWS spending budget needs to be increased if the SMS text codes for authentication have stopped working. The following [tutorial](https://aws.amazon.com/premiumsupport/knowledge-center/sns-sms-spending-limit-increase/) outlines the process. 
 
-https://aws.amazon.com/premiumsupport/knowledge-center/sns-sms-spending-limit-increase/
+
 
 **Testing locally using AWS Query Tab**
 The AWS AppSync Queries tab can be used to send test messages to the app. It is recommended that the programmer first send a test message from app to database, then copy the payload into the query. Then swap the usernames in the 'to' and 'from' fields. 
@@ -316,5 +321,6 @@ user1, user2, user3
 
 
 ## Glossary
+
 
 
