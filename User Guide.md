@@ -19,7 +19,7 @@
 
 
 ## Table of Contents
-- **Overview of the Product** 
+- [Overview of the Product](Overview of the Product) 
 - **Installation or Distribution** 
 - **Sign Up, Login, and User Information Changes** 
 - **Local Storage** 
