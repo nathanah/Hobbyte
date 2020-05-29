@@ -1,5 +1,5 @@
 
-# <center>Sanctuary Chat</center> 
+# Sanctuary Chat
 
 <div style="text-align:center" >
  <p style="color:blue"> <b>UC Davis Senior Design Project 2020: 
