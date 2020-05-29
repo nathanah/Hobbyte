@@ -19,7 +19,7 @@
 
 
 ## Table of Contents
-- [Overview of the Product](##-overview-of-the-product)
+- [Overview of the Product](#-overview-of-the-product)
 - **Installation or Distribution** 
 - **Sign Up, Login, and User Information Changes** 
 - **Local Storage** 
@@ -27,14 +27,14 @@
 - **Chat** 
 - **Message Queue** 
 - **Room Settings**
-- [Encryption](##encryption)
+- [Encryption](##-encryption)
 - **Troubleshooting**
 - **Frequently Asked Questions**
 - **Contact Information**
 - **Glossary**
 
 
-## Overview of the Product
+# Overview of the Product
 
 ## Installation or Distribution
 
