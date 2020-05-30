@@ -1,10 +1,8 @@
 
-
-
+# Sanctuary Chat
 <div style="text-align:center" >
  <p style="color:teal"> <b>UC Davis Senior Design Project 2020: 
      <br>Secure and Private Social Media App </b></p>
-<img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_6f6edcc396701a45682966f45d5eb592.png " alt="Sanctuary Logo" style="width:400px;height:400px;">
     
 <b>Client</b>
     Justin Jia
@@ -60,7 +58,7 @@ Sanctuary Chat is transparent with storing user's data and collects miniminal us
 - TweetNaCL.js - Encryption library 
 
 
-![](https://codimd.s3.shivering-isles.com/demo/uploads/upload_19b498e5ac3ed9d62f2eeaa4498b9e12.jpg)
+![](assets/images/overview.png)
 
 
 ## Installation or Distribution
@@ -131,9 +129,9 @@ To maintain user privacy, the AWS Dynamo database as used as a message queue and
 
 Public keys are stored and maintained in this message queue so that they're accessible by any user who would like to start a conversation. 
 
-AWS AppSync API was used to create this message queue communication. AppSync uses GraphQL schemas to route data from user's account to the AWS Dynamo database. In this project, GraphQL queries and mutations were used to create, delete, and query messages as well as public encryption keys from the database. User information, content, and settings are encapsulated in GraphQL requests which are JSON objects. 
+AWS AppSync API was used to create this message queue communication. AppSync uses GraphQL schemas to route data from user's account to the AWS Dynamo database. In this project, GraphQL queries and mutations were used to create, delete, and query messages as well as public encryption keys from the database. User information, content, and settings are encapsulated in GraphQL requests which are JSON objects.
 
-![](https://codimd.s3.shivering-isles.com/demo/uploads/upload_f85913f14ca89e250660fd16a6205483.jpg)
+![](assets/images/messagequeue.png)
 
 
 ### Room Settings
@@ -154,7 +152,7 @@ The partipants share their *public* keys with each other (via AWS). Using the Di
 - **Encryption** -The sender signs the outgoing message with their local *private* key and encrypts with the recipients *public* key. Additionally, every message is encrypted along with a nonce. The nonce jumbles the initial text with random characters before encrypting it to ciphertext. This is crucial since the encrypted ciphertext shouldn't be identical in length to the unencrypted text.
 
 - **Decryption** -The recipient verifies the signature with the sender’s *public* key and decrypts the message with their local *private* key. The nonce, which is sent alongside the encrypted message, is used to omit the randomly added characters during encryption and view the original message.
-![](https://codimd.s3.shivering-isles.com/demo/uploads/upload_4ac4a76ff562d562ace7ef4ccd181819.png)
+![](assets/images/box.png)
 
 
 #### Group conversations (rooms of 2+ participants)
@@ -163,8 +161,7 @@ Group messages are encrypted symmetrically, using TweetNaCl's secretbox method, 
 Symmtetric encryption is when a single secret key is generated for every message along with a nonce which jumbles the message accordingly. The secret key and nonce is sent with the encrypted message to be used by recipients to decrypt. 
 
 
-![](https://codimd.s3.shivering-isles.com/demo/uploads/upload_514f7680b1bd824df9c578af6980ce2f.jpg)
-
+![](assets/images/secretbox.png)
 
 ## Troubleshooting
 
