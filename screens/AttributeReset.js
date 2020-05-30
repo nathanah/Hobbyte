@@ -1,8 +1,4 @@
 
-// HomeScreen
-// Should appear after Login page
-// currently displays green screen with Sign Out button
-
 import * as WebBrowser from 'expo-web-browser';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
