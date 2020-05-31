@@ -1,5 +1,5 @@
 
-![](assets/images/sanctuaryBanner.png)
+# Sanctuary Chat
 
 <div style="text-align:center" >
  <p style="color:teal"> <b>UC Davis Senior Design Project 2020: 
