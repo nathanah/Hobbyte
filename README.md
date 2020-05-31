@@ -4,7 +4,7 @@
 <div style="text-align:center" >
  <p style="color:teal"> <b>UC Davis Senior Design Project 2020: 
      <br>Secure and Private Social Media App </b></p>
-<img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_6f6edcc396701a45682966f45d5eb592.png " alt="Sanctuary Logo" style="width:400px;height:400px;">
+![](assets/images/sanctuaryBanner.png)
     
 <b>Client</b>
     Justin Jia
