@@ -4,7 +4,7 @@
 <div style="text-align:center" >
  <p style="color:teal"> <b>UC Davis Senior Design Project 2020: 
      <br>Secure and Private Social Media App </b></p>
-![](assets/images/sanctuaryBanner.png)
+![](assets/images/icon.png)
     
 <b>Client</b>
     Justin Jia
