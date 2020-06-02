@@ -109,7 +109,7 @@ async function sendMessage(payload) {
     fullPayload = JSON.stringify(fullPayload);	
   }	
   	
-  await getPublicKey(payload.roomMembers[0]); 	
+
   const myKeys = await AsyncStorage.getItem('keys');	
   console.log("Keys genererated: Public - " + myKeys);	
           const keysObj = JSON.parse(myKeys);	

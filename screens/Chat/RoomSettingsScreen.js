@@ -114,7 +114,6 @@ async function sendMessage(payload) {
     fullPayload = JSON.stringify(fullPayload);	
   }	
   	
-  await getPublicKey(payload.roomMembers[0]); 	
   const myKeys = await AsyncStorage.getItem('keys');	
   console.log("Keys genererated: Public - " + myKeys);	
           const keysObj = JSON.parse(myKeys);	
@@ -128,7 +127,7 @@ console.log("full payload" + fullPayload);
       const package_ = {
         to: roomMembers[i],
         from: sender,
-        payload: payloadStr,
+        payload: fullPayload,
       };
       console.log("package: " + JSON.stringify(package_));
       const resp = await API.graphql(graphqlOperation(createMessage, { input: package_ })).then(
