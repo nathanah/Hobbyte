@@ -16,7 +16,28 @@ import {styles} from '../../styles/styles'
 import {ActionType, Payload} from '../../src/payload';
 import API, { graphqlOperation } from '@aws-amplify/api';
 import {createMessage, deleteMessage} from '../../src/graphql/mutations';
+import {listMessages} from '../../src/graphql/queries';
+import nacl from 'tweet-nacl-react-native-expo'
 
+
+
+async function getPublicKey(member){	
+  console.log("getting public key for: " + member);	
+  const keyFromAWS = await API.graphql(graphqlOperation(listMessages, {filter:{to:{eq: "key"}, from: {eq: member}}})).then(	
+    console.log("retrieved key")	
+  ).catch(	
+    (error) => {	
+      console.log("Error_____________________\n" ,error)	
+    }	
+  );	
+  console.log(keyFromAWS)	
+  const keyString = JSON.stringify(keyFromAWS.data.listMessages.items[0].payload); 	
+  var key = keyString.replace(/[{"()"}]/g, '');	
+  console.log("Key from AWS: <" + key + ">");	
+  key = nacl.util.decodeBase64(key); 	
+  console.log("key: " + key); 	
+  return key;	
+}
 //Should make into global function and merge with copy in ChatScreen
 async function sendMessage(payload) {
   console.log("in send message")
@@ -26,7 +47,80 @@ async function sendMessage(payload) {
 
   //Encrypt payload here
 
+
+
   let payloadStr = JSON.stringify(payload);
+
+  var fullPayload = {	
+    nonce: '',	
+    key: '',	
+    payloadEncrypted: '',	
+    box: true,	
+  };	
+  	
+  //Decoded string to be encrypted	
+  const strDecoded = new Uint8Array(nacl.util.decodeUTF8(payloadStr))	
+  console.log("strDecoded " + strDecoded); 	
+  //new nonce being generated	
+  const nonce = await nacl.randomBytes(24)	
+  var encryptedNonce = nacl.util.encodeBase64(nonce);	
+  	
+  fullPayload.nonce = encryptedNonce; 	
+  	
+  //If the conversation is between 2 (box)	
+  if (roomMembers.length==2){	
+    console.log("using box");	
+    for (var i = 0; i < roomMembers.length ; i++){	
+      //If the member is not the sender (recipient)	
+      if(roomMembers[i] != payload.sender){	
+        //Retrieve decoded public key	
+        var recipient_public_key = await getPublicKey(roomMembers[i]);	
+        //Retrieve sender's private key	
+        const myKeys = await AsyncStorage.getItem('keys');	
+        const keysObj = JSON.parse(myKeys);	
+        console.log("myKeys" + myKeys); 	
+        var sender_private_key = nacl.util.decodeBase64(keysObj.secret);	
+        //Create shared key	
+        const mySharedKey = nacl.box.before(recipient_public_key, sender_private_key)	
+        //Encrypt the message and convert to Base64 format. Base64EncryptedStr is message to be sent.	
+        const EncryptedStr = nacl.box.after(strDecoded, nonce, mySharedKey)	
+        const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)	
+        fullPayload.payloadEncrypted =  Base64EncryptedStr ;	
+        fullPayload = JSON.stringify(fullPayload);	
+      }	
+    }	
+     	
+    	
+  }	
+  //If the conversation is between multiple users (secretbox)	
+  else{	
+    console.log("using secret box");	
+    fullPayload.box = false; 	
+    //Generate random key	
+  	
+    const symmetrickey = await nacl.randomBytes(32)	
+    console.log("sym key" + symmetrickey); 	
+    // var symKey = nacl.util.decodeUTF8(symmetrickey);    	
+    //encrypt decoded string with nonce and key	
+    const EncryptedStr = nacl.secretbox(strDecoded, nonce, symmetrickey)	
+    console.log("Encrypted STring" + EncryptedStr); 	
+    //Encrypted string encoded to base 64	
+    const Base64EncryptedStr = nacl.util.encodeBase64(EncryptedStr)	
+    fullPayload.payloadEncrypted = Base64EncryptedStr;	
+    console.log("Base64EncryptedStr " + Base64EncryptedStr); 	
+    //Encoded key prepared to be sent	
+    const key_encoded = nacl.util.encodeBase64(symmetrickey)	
+    fullPayload.key = key_encoded; 	
+    fullPayload = JSON.stringify(fullPayload);	
+  }	
+  	
+  await getPublicKey(payload.roomMembers[0]); 	
+  const myKeys = await AsyncStorage.getItem('keys');	
+  console.log("Keys genererated: Public - " + myKeys);	
+          const keysObj = JSON.parse(myKeys);	
+  // console.log("Full payload:" + JSON.stringify(fullPayload)); 	
+console.log("full payload" + fullPayload); 	
+  console.log("private" + keysObj);
 
   for (var i = 0; i < roomMembers.length ; i++){
     if(roomMembers[i] != sender){
