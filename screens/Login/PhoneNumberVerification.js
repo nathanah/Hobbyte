@@ -312,6 +312,7 @@ export default class PhoneNumberVerification extends React.Component {
               //We came form signup so we want to go to signin...
               AsyncStorage.setItem("userToken",JSON.stringify(Auth))
               this.setState({verificationCode:''})
+              generateKeys(this.state.user); 
               this.props.navigation.navigate("Home");
 
             }
