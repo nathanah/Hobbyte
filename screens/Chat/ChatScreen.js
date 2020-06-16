@@ -600,6 +600,31 @@ class ChatScreen extends React.Component {
         }
         //Backup Requested
         case ActionType.BACKUP:{
+          // change user ID for backup here before setting item 
+          console.log("Received payload: " +payload.textContent); 
+          console.log("From :" + messageObj.from); 
+
+          const hashFrom = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256,
+              messageObj.from
+          );
+
+          const hashTo = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256, 
+            messageObj.to
+          ); 
+          
+          var messages = payload.textcontent; 
+          for (var i = 0; i < payload.textContent.size ; i++){
+            var message = payload.textContent[i]; 
+            if (message.user.id == 1){ // sender
+              messages.user.id = hashFrom; 
+            }
+
+            if (message.user.id == hashTo){
+              messages.user.id = 1; 
+            }
+          }
           AsyncStorage.setItem(payload.roomId,payload.textContent);
           break;
         }
